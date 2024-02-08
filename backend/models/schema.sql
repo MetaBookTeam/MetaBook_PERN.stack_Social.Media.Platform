@@ -144,3 +144,56 @@ VALUES
     'Zarqa',
     'Jordan'
   ) RETURNING *;
+
+
+-- Create a table called **posts** in the database
+
+CREATE TABLE
+  posts (
+    id SERIAL PRIMARY KEY NOT NULL,
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    content VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW (),
+  );
+  -- insert posts
+INSERT INTO
+  users (user_id, content)
+VALUES
+  (1, 'The is text post'),
+  (2, 'The is text post 2') RETURNING *;
+
+
+-- Create a table called **posts_likes** in the database
+
+  CREATE TABLE
+  posts_likes (
+    id SERIAL PRIMARY KEY NOT NULL,
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+     post_id INT,
+    FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE,
+  );
+   -- insert posts_likes
+  INSERT INTO
+  posts_likes (user_id, post_id)
+  VALUES
+  (1, 1),
+  (2, 1) RETURNING *; 
+  -- Create a table called **photos** in the database
+
+  CREATE TABLE
+  photos (
+    id SERIAL PRIMARY KEY NOT NULL,
+    post_id INT,
+    FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE,
+    content VARCHAR(255) NOT NULL,
+  );
+    -- insert photos
+  INSERT INTO
+  posts_likes (post_id, content)
+  VALUES
+  (1, 'image URL'),
+  (2, 'IMAGE URL') RETURNING *;
+
+  -- =============================
