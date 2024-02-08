@@ -144,3 +144,71 @@ VALUES
     'Zarqa',
     'Jordan'
   ) RETURNING *;
+
+
+-- Create a table called **pages** in the database
+
+  DROP TABLE IF EXISTS pages CASCADE;
+
+  CREATE TABLE 
+    pages(
+      id SERIAL PRIMARY KEY NOT NULL,
+      pageName VARCHAR (255),
+      pageContent VARCHAR (255)
+  );
+
+  -- insert pages
+  INSERT INTO
+  pages(
+    pageName,
+    pageContent
+  )
+
+  VALUES
+  ('MERAKI','paragraph'),('udemy','Text') RETURNING *;
+
+  -- Create a table called **pageLikes** in the database
+
+   DROP TABLE IF EXISTS pageLikes CASCADE;
+
+   CREATE TABLE
+   pageLikes(
+    
+    id SERIAL PRIMARY KEY NOT NULL,
+    user_id INT UNIQUE NOT NULL,
+    page_id INT UNIQUE NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    FOREIGN KEY (page_id) REFERENCES pages (id) ON DELETE CASCADE
+
+   );
+
+   -- insert pageLikes
+
+   INSERT INTO
+   pageLikes(
+    user_id,
+    page_id
+   )
+   VALUES
+   (1,1) RETURNING *;
+
+    -- Create a table called **friends** in the database
+
+    DROP TABLE IF EXISTS friends CASCADE;
+
+    CREATE TABLE
+    friends(
+      id SERIAL PRIMARY KEY NOT NULL,
+      user_id INT UNIQUE NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    );
+
+     -- insert friends
+
+     INSERT INTO 
+     friends(
+      user_id
+     )
+     VALUES
+     (1) RETURNING *;
+     
