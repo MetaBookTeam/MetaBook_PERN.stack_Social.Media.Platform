@@ -19,17 +19,16 @@ DROP TABLE IF EXISTS permissions CASCADE;
 
 CREATE TABLE
   permissions (
-    id SERIAL NOT NULL,
-    permission VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id)
+    id SERIAL PRIMARY KEY NOT NULL,
+    permission VARCHAR(255) NOT NULL
   );
 
 -- insert permissions  
 INSERT INTO
   permissions (permission)
 VALUES
-  ('CREATE_ARTICLE'),
-  ('CREATE_COMMENT') RETURNING *;
+  ('ADD_POST'),
+  ('ADD_COMMENT') RETURNING *;
 
 -- Create a table called **role_permission** in the database
 DROP TABLE IF EXISTS role_permission CASCADE;
@@ -56,32 +55,92 @@ DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE
   users (
     id SERIAL PRIMARY KEY NOT NULL,
-    firstName VARCHAR(255),
-    lastName VARCHAR(255),
-    age INT,
-    country VARCHAR(255),
-    email VARCHAR(255) UNIQUE,
-    password VARCHAR(255),
+    email TEXT UNIQUE NOT NULL,
+    user_name VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
     role_id INT,
+    created_at TIMESTAMP DEFAULT NOW (),
     is_deleted SMALLINT DEFAULT 0,
     FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE
   );
 
 -- insert users
 INSERT INTO
-  users (
-    firstName,
-    lastName,
-    age,
-    country,
-    email,
-    password,
-    role_id
-  )
+  users (email, user_name, password, role_id)
 VALUES
-  ('fName', 'lName', 0, 'Jordan', 'admin', 123456, 1),
-  ('fName', 'lName', 0, 'Jordan', 'user1', 123456, 2),
-  ('fName', 'lName', 0, 'Jordan', 'user2', 123456, 2) RETURNING *;
+  ('admin@gmail.com', 'admin1', 123456, 1),
+  ('user1@gmail.com', 'user1', 123456, 2),
+  ('user2@gmail.com', 'user2', 123456, 2) RETURNING *;
 
 --! the inserted passwords are not encrypted so the login will not work on them, so we need to register from POSTMAN.
 --
+-- Create a table called **user_profile** in the database
+DROP TABLE IF EXISTS user_profile CASCADE;
+
+CREATE TABLE
+  user_profile (
+    id SERIAL PRIMARY KEY NOT NULL,
+    user_id INT UNIQUE NOT NULL,
+    firstName VARCHAR(255),
+    lastName VARCHAR(255),
+    birthday TIMESTAMP,
+    gender VARCHAR(6) CHECK (gender IN ('male', 'female')),
+    phoneNumber INT UNIQUE,
+    school VARCHAR(255),
+    address VARCHAR(255),
+    city VARCHAR(255),
+    country VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+  );
+
+-- insert users
+INSERT INTO
+  user_profile (
+    user_id,
+    firstName,
+    lastName,
+    birthday,
+    gender,
+    phoneNumber,
+    school,
+    address,
+    city,
+    country
+  )
+VALUES
+  (
+    1,
+    'fName',
+    'lName',
+    '2000-01-01',
+    'male',
+    0790000001,
+    'school',
+    'address',
+    'Amman',
+    'Jordan'
+  ),
+  (
+    2,
+    'fName',
+    'lName',
+    '1990-11-11',
+    'female',
+    0790000002,
+    'school',
+    'address',
+    'Irbid',
+    'Jordan'
+  ),
+  (
+    3,
+    'fName',
+    'lName',
+    '1999-09-09',
+    'male',
+    0790000003,
+    'school',
+    'address',
+    'Zarqa',
+    'Jordan'
+  ) RETURNING *;
