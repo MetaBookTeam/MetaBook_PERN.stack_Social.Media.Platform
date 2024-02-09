@@ -81,11 +81,11 @@ CREATE TABLE
   user_profile (
     id SERIAL PRIMARY KEY NOT NULL,
     user_id INT UNIQUE NOT NULL,
-    firstName VARCHAR(255),
-    lastName VARCHAR(255),
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
     birthday TIMESTAMP,
     gender VARCHAR(6) CHECK (gender IN ('male', 'female')),
-    phoneNumber INT UNIQUE,
+    phone_number INT UNIQUE,
     school VARCHAR(255),
     address VARCHAR(255),
     city VARCHAR(255),
@@ -97,11 +97,11 @@ CREATE TABLE
 INSERT INTO
   user_profile (
     user_id,
-    firstName,
-    lastName,
+    first_name,
+    last_name,
     birthday,
     gender,
-    phoneNumber,
+    phone_number,
     school,
     address,
     city,
@@ -145,121 +145,124 @@ VALUES
     'Jordan'
   ) RETURNING *;
 
-
 -- Create a table called **pages** in the database
+DROP TABLE IF EXISTS pages CASCADE;
 
-  DROP TABLE IF EXISTS pages CASCADE;
-
-  CREATE TABLE 
-    pages(
-      id SERIAL PRIMARY KEY NOT NULL,
-      pageName VARCHAR (255),
-      pageContent VARCHAR (255)
+CREATE TABLE
+  pages (
+    id SERIAL PRIMARY KEY NOT NULL,
+    page_name VARCHAR(255) NOT NULL,
+    page_content VARCHAR(255),
+    created_at TIMESTAMP DEFAULT NOW (),
+    is_deleted SMALLINT DEFAULT 0
   );
 
-  -- insert pages
-  INSERT INTO
-  pages(
-    pageName,
-    pageContent
-  )
+--! need to discuss the page_content data type and what values it will hold.
+-- insert pages
+INSERT INTO
+  pages (page_name, page_content)
+VALUES
+  ('MERAKI', 'paragraph'),
+  ('Udemy', 'Text') RETURNING *;
 
-  VALUES
-  ('MERAKI','paragraph'),('udemy','Text') RETURNING *;
+-- Create a table called **page_likes** in the database
+DROP TABLE IF EXISTS page_likes CASCADE;
 
-  -- Create a table called **pageLikes** in the database
-
-   DROP TABLE IF EXISTS pageLikes CASCADE;
-
-   CREATE TABLE
-   pageLikes(
-    
+CREATE TABLE
+  page_likes (
     id SERIAL PRIMARY KEY NOT NULL,
     user_id INT UNIQUE NOT NULL,
     page_id INT UNIQUE NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
     FOREIGN KEY (page_id) REFERENCES pages (id) ON DELETE CASCADE
+    --customer_id integer REFERENCES customers(customer_id) ON DELETE CASCADE,
+  );
 
-   );
+-- insert page_likes
+INSERT INTO
+  page_likes (user_id, page_id)
+VALUES
+  (1, 1) RETURNING *;
 
-   -- insert pageLikes
+-- Create a table called **friends** in the database
+DROP TABLE IF EXISTS friends CASCADE;
 
-   INSERT INTO
-   pageLikes(
-    user_id,
-    page_id
-   )
-   VALUES
-   (1,1) RETURNING *;
+CREATE TABLE
+  friends (
+    id SERIAL PRIMARY KEY NOT NULL,
+    user_id INT NOT NULL,
+    friend_id INT UNIQUE NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    FOREIGN KEY (friend_id) REFERENCES users (id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT NOW (),
+    is_deleted SMALLINT DEFAULT 0
+  );
 
-    -- Create a table called **friends** in the database
+--! we have  user_id  and friend_id both refers to users table for unique instances (persons).
+-- insert friends
+INSERT INTO
+  friends (user_id, friend_id)
+VALUES
+  (1, 2) RETURNING *;
 
-    DROP TABLE IF EXISTS friends CASCADE;
-
-    CREATE TABLE
-    friends(
-      id SERIAL PRIMARY KEY NOT NULL,
-      user_id INT UNIQUE NOT NULL,
-      FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-    );
-
-     -- insert friends
-
-     INSERT INTO 
-     friends(
-      user_id
-     )
-     VALUES
-     (1) RETURNING *;
-     
 -- Create a table called **posts** in the database
+DROP TABLE IF EXISTS posts CASCADE;
 
 CREATE TABLE
   posts (
     id SERIAL PRIMARY KEY NOT NULL,
-    user_id INT,
+    user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
     content VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW (),
+    is_deleted SMALLINT DEFAULT 0
   );
-  -- insert posts
-INSERT INTO
-  users (user_id, content)
-VALUES
-  (1, 'The is text post'),
-  (2, 'The is text post 2') RETURNING *;
 
+-- insert posts
+INSERT INTO
+  posts (user_id, content)
+VALUES
+  (1, 'This is text post'),
+  (2, 'This is text post 2') RETURNING *;
 
 -- Create a table called **posts_likes** in the database
+DROP TABLE IF EXISTS posts_likes CASCADE;
 
-  CREATE TABLE
+CREATE TABLE
   posts_likes (
     id SERIAL PRIMARY KEY NOT NULL,
-    user_id INT,
+    user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-     post_id INT,
-    FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE,
+    post_id INT NOT NULL,
+    FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE
   );
-   -- insert posts_likes
-  INSERT INTO
-  posts_likes (user_id, post_id)
-  VALUES
-  (1, 1),
-  (2, 1) RETURNING *; 
-  -- Create a table called **photos** in the database
 
-  CREATE TABLE
+--! prevent the user from liking the same post multiple times... 
+-- insert posts_likes
+INSERT INTO
+  posts_likes (user_id, post_id)
+VALUES
+  (1, 1),
+  (2, 1),
+  (1, 2),
+  (2, 2) RETURNING *;
+
+-- Create a table called **photos** in the database
+DROP TABLE IF EXISTS photos CASCADE;
+
+CREATE TABLE
   photos (
     id SERIAL PRIMARY KEY NOT NULL,
-    post_id INT,
+    post_id INT NOT NULL,
     FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE,
-    content VARCHAR(255) NOT NULL,
+    photo_url TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW (),
+    is_deleted SMALLINT DEFAULT 0
   );
-    -- insert photos
-  INSERT INTO
-  posts_likes (post_id, content)
-  VALUES
-  (1, 'image URL'),
-  (2, 'IMAGE URL') RETURNING *;
 
-  -- =============================
+-- insert photos
+INSERT INTO
+  photos (post_id, photo_url)
+VALUES
+  (1, 'image URL1'),
+  (2, 'image URL2') RETURNING *;
