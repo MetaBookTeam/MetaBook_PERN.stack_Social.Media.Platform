@@ -36,10 +36,8 @@ DROP TABLE IF EXISTS role_permission CASCADE;
 CREATE TABLE
   role_permission (
     id SERIAL PRIMARY KEY NOT NULL,
-    role_id INT,
-    permission_id INT,
-    FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE,
-    FOREIGN KEY (permission_id) REFERENCES permissions (id) ON DELETE CASCADE
+    role_id INT REFERENCES roles (id) ON DELETE CASCADE,
+    permission_id INT REFERENCES permissions (id) ON DELETE CASCADE
   );
 
 -- insert role_permission connections
@@ -58,10 +56,9 @@ CREATE TABLE
     email TEXT UNIQUE NOT NULL,
     user_name VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    role_id INT,
+    role_id INT NOT NULL REFERENCES roles (id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT NOW (),
-    is_deleted SMALLINT DEFAULT 0,
-    FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE
+    is_deleted SMALLINT DEFAULT 0
   );
 
 -- insert users
@@ -80,7 +77,7 @@ DROP TABLE IF EXISTS user_profile CASCADE;
 CREATE TABLE
   user_profile (
     id SERIAL PRIMARY KEY NOT NULL,
-    user_id INT UNIQUE NOT NULL,
+    user_id INT UNIQUE NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     first_name VARCHAR(255),
     last_name VARCHAR(255),
     birthday TIMESTAMP,
@@ -89,8 +86,7 @@ CREATE TABLE
     school VARCHAR(255),
     address VARCHAR(255),
     city VARCHAR(255),
-    country VARCHAR(255),
-    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+    country VARCHAR(255)
   );
 
 -- insert users
@@ -171,10 +167,8 @@ DROP TABLE IF EXISTS page_likes CASCADE;
 CREATE TABLE
   page_likes (
     id SERIAL PRIMARY KEY NOT NULL,
-    user_id INT UNIQUE NOT NULL,
-    page_id INT UNIQUE NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-    FOREIGN KEY (page_id) REFERENCES pages (id) ON DELETE CASCADE
+    user_id INT UNIQUE NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    page_id INT UNIQUE NOT NULL REFERENCES pages (id) ON DELETE CASCADE
     --customer_id integer REFERENCES customers(customer_id) ON DELETE CASCADE,
   );
 
@@ -190,10 +184,8 @@ DROP TABLE IF EXISTS friends CASCADE;
 CREATE TABLE
   friends (
     id SERIAL PRIMARY KEY NOT NULL,
-    user_id INT NOT NULL,
-    friend_id INT UNIQUE NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-    FOREIGN KEY (friend_id) REFERENCES users (id) ON DELETE CASCADE,
+    user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    friend_id INT UNIQUE NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT NOW (),
     is_deleted SMALLINT DEFAULT 0
   );
@@ -211,8 +203,7 @@ DROP TABLE IF EXISTS posts CASCADE;
 CREATE TABLE
   posts (
     id SERIAL PRIMARY KEY NOT NULL,
-    user_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     content VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW (),
     is_deleted SMALLINT DEFAULT 0
@@ -231,10 +222,8 @@ DROP TABLE IF EXISTS posts_likes CASCADE;
 CREATE TABLE
   posts_likes (
     id SERIAL PRIMARY KEY NOT NULL,
-    user_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-    post_id INT NOT NULL,
-    FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE
+    user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    post_id INT NOT NULL REFERENCES posts (id) ON DELETE CASCADE
   );
 
 --! prevent the user from liking the same post multiple times... 
@@ -253,8 +242,7 @@ DROP TABLE IF EXISTS photos CASCADE;
 CREATE TABLE
   photos (
     id SERIAL PRIMARY KEY NOT NULL,
-    post_id INT NOT NULL,
-    FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE,
+    post_id INT NOT NULL REFERENCES posts (id) ON DELETE CASCADE,
     photo_url TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW (),
     is_deleted SMALLINT DEFAULT 0
@@ -266,3 +254,60 @@ INSERT INTO
 VALUES
   (1, 'image URL1'),
   (2, 'image URL2') RETURNING *;
+
+-- Create a table called **shares** in the database
+DROP TABLE IF EXISTS shares CASCADE;
+
+CREATE TABLE
+  shares (
+    id SERIAL PRIMARY KEY NOT NULL,
+    user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    post_id INT NOT NULL REFERENCES posts (id) ON DELETE CASCADE
+  );
+
+-- insert shares
+INSERT INTO
+  shares (user_id, post_id)
+VALUES
+  (1, 1),
+  (1, 1),
+  (1, 2),
+  (2, 2) RETURNING *;
+
+-- Create a table called **comments** in the database
+DROP TABLE IF EXISTS comments CASCADE;
+
+CREATE TABLE
+  comments (
+    id SERIAL PRIMARY KEY NOT NULL,
+    user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    post_id INT NOT NULL REFERENCES posts (id) ON DELETE CASCADE,
+    comment TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW (),
+    is_deleted SMALLINT DEFAULT 0
+  );
+
+-- insert comments
+INSERT INTO
+  comments (user_id, post_id, comment)
+VALUES
+  (1, 1, 'comment 1'),
+  (2, 1, 'comment 2') RETURNING *;
+
+-- Create a table called **comment_likes** in the database
+DROP TABLE IF EXISTS comment_likes CASCADE;
+
+CREATE TABLE
+  comment_likes (
+    id SERIAL PRIMARY KEY NOT NULL,
+    user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    comment_id INT NOT NULL REFERENCES comments (id) ON DELETE CASCADE
+  );
+
+--! prevent the user from liking the same comment multiple times... 
+-- insert comment_likes
+INSERT INTO
+  comment_likes (user_id, comment_id)
+VALUES
+  (2, 1),
+  (1, 2) RETURNING *;
