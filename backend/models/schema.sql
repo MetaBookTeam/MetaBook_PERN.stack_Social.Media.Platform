@@ -147,19 +147,37 @@ DROP TABLE IF EXISTS pages CASCADE;
 CREATE TABLE
   pages (
     id SERIAL PRIMARY KEY NOT NULL,
+    user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     page_name VARCHAR(255) NOT NULL,
-    page_content VARCHAR(255),
     created_at TIMESTAMP DEFAULT NOW (),
     is_deleted SMALLINT DEFAULT 0
   );
 
---! need to discuss the page_content data type and what values it will hold.
 -- insert pages
 INSERT INTO
-  pages (page_name, page_content)
+  pages (user_id, page_name)
 VALUES
-  ('MERAKI', 'paragraph'),
-  ('Udemy', 'Text') RETURNING *;
+  (1, 'MERAKI'),
+  (1, 'Udemy') RETURNING *;
+
+-- Create a table called **page_content** in the database
+DROP TABLE IF EXISTS page_content CASCADE;
+
+CREATE TABLE
+  page_content (
+    id SERIAL PRIMARY KEY NOT NULL,
+    user_id INT NOT NULL REFERENCES pages (user_id) ON DELETE CASCADE,
+    page_id INT NOT NULL REFERENCES pages (id) ON DELETE CASCADE,
+    page_content TEXT
+  );
+
+--! need to discuss the page_content data type and what values it will hold.
+-- insert page_content
+INSERT INTO
+  page_content (page_content)
+VALUES
+  ('text 1'),
+  ('text 2') RETURNING *;
 
 -- Create a table called **page_likes** in the database
 DROP TABLE IF EXISTS page_likes CASCADE;
@@ -167,16 +185,18 @@ DROP TABLE IF EXISTS page_likes CASCADE;
 CREATE TABLE
   page_likes (
     id SERIAL PRIMARY KEY NOT NULL,
-    user_id INT UNIQUE NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    page_id INT UNIQUE NOT NULL REFERENCES pages (id) ON DELETE CASCADE
-    --customer_id integer REFERENCES customers(customer_id) ON DELETE CASCADE,
+    user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    page_id INT NOT NULL REFERENCES pages (id) ON DELETE CASCADE
   );
 
 -- insert page_likes
 INSERT INTO
   page_likes (user_id, page_id)
 VALUES
-  (1, 1) RETURNING *;
+  (1, 1),
+  (1, 2),
+  (2, 1),
+  (2, 2) RETURNING *;
 
 -- Create a table called **friends** in the database
 DROP TABLE IF EXISTS friends CASCADE;
@@ -204,7 +224,7 @@ CREATE TABLE
   posts (
     id SERIAL PRIMARY KEY NOT NULL,
     user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    content VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW (),
     is_deleted SMALLINT DEFAULT 0
   );
@@ -226,7 +246,7 @@ CREATE TABLE
     post_id INT NOT NULL REFERENCES posts (id) ON DELETE CASCADE
   );
 
---! prevent the user from liking the same post multiple times... 
+--! prevent the user from liking the same post multiple times... Frontend and backend
 -- insert posts_likes
 INSERT INTO
   posts_likes (user_id, post_id)
@@ -304,7 +324,7 @@ CREATE TABLE
     comment_id INT NOT NULL REFERENCES comments (id) ON DELETE CASCADE
   );
 
---! prevent the user from liking the same comment multiple times... 
+--! prevent the user from liking the same comment multiple times... frontend and backend
 -- insert comment_likes
 INSERT INTO
   comment_likes (user_id, comment_id)
