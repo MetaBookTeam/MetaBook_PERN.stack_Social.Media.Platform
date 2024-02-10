@@ -4,7 +4,11 @@ const cors = require("cors");
 require("./models/db");
 
 //routers
-// const articlesRouter = require("./routes/articles");
+const rolesRouter = require("./routes/roles");
+const usersRouter = require("./routes/users");
+const pagesRouter = require("./routes/pages");
+const postsRouter = require("./routes/posts");
+const commentsRouter = require("./routes/comments");
 
 const app = express();
 
@@ -13,7 +17,21 @@ app.use(express.json());
 app.use(cors());
 
 // router middleware
-// app.use("/articles", articlesRouter);
+
+// TABLES roles / permissions / role_permission
+app.use("/roles", rolesRouter);
+
+// TABLES users / user_profile / friends
+app.use("/users", usersRouter);
+
+// TABLES pages / page_content / page_likes
+app.use("/pages", pagesRouter);
+
+// TABLES posts / posts_likes / photos / shares
+app.use("/posts", postsRouter);
+
+// TABLES comments / comment_likes
+app.use("/comments", commentsRouter);
 
 const PORT = process.env.PORT || 5000;
 
