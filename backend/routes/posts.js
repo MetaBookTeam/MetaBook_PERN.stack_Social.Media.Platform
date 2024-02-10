@@ -1,10 +1,10 @@
 const express = require("express");
 
 //controllers
-// const {} = require("../controllers/posts");
+const {createNewPost} = require("../controllers/posts");
 
 const postsRouter = express.Router();
 
-// usersRouter.post("/", createNewRole);
+postsRouter.post("/", createNewPost);
 
 module.exports = postsRouter;
