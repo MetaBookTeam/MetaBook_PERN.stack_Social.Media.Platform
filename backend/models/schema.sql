@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS roles CASCADE;
 CREATE TABLE
   roles (
     id SERIAL PRIMARY KEY NOT NULL,
-    role VARCHAR(255) NOT NULL
+    role VARCHAR(255) UNIQUE NOT NULL
   );
 
 -- insert roles
@@ -56,6 +56,7 @@ CREATE TABLE
     email TEXT UNIQUE NOT NULL,
     user_name VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
+    image TEXT,
     role_id INT NOT NULL REFERENCES roles (id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT NOW (),
     is_deleted SMALLINT DEFAULT 0
@@ -63,11 +64,11 @@ CREATE TABLE
 
 -- insert users
 INSERT INTO
-  users (email, user_name, password, role_id)
+  users (email, user_name, password, image, role_id)
 VALUES
-  ('admin@gmail.com', 'admin1', 123456, 1),
-  ('user1@gmail.com', 'user1', 123456, 2),
-  ('user2@gmail.com', 'user2', 123456, 2) RETURNING *;
+  ('admin@gmail.com', 'admin1', 123456, 'img_url', 1),
+  ('user1@gmail.com', 'user1', 123456, 'img_url', 2),
+  ('user2@gmail.com', 'user2', 123456, 'img_url', 2) RETURNING *;
 
 --! the inserted passwords are not encrypted so the login will not work on them, so we need to register from POSTMAN.
 --
@@ -166,7 +167,7 @@ DROP TABLE IF EXISTS page_content CASCADE;
 CREATE TABLE
   page_content (
     id SERIAL PRIMARY KEY NOT NULL,
-    user_id INT NOT NULL REFERENCES pages (user_id) ON DELETE CASCADE,
+    user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     page_id INT NOT NULL REFERENCES pages (id) ON DELETE CASCADE,
     page_content TEXT
   );
@@ -174,10 +175,10 @@ CREATE TABLE
 --! need to discuss the page_content data type and what values it will hold.
 -- insert page_content
 INSERT INTO
-  page_content (page_content)
+  page_content (user_id, page_id, page_content)
 VALUES
-  ('text 1'),
-  ('text 2') RETURNING *;
+  (1, 1, 'text 1'),
+  (1, 2, 'text 2') RETURNING *;
 
 -- Create a table called **page_likes** in the database
 DROP TABLE IF EXISTS page_likes CASCADE;
@@ -205,7 +206,8 @@ CREATE TABLE
   friends (
     id SERIAL PRIMARY KEY NOT NULL,
     user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    friend_id INT UNIQUE NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    --! /* UNION */ ///////////////
+    friend_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT NOW (),
     is_deleted SMALLINT DEFAULT 0
   );
@@ -281,19 +283,27 @@ DROP TABLE IF EXISTS shares CASCADE;
 CREATE TABLE
   shares (
     id SERIAL PRIMARY KEY NOT NULL,
-    user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    post_id INT NOT NULL REFERENCES posts (id) ON DELETE CASCADE
+    post_id INT NOT NULL REFERENCES posts (id) ON DELETE CASCADE,
+    user_id INT REFERENCES users (id) ON DELETE CASCADE
+    -- OR page_id INT REFERENCES pages (id) ON DELETE CASCADE
   );
 
+--! check the role if user or page. //////////////////////
 -- insert shares
 INSERT INTO
-  shares (user_id, post_id)
+  shares (post_id, user_id)
 VALUES
   (1, 1),
-  (1, 1),
-  (1, 2),
+  (2, 1),
   (2, 2) RETURNING *;
 
+-- INSERT INTO
+--   shares (post_id, user_id, page_id)
+-- VALUES
+--   (1, null, 1),
+--   (1, 1, null),
+--   (2, 1, null),
+--   (2, 2, null) RETURNING *;
 -- Create a table called **comments** in the database
 DROP TABLE IF EXISTS comments CASCADE;
 
@@ -330,4 +340,5 @@ INSERT INTO
   comment_likes (user_id, comment_id)
 VALUES
   (2, 1),
-  (1, 2) RETURNING *;
+  (1, 2),
+  (1, 1) RETURNING *;
