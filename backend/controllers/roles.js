@@ -32,6 +32,13 @@ POST http://localhost:5000/roles/
 };
 
 const createNewPermission = (req, res) => {
+  /* 
+POST http://localhost:5000/roles/permission
+
+{
+    "permission": "ADD_PAGE"
+}
+*/
   const { permission } = req.body;
   const query = `INSERT INTO permissions (permission) VALUES ($1) RETURNING *;`;
   const data = [permission];
@@ -55,6 +62,14 @@ const createNewPermission = (req, res) => {
 };
 
 const createNewRolePermission = (req, res) => {
+  /* 
+POST http://localhost:5000/roles/role_permission/
+
+{
+    "role_id": 1,
+    "permission_id": 3
+}
+*/
   const { role_id, permission_id } = req.body;
   const query = `INSERT INTO role_permission (role_id,
     permission_id) VALUES ($1,$2) RETURNING *`;
@@ -65,7 +80,7 @@ const createNewRolePermission = (req, res) => {
     .then((result) => {
       res.status(201).json({
         success: true,
-        message: ` Role Permission created successfully`,
+        message: `Role Permission created successfully`,
         result: result.rows,
       });
     })
