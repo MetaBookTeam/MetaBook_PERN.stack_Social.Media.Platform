@@ -1,10 +1,22 @@
 const express = require("express");
 
 //controllers
-// const {} = require("../controllers/posts");
+const {createNewPost,getAllPost,getPostByUserId,updatePostById,deletePostById} = require("../controllers/posts");
 
 const postsRouter = express.Router();
 
-// usersRouter.post("/", createNewRole);
+// POST 
+postsRouter.post("/", createNewPost);
+
+// GET
+postsRouter.get("/", getAllPost);
+postsRouter.get("/profile", getPostByUserId);
+
+
+// UPDATE
+postsRouter.put("/:post_id", updatePostById);
+
+// DELETE
+postsRouter.delete("/:post_id", deletePostById);
 
 module.exports = postsRouter;
