@@ -1,7 +1,7 @@
 const express = require("express");
 
 //controllers
-const {createNewPost,getAllPost} = require("../controllers/posts");
+const {createNewPost,getAllPost,getPostByUserId} = require("../controllers/posts");
 
 const postsRouter = express.Router();
 
@@ -10,6 +10,7 @@ postsRouter.post("/", createNewPost);
 
 // GET
 postsRouter.get("/", getAllPost);
+postsRouter.get("/profile", getPostByUserId);
 
 
 module.exports = postsRouter;
