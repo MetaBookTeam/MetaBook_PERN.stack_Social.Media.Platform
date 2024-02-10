@@ -9,7 +9,6 @@ const createNewPost = async (req, res) => {
       `INSERT INTO posts (user_id,content) VALUES ($1,$2) RETURNING *`,
       placeholder
     );
-    console.log(newPost.rows);
     res.status(200).json({
       success: true,
       message: "Created successfully",
@@ -24,6 +23,25 @@ const createNewPost = async (req, res) => {
   }
 };
 
+const getAllPost = async (req,res) => {
+    try {
+        const post = await pool.query(
+          `SELECT * FROM posts`
+        );
+        res.status(200).json({
+          success: true,
+          message: "Created successfully",
+          res: post.rows,
+        });
+      } catch (error) {
+        res.status(404).json({
+          success: false,
+          message: "server error",
+          res: error.message,
+        });
+      }
+}
 module.exports = {
   createNewPost,
+  getAllPost
 };

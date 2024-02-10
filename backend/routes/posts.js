@@ -1,10 +1,15 @@
 const express = require("express");
 
 //controllers
-const {createNewPost} = require("../controllers/posts");
+const {createNewPost,getAllPost} = require("../controllers/posts");
 
 const postsRouter = express.Router();
 
+// POST 
 postsRouter.post("/", createNewPost);
+
+// GET
+postsRouter.get("/", getAllPost);
+
 
 module.exports = postsRouter;
