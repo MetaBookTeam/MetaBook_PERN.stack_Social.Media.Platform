@@ -89,10 +89,25 @@ const updatePostById = async (req, res) => {
     }
   } else {
     res.status(404).json({
-        success: false,
-        message: "Enter data",
-      });
+      success: false,
+      message: "Enter data",
+    });
   }
+};
+
+const deletePostById = async (req, res) => {
+  const { post_id } = req.params;
+  const placeholder = [post_id];
+  const deletePost = await pool.query(
+    `DELETE FROM posts
+          WHERE id=$1 RETURNING *`,
+    placeholder
+  );
+  res.status(200).json({
+    success: true,
+    message: "Deleted successfully",
+    res: deletePost.rows,
+  });
 };
 
 module.exports = {
@@ -100,4 +115,5 @@ module.exports = {
   getAllPost,
   getPostByUserId,
   updatePostById,
+  deletePostById,
 };
