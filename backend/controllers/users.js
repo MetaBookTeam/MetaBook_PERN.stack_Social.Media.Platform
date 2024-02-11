@@ -52,7 +52,7 @@ POST http://localhost:5000/users/login
 
 {
     "email": "user3@gmail.com",
-    "password": "123456",
+    "password": "123456"
 }
 */
 

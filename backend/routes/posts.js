@@ -2,7 +2,7 @@ const express = require("express");
 
 //controllers
 const {createNewPost,getAllPost,getPostByUserId,updatePostById,deletePostById} = require("../controllers/posts");
-
+const authentication = require('../middlewares/authentication')
 const postsRouter = express.Router();
 
 // POST 
@@ -10,7 +10,7 @@ postsRouter.post("/", createNewPost);
 
 // GET
 postsRouter.get("/", getAllPost);
-postsRouter.get("/profile", getPostByUserId);
+postsRouter.get("/profile", authentication,getPostByUserId);
 
 
 // UPDATE
