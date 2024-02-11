@@ -17,6 +17,6 @@ postsRouter.get("/profile", authentication,getPostByUserId);
 postsRouter.put("/:post_id", authentication,updatePostById);
 
 // DELETE
-postsRouter.delete("/:post_id", deletePostById);
+postsRouter.delete("/:post_id",authentication, deletePostById);
 
 module.exports = postsRouter;
