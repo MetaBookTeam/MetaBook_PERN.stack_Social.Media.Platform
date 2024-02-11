@@ -64,15 +64,16 @@ const getPostByUserId = async (req, res) => {
 };
 
 const updatePostById = async (req, res) => {
+  const userId = req.token.userId;
   const { post_id } = req.params;
   const { content } = req.body;
-  const placeholder = [post_id, content];
+  const placeholder = [post_id, content,userId];
   if (content) {
     try {
       const updatePost = await pool.query(
         `UPDATE posts
           SET content = $2
-          WHERE id=$1 RETURNING *`,
+          WHERE id=$1 AND user_id=$3 RETURNING *`,
         placeholder
       );
       res.status(200).json({

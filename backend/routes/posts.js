@@ -14,7 +14,7 @@ postsRouter.get("/profile", authentication,getPostByUserId);
 
 
 // UPDATE
-postsRouter.put("/:post_id", updatePostById);
+postsRouter.put("/:post_id", authentication,updatePostById);
 
 // DELETE
 postsRouter.delete("/:post_id", deletePostById);
