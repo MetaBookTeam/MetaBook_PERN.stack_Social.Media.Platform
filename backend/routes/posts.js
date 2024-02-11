@@ -6,7 +6,7 @@ const authentication = require('../middlewares/authentication')
 const postsRouter = express.Router();
 
 // POST 
-postsRouter.post("/", createNewPost);
+postsRouter.post("/",authentication, createNewPost);
 
 // GET
 postsRouter.get("/", getAllPost);
