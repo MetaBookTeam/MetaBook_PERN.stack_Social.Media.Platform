@@ -13,7 +13,6 @@ const commentsRouter = require("./routes/comments");
 const app = express();
 
 //built-in middleware
-const Db=require("./models/db")
 app.use(express.json());
 app.use(cors());
 
