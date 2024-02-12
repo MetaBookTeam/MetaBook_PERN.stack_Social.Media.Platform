@@ -149,7 +149,7 @@ CREATE TABLE
   pages (
     id SERIAL PRIMARY KEY NOT NULL,
     user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    page_name VARCHAR(255) NOT NULL,
+    page_name VARCHAR(255) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT NOW (),
     is_deleted SMALLINT DEFAULT 0
   );

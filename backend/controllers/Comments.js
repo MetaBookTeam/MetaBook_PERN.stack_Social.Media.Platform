@@ -1,12 +1,12 @@
 import pool from "../models/db"
 //dont forget to import pool
 //create comments
-//const CreateComments=(req,res)=>{
+const CreateComments=(req,res)=>{
  //endpoint and method (post,/CreateComment)
-//const user_id=req.token.userId;
-//const post_id=req.query.id;
+const user_id=req.token.userId;
+const post_id=req.query.id;
  //we want to create comment in req.body
- /* const {comment}=req.body;
+  const {comment}=req.body;
 pool.query(`INSERT INTO comments(user_id,post_id,comment)VALUES($1,$2,$3) RETURNING *`,[user_id,post_id,comment]).then((result)=>{
     res.status(201).json({
         success: true,
@@ -21,7 +21,7 @@ pool.query(`INSERT INTO comments(user_id,post_id,comment)VALUES($1,$2,$3) RETURN
       });
 })
 }
-const getComments=(req,res)=>{
+/* const getComments=(req,res)=>{
     const userId = req.token.userId
     pool.query(`  SELECT * FROM comments
   WHERE is_deleted = 0`,[userId]).then((result)=>{
@@ -70,8 +70,8 @@ const UpdateCommentsById=(req,res)=>{
 }
 const DeleteCommentsById=(req,res)=>{
     
-}
+} */
 
 module.exports={
     CreateComments,DeleteComments,DeleteCommentsById,UpdateCommentsById,getComments,UpdateComments,getCommentsById
-} */
+} 
