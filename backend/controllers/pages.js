@@ -1,5 +1,6 @@
 const pool = require("../models/db");
 
+let cont=0
 // 1- this function createNewPage
 
 //POST http://localhost:5000/pages/

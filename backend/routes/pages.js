@@ -16,7 +16,7 @@ pagesRouter.get("/search_1/:id",getPageById)
 // endpoint for the PUT request
 pagesRouter.put("/:id",updatePageById)
 
-// endpoint for the DELETE request
+// endpoint for the DELETE request ///
 pagesRouter.delete("/:id",deletePageById)
 pagesRouter.delete("/:id/user",deletePageByUser)
 
