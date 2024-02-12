@@ -11,15 +11,39 @@ POST http://localhost:5000/users/register
     "email": "user3@gmail.com",
     "user_name": "user3",
     "password": "123456",
-    "image": "img_url"
+    "image": "img_url",
+    "first_name": "fName",
+    "last_name": "lName",
+    "birthday": "2000-01-01",
+    "gender": "male",
+    "phone_number": "0790000004",
+    "school": "school",
+    "address": "home",
+    "city": "Amman",
+    "country": "Jordan"
 }
 */
-  const { email, user_name, password, image } = req.body;
+  const {
+    email,
+    user_name,
+    password,
+    image,
+    first_name,
+    last_name,
+    birthday,
+    gender,
+    phone_number,
+    school,
+    address,
+    city,
+    country,
+  } = req.body;
 
   const role_id = "2"; //! edit the value of role_id depend on role id in role table.
+
   const encryptedPassword = await bcrypt.hash(password, saltRounds);
 
-  const query = `INSERT INTO users (email, user_name, password, image, role_id) VALUES ($1,$2,$3,$4,$5)`;
+  const query = `INSERT INTO users (email, user_name, password, image, role_id) VALUES ($1,$2,$3,$4,$5) RETURNING *;`;
 
   const data = [
     email.toLowerCase(),
@@ -31,7 +55,42 @@ POST http://localhost:5000/users/register
 
   pool
     .query(query, data)
-    .then((result) => {
+    .then(async (result) => {
+      // add extra information to user_profile
+      const user_id = result.rows[0].id;
+
+      const query = `INSERT INTO user_profile 
+      (user_id, first_name, last_name, birthday, gender, phone_number, school, address, city, country) 
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10);`;
+
+      const data = [
+        user_id,
+        first_name,
+        last_name,
+        birthday,
+        gender,
+        phone_number,
+        school,
+        address,
+        city,
+        country,
+      ];
+
+      await pool
+        .query(query, data)
+        .then((result) => {
+          console.log("user_profile created");
+        })
+        .catch((err) => {
+          console.log({
+            success: false,
+            message: "user_profile error",
+            err,
+          });
+        });
+
+      // returning the result of creating new user
+      console.log("Account created successfully");
       res.status(200).json({
         success: true,
         message: "Account created successfully",
