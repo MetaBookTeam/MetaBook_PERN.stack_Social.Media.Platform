@@ -162,7 +162,267 @@ POST http://localhost:5000/users/login
     });
 };
 
+// This function will getAllUsers
+
+const getAllUsers = (req, res) => {
+  const query = `SELECT * FROM users WHERE is_deleted = 0;`;
+  pool
+    .query(query)
+    .then((result) => {
+      if (result.rows.length === 0) {
+        console.log(`there is no users in DB`);
+
+        res.status(204).json({
+          success: true,
+          message: `there is no users in DB`,
+        });
+      } else if (result.rows.length) {
+        console.log(`getAllUsers done`);
+
+        res.status(200).json({
+          success: true,
+          message: `getAllUsers done`,
+          results: result.rows,
+        });
+      } else throw Error;
+    })
+    .catch((err) => {
+      res.status(403).json({
+        success: false,
+        message: "getAllUsers error",
+        err,
+      });
+    });
+};
+
+// //? getUserById  /////////////////////////////////
+
+const getUserById = (req, res) => {
+  //   /*
+  //     postman params /:id ==>
+  //     GET http://localhost:5000/users/6595c80555fc1e4be12e5bcc
+  //   */
+  //   const userId = req.params.id;
+  //   //* check the user account ownership before update it.
+  //   usersModel
+  //     .findById(userId)
+  //     .then(async (result) => {
+  //       if (
+  //         result.id.toString() === req.token.userId ||
+  //         req.token.role.role === "admin"
+  //       ) {
+  //         try {
+  //           const foundUser = await usersModel.findOne({ _id: userId });
+  //           console.log("foundUser ==>", foundUser);
+  //           if (foundUser === null) {
+  //             console.log(`No User found at id: ${userId}`);
+  //             res.status(404).json({
+  //               success: false,
+  //               message: `No user found at id: ${userId}`,
+  //             });
+  //           } else {
+  //             console.log(`user id: ${userId} has been found
+  //             by: ${
+  //               req.token.role.role === "admin"
+  //                 ? "admin"
+  //                 : ` the owner id: ${req.token.userId}`
+  //             }`);
+  //             res.status(200).json({
+  //               success: true,
+  //               message: foundUser,
+  //             });
+  //           }
+  //         } catch (err) {
+  //           console.log(err);
+  //           res.status(500).json({
+  //             success: false,
+  //             message: "usersModel.findOne({ _id: userId } Server Error",
+  //             err,
+  //           });
+  //         }
+  //       } else {
+  //         console.log("You are not the user account owner");
+  //         res.status(500).json({
+  //           success: false,
+  //           message: "You are not the user account owner",
+  //         });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       res.status(500).json({
+  //         success: false,
+  //         message: " .findById(userId) Server Error",
+  //         err,
+  //       });
+  //     });
+};
+
+// //? updateUserById  /////////////////////////////////
+
+const updateUserById = (req, res) => {
+  //   /*
+  //     postman params /:id ==>
+  //     PUT http://localhost:5000/users/6595c80555fc1e4be12e5bcc
+  //     req.body:
+  // {
+  //     "firstName": "user edited",
+  //     "age": 100
+  // }
+  //   */
+  //   const userId = req.params.id;
+  //   // console.log("req.token.userId", req.token.userId);
+  //   const {
+  //     userName,
+  //     firstName,
+  //     lastName,
+  //     phoneNumber,
+  //     age,
+  //     country,
+  //     email,
+  //     userCart,
+  //     userFav,
+  //     // password,
+  //     // role,
+  //   } = req.body;
+  //   //* check the user account ownership before update it.
+  //   usersModel
+  //     .findById(userId)
+  //     .then(async (result) => {
+  //       if (
+  //         result.id.toString() === req.token.userId ||
+  //         req.token.role.role === "admin"
+  //       ) {
+  //         try {
+  //           const findUser = await usersModel.findByIdAndUpdate(userId, {
+  //             userName,
+  //             firstName,
+  //             lastName,
+  //             phoneNumber,
+  //             age,
+  //             country,
+  //             email,
+  //             userCart,
+  //             userFav,
+  //             // password,
+  //             // role,
+  //           });
+  //           const updatedUser = {
+  //             userName: userName ? userName : findUser.userName,
+  //             firstName: firstName ? firstName : findUser.firstName,
+  //             lastName: lastName ? lastName : findUser.lastName,
+  //             phoneNumber: phoneNumber ? phoneNumber : findUser.phoneNumber,
+  //             age: age ? age : findUser.age,
+  //             country: country ? country : findUser.country,
+  //             email: email ? email : findUser.email,
+  //             userCart: userCart ? userCart : findUser.userCart,
+  //             userFav: userFav ? userFav : findUser.userFav,
+  //             // password: password ? password : findUser.password,
+  //             // role: role ? role : findUser.role,
+  //           };
+  //           console.log(`Updated user id: ${userId}
+  //           by: ${
+  //             req.token.role.role === "admin"
+  //               ? "admin"
+  //               : ` the owner id: ${req.token.userId}`
+  //           }`);
+  //           res.status(200).json({
+  //             success: true,
+  //             message: "user updated",
+  //             user: updatedUser,
+  //           });
+  //         } catch (err) {
+  //           console.log(err);
+  //           res.status(500).json({
+  //             success: false,
+  //             message: "Server Error",
+  //             err,
+  //           });
+  //         }
+  //       } else {
+  //         console.log("You are not the user account owner");
+  //         res.status(500).json({
+  //           success: false,
+  //           message: "You are not the user account owner",
+  //         });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       res.status(500).json({
+  //         success: false,
+  //         message: " .findById(userId) Server Error",
+  //         err,
+  //       });
+  //     });
+};
+
+// //? deleteUserById  /////////////////////////////////
+
+const deleteUserById = (req, res) => {
+  //   /*
+  //     postman params /:id ==>
+  //     DELETE http://localhost:5000/users/65975437a31cc98f9b7c61e2
+  //   */
+  //   const userId = req.params.id;
+  //   //* check the user account ownership before delete it.
+  //   usersModel
+  //     .findById(userId)
+  //     .then(async (result) => {
+  //       if (result === null) {
+  //         console.log(`user not found id: ${userId}`);
+  //         return res.status(404).json({
+  //           success: false,
+  //           message: "user not found",
+  //         });
+  //       }
+  //       if (
+  //         result.id.toString() === req.token.userId ||
+  //         req.token.role.role === "admin"
+  //       ) {
+  //         try {
+  //           const findUser = await usersModel.findByIdAndDelete(userId);
+  //           console.log(`user id: ${userId}
+  //           Deleted by: ${
+  //             req.token.role.role === "admin"
+  //               ? "admin"
+  //               : ` the owner id: ${req.token.userId}`
+  //           }`);
+  //           res.status(200).json({
+  //             success: true,
+  //             message: "user deleted",
+  //           });
+  //         } catch (err) {
+  //           console.log(err);
+  //           res.status(500).json({
+  //             success: false,
+  //             message: "Server Error",
+  //             err,
+  //           });
+  //         }
+  //       } else {
+  //         console.log("You are not the user account owner");
+  //         res.status(500).json({
+  //           success: false,
+  //           message: "You are not the user account owner",
+  //         });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       res.status(500).json({
+  //         success: false,
+  //         message: " .findById(userId) Server Error",
+  //         err,
+  //       });
+  //     });
+};
+
 module.exports = {
   register,
   login,
+  getAllUsers,
+  getUserById,
+  updateUserById,
+  deleteUserById,
 };
