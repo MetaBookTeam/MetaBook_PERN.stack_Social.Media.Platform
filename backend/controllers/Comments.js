@@ -21,10 +21,11 @@ pool.query(`INSERT INTO comments(user_id,post_id,comment)VALUES($1,$2,$3) RETURN
       });
 })
 }
-/* const getComments=(req,res)=>{
+ const getComments=(req,res)=>{
     const userId = req.token.userId
+    //console.log(req.token.userId);
     pool.query(`  SELECT * FROM comments
-  WHERE is_deleted = 0`,[userId]).then((result)=>{
+  WHERE is_deleted = 0  `,[userId]).then((result)=>{
     return res.status(200).json({
       success: true,
       message: 'All the comments',
@@ -38,7 +39,7 @@ pool.query(`INSERT INTO comments(user_id,post_id,comment)VALUES($1,$2,$3) RETURN
     });
   })
 }
-const UpdateComments=(req,res)=>{
+/* const UpdateComments=(req,res)=>{
     
 }
 const DeleteComments=(req,res)=>{
@@ -70,7 +71,7 @@ const UpdateCommentsById=(req,res)=>{
 }
 const DeleteCommentsById=(req,res)=>{
     
-} */
+}  */
 
 module.exports={
     CreateComments,DeleteComments,DeleteCommentsById,UpdateCommentsById,getComments,UpdateComments,getCommentsById
