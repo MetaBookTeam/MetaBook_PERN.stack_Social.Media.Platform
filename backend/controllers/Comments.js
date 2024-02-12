@@ -100,14 +100,33 @@ const getCommentsById=(req,res)=>{
   });
 })
 }
-/*
-const UpdateCommentsById=(req,res)=>{
 
-}
-const DeleteCommentsById=(req,res)=>{
+const UpdateCommentsById=(req,res)=>{
+  const post_id = req.params.id;
+  const{comment}=req.body
+  const data = [comment, post_id];
+  pool.query(`UPDATE comments SET id = COALESCE($1) WHERE id=$3 AND is_deleted = 0  RETURNING *;`,data).then((result)=>{
+    if(result.rows.length !== 0){
+      return res.status(200).json({
+        success: true,
+        message: `comments with id: ${post_id} updated successfully`,
+        article: result.rows[0]
+      });
+    }else {
+      throw new Error("Error happened while updating article");
+
+    }
     
-}  */
+  }).catch((err)=>{
+    return res.status(500).json({
+      success: false,
+      message: 'Server error',
+      err: err.message
+    });
+  })
+}
+
 
 module.exports={
-    CreateComments,DeleteComments,DeleteCommentsById,UpdateCommentsById,getComments,UpdateComments,getCommentsById
+    CreateComments,DeleteComments,UpdateCommentsById,getComments,UpdateComments,getCommentsById
 } 
