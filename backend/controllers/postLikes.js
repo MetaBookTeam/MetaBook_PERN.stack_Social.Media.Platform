@@ -1,0 +1,30 @@
+const pool = require("../models/db");
+
+const createNewPostLike = async (req, res) => {
+  const user_id = req.token.userId;
+  const { postId } = req.params;
+  const placeholder = [postId, user_id];
+  try {
+    const newLike = await pool.query(
+      `INSERT INTO posts_likes (post_id,user_id) VALUES ($1,$2) RETURNING *`,
+      placeholder
+    );
+    res.status(200).json({
+        success:true,
+        message:"Like added successfully",
+        res:newLike.rows
+    })
+  } catch (error) {
+    res.status(404).json({
+        success:false,
+        message:"Server error",
+        res:error
+    })
+  }
+};
+
+
+module.exports = {
+  createNewPostLike,
+
+};
