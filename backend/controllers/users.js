@@ -162,7 +162,7 @@ POST http://localhost:5000/users/login
     });
 };
 
-// This function will getAllUsers
+//? getAllUsers  /////////////////////////////////
 
 const getAllUsers = (req, res) => {
   const query = `
@@ -201,7 +201,7 @@ const getAllUsers = (req, res) => {
     });
 };
 
-// //? getUserById  /////////////////////////////////
+//? getUserById  /////////////////////////////////
 
 const getUserById = (req, res) => {
   /* 
@@ -213,7 +213,6 @@ GET http://localhost:5000/users/:user_id
     a. admin and the account owner (user) => all info
     b. the user's friends =>
     c. anyone else =>
-
 */
 
   const { user_id } = req.params;
