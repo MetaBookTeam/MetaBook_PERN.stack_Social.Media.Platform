@@ -50,7 +50,7 @@ pool.query(`INSERT INTO comments(user_id,post_id,comment)VALUES($1,$2,$3) RETURN
         article: result.rows[0]
       });
     }else {
-      throw new Error("Error happened while updating article");
+      throw new Error("Error happened while updating comments");
 
     }
     
@@ -78,10 +78,10 @@ const DeleteComments=(req,res)=>{
       });
     })
 }
-/*
+
 const getCommentsById=(req,res)=>{
     const userId = req.params.id;
-    pool.query(`SELECT user_id,post_id,comment, FROM users INNER JOIN comments ON users.id=comments.user_id WHERE comments.id=$1 AND comments.is_deleted=0;
+    pool.query(`SELECT user_id,post_id,comment, FROM comments INNER JOIN comments ON users.id=comments.user_id WHERE comments.id=$1 AND comments.is_deleted=0;
 `,[userId]).then((result)=>{
   if (result.rows.length !== 0) {
     return res.status(200).json({
@@ -90,7 +90,7 @@ const getCommentsById=(req,res)=>{
       comment: result.rows
     });
   }else {
-    throw new Error("Error happened while getting article");
+    throw new Error("Error happened while getting comments");
   }
 }).catch((err)=>{
   return res.status(500).json({
@@ -100,6 +100,7 @@ const getCommentsById=(req,res)=>{
   });
 })
 }
+/*
 const UpdateCommentsById=(req,res)=>{
 
 }
