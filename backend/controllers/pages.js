@@ -11,10 +11,17 @@ const createNewPage=(req,res)=>{
     const {page_name}=req.body
     const query=`INSERT INTO pages (user_id,page_name) VALUES ($1,$2) RETURNING *;`
     const data=[user_id,page_name]
-
+    if(!page_name){
+        res.status(404).json({
+            success:false,
+            message:"Enter Page Name",
+            
+        })
+    }
     pool
     .query(query,data)
     .then((result)=>{
+
         res.status(201).json({
             success:true,
             message:"Page Created",
@@ -22,7 +29,7 @@ const createNewPage=(req,res)=>{
         })
     }).catch((err)=>{
         res.status(500).json({
-            success:true,
+            success:false,
             message:"Server Error",
             err:err.message
         })
@@ -36,10 +43,11 @@ const createNewPage=(req,res)=>{
 
 const getAllPages=(req,res)=>{
 
-    const query=`SELECT * FROM pages`
+    const query=`SELECT * FROM pages WHERE is_deleted=0`
     pool
     .query(query)
     .then((result)=>{
+
         res.status(200).json({
             success:true,
             message:"All pages",
@@ -60,14 +68,14 @@ const getAllPages=(req,res)=>{
 
 const getPageByUser=(req,res)=>{
     const user_id=req.token.userId
-    const query=`SELECT * FROM pages WHERE user_id =$1`
+    const query=`SELECT * FROM pages WHERE user_id =$1 AND is_deleted=0`
     const data=[user_id]
 
     pool
     .query(query,data)
     .then((result)=>{
 
-        if(result.rows.length==0){
+        if(result.rows.length===0){
          res.status(404).json({
                 success: false,
                 message: `The UserId: ${user_id} has no pages`,
@@ -100,7 +108,7 @@ const data=[id]
 pool
 .query(query,data)
 .then((result)=>{
-    if(result.rows.length==0){
+    if(result.rows.length===0){
         res.status(404).json({
             success:false,
             message:`There is no ${id} with is page`
@@ -135,7 +143,7 @@ const updatePageById=(req,res)=>{
 pool
 .query(query,data)
 .then((result)=>{
-    if(result.rows.length==0){
+    if(result.rows.length===0){
         res.status(404).json({
             success:false,
             message:`There is no ${id} with is page`
@@ -198,7 +206,7 @@ pool
     pool
     .query(query,data)
     .then((result)=>{
-        if(result.rows.length==0){
+        if(result.rows.length===0){
             res.status(404).json({
                 success:false,
                 message:`There is no ${user_id} with is page` 
