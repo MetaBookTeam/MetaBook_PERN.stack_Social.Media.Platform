@@ -39,9 +39,30 @@ pool.query(`INSERT INTO comments(user_id,post_id,comment)VALUES($1,$2,$3) RETURN
     });
   })
 }
-/* const UpdateComments=(req,res)=>{
+ const UpdateComments=(req,res)=>{
+  const post_Id = req.params.id;
+  const{comment}=req.body
+  const data = [comment, post_Id];
+  pool.query(`UPDATE Comments SET Comment = COALESCE($1)  WHERE id=$3 AND is_deleted = 0  RETURNING *;`,data).then((result)=>{
+    if(result.rows.length !== 0){
+      return res.status(200).json({
+        success: true,
+        article: result.rows[0]
+      });
+    }else {
+      throw new Error("Error happened while updating article");
+
+    }
     
+  }).catch((err)=>{
+    return res.status(500).json({
+      success: false,
+      message: 'Server error',
+      err: err.message
+    });
+  })
 }
+/*
 const DeleteComments=(req,res)=>{
     
 }
