@@ -62,10 +62,23 @@ pool.query(`INSERT INTO comments(user_id,post_id,comment)VALUES($1,$2,$3) RETURN
     });
   })
 }
-/*
+
 const DeleteComments=(req,res)=>{
-    
+    const post_id=req.params.id;
+    pool.query(`UPDATE comments SET is_deleted = 1 WHERE id = $1`,[articleId]).then((result)=>{
+      return res.status(200).json({
+        success: true,
+        message: `comments with id: ${post_id} deleted successfully`
+      });
+    }).catch((err)=>{
+      return res.status(500).json({
+        success: false,
+        message: 'Server error',
+        err: err.message
+      });
+    })
 }
+/*
 const getCommentsById=(req,res)=>{
     const userId = req.params.id;
     pool.query(`SELECT user_id,post_id,comment, FROM users INNER JOIN comments ON users.id=comments.user_id WHERE comments.id=$1 AND comments.is_deleted=0;
