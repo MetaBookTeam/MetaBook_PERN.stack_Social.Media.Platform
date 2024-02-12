@@ -165,7 +165,13 @@ POST http://localhost:5000/users/login
 // This function will getAllUsers
 
 const getAllUsers = (req, res) => {
-  const query = `SELECT * FROM users WHERE is_deleted = 0;`;
+  const query = `
+  SELECT * 
+  FROM users 
+  FULL OUTER JOIN user_profile 
+  ON users.id = user_profile.user_id 
+  WHERE users.is_deleted = 0;
+  `;
   pool
     .query(query)
     .then((result) => {
@@ -198,64 +204,58 @@ const getAllUsers = (req, res) => {
 // //? getUserById  /////////////////////////////////
 
 const getUserById = (req, res) => {
-  //   /*
-  //     postman params /:id ==>
-  //     GET http://localhost:5000/users/6595c80555fc1e4be12e5bcc
-  //   */
-  //   const userId = req.params.id;
-  //   //* check the user account ownership before update it.
-  //   usersModel
-  //     .findById(userId)
-  //     .then(async (result) => {
-  //       if (
-  //         result.id.toString() === req.token.userId ||
-  //         req.token.role.role === "admin"
-  //       ) {
-  //         try {
-  //           const foundUser = await usersModel.findOne({ _id: userId });
-  //           console.log("foundUser ==>", foundUser);
-  //           if (foundUser === null) {
-  //             console.log(`No User found at id: ${userId}`);
-  //             res.status(404).json({
-  //               success: false,
-  //               message: `No user found at id: ${userId}`,
-  //             });
-  //           } else {
-  //             console.log(`user id: ${userId} has been found
-  //             by: ${
-  //               req.token.role.role === "admin"
-  //                 ? "admin"
-  //                 : ` the owner id: ${req.token.userId}`
-  //             }`);
-  //             res.status(200).json({
-  //               success: true,
-  //               message: foundUser,
-  //             });
-  //           }
-  //         } catch (err) {
-  //           console.log(err);
-  //           res.status(500).json({
-  //             success: false,
-  //             message: "usersModel.findOne({ _id: userId } Server Error",
-  //             err,
-  //           });
-  //         }
-  //       } else {
-  //         console.log("You are not the user account owner");
-  //         res.status(500).json({
-  //           success: false,
-  //           message: "You are not the user account owner",
-  //         });
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       res.status(500).json({
-  //         success: false,
-  //         message: " .findById(userId) Server Error",
-  //         err,
-  //       });
-  //     });
+  /* 
+GET http://localhost:5000/users/:user_id
+*/
+
+  /* //! we need to check: 
+  1. who have the authority the see the user info and what information shall we share with them:
+    a. admin and the account owner (user) => all info
+    b. the user's friends =>
+    c. anyone else =>
+
+*/
+
+  const { user_id } = req.params;
+
+  const query = `
+  SELECT * 
+  FROM users 
+  FULL OUTER JOIN user_profile 
+  ON users.id = user_profile.user_id 
+  WHERE users.id = $1
+  AND users.is_deleted = 0;
+  `;
+
+  const data = [user_id];
+
+  pool
+    .query(query, data)
+    .then((result) => {
+      if (result.rows.length === 0) {
+        console.log(`there is no user with id= ${user_id}`);
+
+        // status 204 will not return and response
+        res.status(204).json({
+          success: true,
+          message: `there is no user with id= ${user_id}`,
+        });
+      } else if (result.rows.length) {
+        console.log(`getUserById done`);
+        res.status(200).json({
+          success: true,
+          message: `getUserById done`,
+          results: result.rows,
+        });
+      } else throw Error;
+    })
+    .catch((err) => {
+      res.status(403).json({
+        success: false,
+        message: "getUserById error",
+        err,
+      });
+    });
 };
 
 // //? updateUserById  /////////////////////////////////

@@ -24,21 +24,21 @@ usersRouter.get(
 );
 
 usersRouter.get(
-  "/:id",
+  "/:user_id",
   authentication,
   //   authorization("MANAGE-USERS"),
   getUserById
 );
 
 usersRouter.put(
-  "/:id",
+  "/:user_id",
   authentication,
   //   authorization("MANAGE-USERS"),
   updateUserById
 );
 
 usersRouter.delete(
-  "/:id",
+  "/:user_id",
   authentication,
   //   authorization("MANAGE-USERS"),
   deleteUserById
