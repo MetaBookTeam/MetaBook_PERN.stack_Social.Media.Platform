@@ -96,7 +96,8 @@ const updatePostById = async (req, res) => {
   }
 };
 
-const deletePostById = async (req, res) => { const userId = req.token.userId;
+const deletePostById = async (req, res) => { 
+  const userId = req.token.userId;
   const { post_id } = req.params;
   const placeholder = [post_id,userId];
   const deletePost = await pool.query(
