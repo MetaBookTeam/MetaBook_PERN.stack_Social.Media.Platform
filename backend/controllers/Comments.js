@@ -113,7 +113,7 @@ const UpdateCommentsById=(req,res)=>{
         article: result.rows[0]
       });
     }else {
-      throw new Error("Error happened while updating article");
+      throw new Error("Error happened while updating comments");
 
     }
     
