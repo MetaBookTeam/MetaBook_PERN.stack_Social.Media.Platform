@@ -1,4 +1,4 @@
-import pool from "../models/db"
+const pool = require("../models/db");
 //dont forget to import pool
 //create comments
 const CreateComments=(req,res)=>{
