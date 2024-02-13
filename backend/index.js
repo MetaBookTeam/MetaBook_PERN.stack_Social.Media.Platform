@@ -39,7 +39,7 @@ app.use("/posts", postsRouter);
 
 // TABLES comments / comment_likes
 app.use("/comments", commentsRouter);
-app.use('/comment_like',commentLikeRouter)
+
 
 const PORT = process.env.PORT || 5000;
 // Handles any other endpoints [unassigned - endpoints]

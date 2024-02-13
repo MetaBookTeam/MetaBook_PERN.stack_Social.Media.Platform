@@ -5,7 +5,7 @@ const {
   UpdateComments,
   DeleteComments,
   getCommentsById,
-  UpdateCommentsById,
+  UpdateCommentsById,getCommentLikeById, updateCommentLikeById, deleteCommentLikeById,createCommentLike
 } = require("../controllers/Comments");
 //controllers
 // const {} = require("../controllers/comments");
@@ -37,6 +37,10 @@ commentsRouter.put("/",authentication,UpdateComments);
 
 //* endpoint for the DELETE request
 commentsRouter.delete("/",authentication,DeleteComments); */
+commentsRouter.post('/comment_like',createCommentLike)
+commentsRouter.get('/like/:id',getCommentLikeById)
+commentsRouter.put('/comment_like/:id',updateCommentLikeById)
+commentsRouter.delete('/comment_like/:id',deleteCommentLikeById)
 
 
 module.exports = commentsRouter;
