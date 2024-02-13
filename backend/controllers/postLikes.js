@@ -40,6 +40,7 @@ const deletePostLikeById = async (req, res) => {
           message:"Remove like successfully",
           res:deleteLike.rows
       })
+      console.log(deleteLike);
     } catch (error) {
       res.status(404).json({
           success:false,
@@ -48,6 +49,7 @@ const deletePostLikeById = async (req, res) => {
       })
     }
 };
+
 module.exports = {
   createNewPostLike,
   deletePostLikeById,

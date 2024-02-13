@@ -66,7 +66,7 @@ const getPostByUserId = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Server error",
-      res: error.message,
+      result: error.message,
     });
   }
 };
@@ -113,10 +113,11 @@ const deletePostById = async (req, res) => {
           WHERE id=$1 AND user_id=$2  RETURNING *`,
     placeholder
   );
+  
   res.status(200).json({
     success: true,
     message: "Deleted successfully",
-    res: deletePost.rows,
+    result: deletePost,
   });
 };
 
