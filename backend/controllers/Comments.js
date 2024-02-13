@@ -19,11 +19,11 @@ const CreateComments = (req, res) => {
         result: result.rows[0],
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       res.status(404).json({
         success: false,
         message: "Server error",
-        err: err.message,
+        error: error.message,
       });
     });
 };
@@ -64,17 +64,17 @@ const UpdateComments = (req, res) => {
       if (result.rows.length !== 0) {
         return res.status(200).json({
           success: true,
-          article: result.rows[0],
+          result: result.rows[0],
         });
       } else {
         throw new Error("Error happened while updating comments");
       }
     })
-    .catch((err) => {
+    .catch((error) => {
       return res.status(500).json({
         success: false,
         message: "Server error",
-        err: err.message,
+        error: error.message,
       });
     });
 };
@@ -82,18 +82,19 @@ const UpdateComments = (req, res) => {
 const DeleteComments = (req, res) => {
   const post_id = req.params.id;
   pool
-    .query(`UPDATE comments SET is_deleted = 1 WHERE id = $1`, [articleId])
+    .query(`UPDATE comments SET is_deleted = 1 WHERE id = $1`, [post_id])
     .then((result) => {
       return res.status(200).json({
         success: true,
         message: `comments with id: ${post_id} deleted successfully`,
+        result
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       return res.status(500).json({
         success: false,
         message: "Server error",
-        err: err.message,
+        error: error.message,
       });
     });
 };
@@ -111,17 +112,17 @@ const getCommentsById = (req, res) => {
         return res.status(200).json({
           success: true,
           message: `The comment with id: ${userId}`,
-          comment: result.rows,
+          comment: result.rows
         });
       } else {
         throw new Error("Error happened while getting comments");
       }
     })
-    .catch((err) => {
+    .catch((error) => {
       return res.status(500).json({
         success: false,
         message: "Server error",
-        err: err.message,
+        error: error.message,
       });
     });
 };
@@ -140,17 +141,17 @@ const UpdateCommentsById = (req, res) => {
         return res.status(200).json({
           success: true,
           message: `comments with id: ${post_id} updated successfully`,
-          article: result.rows[0],
+          result: result.rows[0]
         });
       } else {
         throw new Error("Error happened while updating comments");
       }
     })
-    .catch((err) => {
+    .catch((error) => {
       return res.status(500).json({
         success: false,
         message: "Server error",
-        err: err.message,
+        error: error.message,
       });
     });
 };
