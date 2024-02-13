@@ -5,6 +5,9 @@ const {
   createNewRole,
   createNewPermission,
   createNewRolePermission,
+  getAllRoles,
+  getAllPermissions,
+  getAllRolePermission,
 } = require("../controllers/roles");
 
 const authentication = require("../middlewares/authentication");
@@ -22,7 +25,7 @@ rolesRouter.post(
 );
 
 rolesRouter.post(
-  "/permission",
+  "/permissions",
   authentication,
   authorization("MANAGE_ROLES"),
   createNewPermission
@@ -33,6 +36,28 @@ rolesRouter.post(
   authentication,
   authorization("MANAGE_ROLES"),
   createNewRolePermission
+);
+
+//* endpoint for the GET request
+rolesRouter.get(
+  "/",
+  authentication,
+  authorization("MANAGE_ROLES"),
+  getAllRoles
+);
+
+rolesRouter.get(
+  "/permissions",
+  authentication,
+  authorization("MANAGE_ROLES"),
+  getAllPermissions
+);
+
+rolesRouter.get(
+  "/role_permission",
+  authentication,
+  authorization("MANAGE_ROLES"),
+  getAllRolePermission
 );
 
 module.exports = rolesRouter;
