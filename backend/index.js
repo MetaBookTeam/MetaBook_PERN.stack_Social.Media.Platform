@@ -9,12 +9,19 @@ const usersRouter = require("./routes/users");
 const pagesRouter = require("./routes/pages");
 const postsRouter = require("./routes/posts");
 const commentsRouter = require("./routes/comments");
+const commentLikeRouter = require("./routes/CommentLike");
 
 const app = express();
 
 //built-in middleware
 app.use(express.json());
 app.use(cors());
+
+
+// 
+
+
+
 
 // router middleware
 
@@ -32,6 +39,7 @@ app.use("/posts", postsRouter);
 
 // TABLES comments / comment_likes
 app.use("/comments", commentsRouter);
+app.use('/comment_like',commentLikeRouter)
 
 const PORT = process.env.PORT || 5000;
 // Handles any other endpoints [unassigned - endpoints]

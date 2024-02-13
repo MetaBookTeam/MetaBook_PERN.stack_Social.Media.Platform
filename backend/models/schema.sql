@@ -27,12 +27,8 @@ CREATE TABLE
 INSERT INTO
   permissions (permission)
 VALUES
-  ('MANAGE_ROLES'),
-  ('MANAGE_USERS'),
-  ('MANAGE_POSTS'),
-  ('MANAGE_COMMENTS'),
-  ('MANAGE_SHARES'),
-  ('MANAGE_PAGES') RETURNING *;
+  ('ADD_POST'),
+  ('ADD_COMMENT') RETURNING *;
 
 -- Create a table called **role_permission** in the database
 DROP TABLE IF EXISTS role_permission CASCADE;
@@ -49,16 +45,7 @@ INSERT INTO
   role_permission (role_id, permission_id)
 VALUES
   (1, 1),
-  (1, 2),
-  (1, 3),
-  (1, 4),
-  (1, 5),
-  (1, 6),
-  (2, 2),
-  (2, 3),
-  (2, 4),
-  (2, 5),
-  (2, 6) RETURNING *;
+  (1, 2) RETURNING *;
 
 -- Create a table called **users** in the database
 DROP TABLE IF EXISTS users CASCADE;
@@ -240,7 +227,6 @@ CREATE TABLE
     id SERIAL PRIMARY KEY NOT NULL,
     user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     content TEXT NOT NULL,
-    -- ! type VARCHAR(255)[]
     created_at TIMESTAMP DEFAULT NOW (),
     is_deleted SMALLINT DEFAULT 0
   );
@@ -318,7 +304,6 @@ VALUES
 --   (1, 1, null),
 --   (2, 1, null),
 --   (2, 2, null) RETURNING *;
---
 -- Create a table called **comments** in the database
 DROP TABLE IF EXISTS comments CASCADE;
 
