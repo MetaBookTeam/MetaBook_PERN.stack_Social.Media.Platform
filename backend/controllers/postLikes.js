@@ -10,17 +10,16 @@ const createNewPostLike = async (req, res) => {
       `INSERT INTO posts_likes (post_id,user_id) VALUES ($1,$2) RETURNING *`,
       placeholder
     );
-    console.log(newLike);
     res.status(200).json({
         success:true,
         message:"Like added successfully",
-        res:newLike.rows
+        result:newLike.rows
     })
   } catch (error) {
     res.status(404).json({
         success:false,
         message:"Server error",
-        res:error
+        error
     })
   }
 };
@@ -38,14 +37,14 @@ const deletePostLikeById = async (req, res) => {
       res.status(200).json({
           success:true,
           message:"Remove like successfully",
-          res:deleteLike.rows
+          result:deleteLike.rows
       })
       console.log(deleteLike);
     } catch (error) {
       res.status(404).json({
           success:false,
           message:"Server error",
-          res:error
+          error
       })
     }
 };
