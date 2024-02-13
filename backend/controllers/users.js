@@ -61,7 +61,7 @@ POST http://localhost:5000/users/register
     country,
   } = req.body;
 
-  const role_id = "2"; //! edit the value of role_id depend on role id in role table.
+  const role_id = "1"; //! edit the value of role_id depend on role id in role table.
 
   const encryptedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -116,6 +116,7 @@ POST http://localhost:5000/users/register
       res.status(200).json({
         success: true,
         message: "Account created successfully",
+        result: result.rows,
       });
     })
     .catch((err) => {
@@ -253,11 +254,10 @@ GET http://localhost:5000/users/:user_id
   pool
     .query(query, data)
     .then((result) => {
-      if (result.rows.length === 0) {
+      if (!result.rows.length) {
         console.log(`there is no user with id= ${user_id}`);
-
-        // status 204 will not return and response
-        res.status(204).json({
+        // res.status(204) will not send back a response
+        res.status(404).json({
           success: true,
           message: `there is no user with id= ${user_id}`,
         });
@@ -266,11 +266,11 @@ GET http://localhost:5000/users/:user_id
         res.status(200).json({
           success: true,
           message: `getUserById done`,
-          results: result.rows,
+          result: result.rows,
         });
       } else throw Error;
     })
-    .catch((err) => {
+    .catch((error) => {
       res.status(403).json({
         success: false,
         message: "getUserById error",
@@ -282,6 +282,69 @@ GET http://localhost:5000/users/:user_id
 // //? updateUserById  /////////////////////////////////
 
 const updateUserById = (req, res) => {
+
+
+
+  /* 
+PUT http://localhost:5000/users/2
+
+{
+    "user_name": "user3 edited",
+    "city": "Zarqa City"
+}
+*/
+//! add new route for password only {"password": "123456"}
+  /* //! we need to check: 
+  1. who have the authority the see the user info and what information shall we share with them:
+    a. admin and the account owner (user) => all info
+    b. the user's friends =>
+    c. anyone else =>
+*/
+
+const { user_id } = req.params;
+
+const query = `
+SELECT * 
+FROM users 
+FULL OUTER JOIN user_profile 
+ON users.id = user_profile.user_id 
+WHERE users.id = $1
+AND users.is_deleted = 0;
+`;
+
+const data = [user_id];
+
+pool
+  .query(query, data)
+  .then((result) => {
+    if (result.rows.length === 0) {
+      console.log(`there is no user with id= ${user_id}`);
+
+      // status 204 will not return and response
+      res.status(204).json({
+        success: true,
+        message: `there is no user with id= ${user_id}`,
+      });
+    } else if (result.rows.length) {
+      console.log(`getUserById done`);
+      res.status(200).json({
+        success: true,
+        message: `getUserById done`,
+        result: result.rows,
+      });
+    } else throw Error;
+  })
+  .catch((error) => {
+    res.status(403).json({
+      success: false,
+      message: "getUserById error",
+      error,
+    });
+  });
+
+
+
+
   //   /*
   //     postman params /:id ==>
   //     PUT http://localhost:5000/users/6595c80555fc1e4be12e5bcc
@@ -378,9 +441,41 @@ const updateUserById = (req, res) => {
   //     });
 };
 
-// //? deleteUserById  /////////////////////////////////
+//? softDeleteUserById  /////////////////////////////////
+const softDeleteUserById = (req, res) => {
+  /* 
+DELETE http://localhost:5000/users/3
+*/
+  //@ after deleting the user the app shall logout.
+  //@ check if the user he is the one who delete the profile.
 
-const deleteUserById = (req, res) => {
+  const { user_id } = req.params;
+
+  const query = `UPDATE users SET is_deleted = 1 WHERE id=$1 RETURNING *;`;
+
+  const data = [user_id];
+
+  pool
+    .query(query, data)
+    .then((result) => {
+      if (result.rows.length) {
+        console.log(`softDeleteUserById done`);
+        res.status(410).json({
+          success: true,
+          message: `softDeleteUserById done`,
+          result: result.rows,
+        });
+      } else throw Error;
+    })
+    .catch((error) => {
+      console.log("softDeleteUserById error");
+      res.status(500).json({
+        success: false,
+        message: "softDeleteUserById error",
+        error,
+      });
+    });
+
   //   /*
   //     postman params /:id ==>
   //     DELETE http://localhost:5000/users/65975437a31cc98f9b7c61e2
@@ -439,11 +534,54 @@ const deleteUserById = (req, res) => {
   //     });
 };
 
+//? hardDeleteUserById  /////////////////////////////////
+const hardDeleteUserById = (req, res) => {
+  /* 
+DELETE http://localhost:5000/users/delete/3
+*/
+  //@ after deleting the user the app shall logout.
+  //@ check if the user he is the one who delete the profile.
+
+  const { user_id } = req.params;
+
+  const query = `DELETE FROM users WHERE id=$1 RETURNING *;`;
+  const data = [user_id];
+
+  pool
+    .query(query, data)
+    .then((result) => {
+      if (!result.rows.length) {
+        console.log(`user not found or already deleted.`);
+        res.status(410).json({
+          success: true,
+          message: `user not found or already deleted.`,
+        });
+        return;
+      }
+
+      console.log(`hardDeleteUserById done`);
+      res.status(410).json({
+        success: true,
+        message: `hardDeleteUserById done`,
+        result: result.rows,
+      });
+    })
+    .catch((error) => {
+      console.log("hardDeleteUserById error");
+      res.status(500).json({
+        success: false,
+        message: "hardDeleteUserById error",
+        error,
+      });
+    });
+};
+
 module.exports = {
   register,
   login,
   getAllUsers,
   getUserById,
   updateUserById,
-  deleteUserById,
+  softDeleteUserById,
+  hardDeleteUserById,
 };

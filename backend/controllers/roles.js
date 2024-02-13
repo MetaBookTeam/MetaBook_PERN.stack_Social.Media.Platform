@@ -92,8 +92,100 @@ POST http://localhost:5000/roles/role_permission/
       });
     });
 };
+
+const getAllRoles = (req, res) => {
+  /* 
+GET http://localhost:5000/roles/
+*/
+
+  const query = `SELECT * FROM roles;`;
+
+  pool
+    .query(query)
+    .then((result) => {
+      console.log("getAllRoles done");
+      res.status(200).json({
+        success: true,
+        message: "getAllRoles done",
+        result: result.rows,
+      });
+    })
+    .catch((error) => {
+      console.log(`getAllRoles Server error`);
+      res.status(500).json({
+        success: false,
+        message: `getAllRoles Server error`,
+        error,
+      });
+    });
+};
+
+const getAllPermissions = (req, res) => {
+  /* 
+GET http://localhost:5000/roles/permissions
+*/
+
+  const query = `SELECT * FROM permissions;`;
+
+  pool
+    .query(query)
+    .then((result) => {
+      console.log("getAllPermissions done");
+      res.status(200).json({
+        success: true,
+        message: "getAllPermissions done",
+        result: result.rows,
+      });
+    })
+    .catch((error) => {
+      console.log(`getAllPermissions Server error`);
+      res.status(500).json({
+        success: false,
+        message: `getAllPermissions Server error`,
+        error,
+      });
+    });
+};
+
+const getAllRolePermission = (req, res) => {
+  /* 
+GET http://localhost:5000/roles/role_permission
+*/
+
+  const query = `
+  SELECT * 
+  FROM role_permission
+  FULL OUTER JOIN roles
+  ON role_permission.role_id = roles.id
+  FULL OUTER JOIN permissions
+  ON role_permission.permission_id = permissions.id;
+  `;
+
+  pool
+    .query(query)
+    .then((result) => {
+      console.log("getAllRolePermission done");
+      res.status(200).json({
+        success: true,
+        message: "getAllRolePermission done",
+        result: result.rows,
+      });
+    })
+    .catch((error) => {
+      console.log(`getAllRolePermission Server error`);
+      res.status(500).json({
+        success: false,
+        message: `getAllRolePermission Server error`,
+        error,
+      });
+    });
+};
+
 module.exports = {
   createNewRole,
   createNewPermission,
   createNewRolePermission,
+  getAllRoles,
+  getAllPermissions,
+  getAllRolePermission,
 };

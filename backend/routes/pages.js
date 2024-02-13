@@ -1,12 +1,21 @@
 const express = require("express");
 // Import pages controller
-const { createNewPage, getAllPages, getPageByUser, getPageById, updatePageById, deletePageById, deletePageByUser, } = require("../controllers/pages");
+
+const {
+  createNewPage,
+  getAllPages,
+  getPageByUser,
+  getPageById,
+  updatePageById,
+  deletePageById,
+  deletePageByUser,
+} = require("../controllers/pages");
 
 // Create pages router
 const pagesRouter = express.Router();
 
 // endpoint for the POST request
-pagesRouter.post("/",createNewPage)
+pagesRouter.post("/",authentication,createNewPage)
 
 // endpoint for the GET request
 pagesRouter.get("/",getAllPages)

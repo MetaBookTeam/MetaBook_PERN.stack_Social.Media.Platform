@@ -66,35 +66,35 @@ const getAllPages=(req,res)=>{
 
 //GET  http://localhost:5000/pages/id
 
-const getPageByUser=(req,res)=>{
-    const user_id=req.token.userId
-    const query=`SELECT * FROM pages WHERE user_id =$1 AND is_deleted=0`
-    const data=[user_id]
+const getPageByUser = (req, res) => {
+  const user_id = req.token.userId;
+  const query = `SELECT * FROM pages WHERE user_id =$1 AND is_deleted=0;`;
+  const data = [user_id];
 
-    pool
-    .query(query,data)
-    .then((result)=>{
-
-        if(result.rows.length===0){
-         res.status(404).json({
-                success: false,
-                message: `The UserId: ${user_id} has no pages`,
-              });
-        }else{
+  pool
+    .query(query, data)
+    .then((result) => {
+      if (result.rows.length === 0) {
+        res.status(404).json({
+          success: false,
+          message: `The UserId: ${user_id} has no pages`,
+        });
+      } else {
         res.status(200).json({
-            success:true,
-            message:`All the pages for the user: ${user_id}`,
-            result:result.rows
-        })
-    }
-    }).catch((err)=>{
-        res.status(500).json({
-            success:false,
-            message:"Server Erorr",
-            err:err.message
-        })
+          success: true,
+          message: `All the pages for the user: ${user_id}`,
+          result: result.rows,
+        });
+      }
     })
-}
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: "Server Error",
+        err: err.message,
+      });
+    });
+};
 
 // 4- this function getPageById
 
@@ -134,16 +134,15 @@ pool
 
  //PUT  http://localhost:5000/pages/:id
 
-const updatePageById=(req,res)=>{
-
- const {id}=req.params
- const {page_name}=req.body
- const query=`UPDATE pages SET page_name= $1 WHERE id=$2 RETRUNING * `
- const data=[id,page_name]
-pool
-.query(query,data)
-.then((result)=>{
-    if(result.rows.length===0){
+const updatePageById = (req, res) => {
+  const { id } = req.params;
+  const { page_name } = req.body;
+  const query = `UPDATE pages SET page_name= $1 WHERE id=$2 RETURNING *;`;
+  const data = [id, page_name];
+  pool
+    .query(query, data)
+    .then((result) => {
+      if (result.rows.length === 0) {
         res.status(404).json({
             success:false,
             message:`There is no ${id} with is page`
