@@ -1,6 +1,14 @@
 const pool = require("../models/db");
 
 const createNewPost = async (req, res) => {
+  /* 
+POST http://localhost:5000/posts
+
+{
+    "content": "description"
+}
+*/
+
   const { userId } = req.token;
   const { content } = req.body;
 
@@ -20,12 +28,17 @@ const createNewPost = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "server error",
-      error
+      error,
     });
   }
 };
 
 const getAllPost = async (req, res) => {
+   /* 
+GET http://localhost:5000/posts
+
+*/
+  
   try {
     const post = await pool.query(
       `SELECT * FROM posts INNER JOIN comments ON posts.id=comments.post_id;`
@@ -39,7 +52,7 @@ const getAllPost = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "server error",
-      error
+      error,
     });
   }
 };
@@ -48,6 +61,11 @@ const getAllPost = async (req, res) => {
 //       UNION ALL
 //       SELECT comment FROM comments INNER JOIN posts ON posts.id=comments.post_id
 const getPostByUserId = async (req, res) => {
+   /* 
+GET http://localhost:5000/posts/profile
+
+
+*/
   const userId = req.token.userId;
   const placeholder = [userId];
   try {
@@ -72,6 +90,13 @@ const getPostByUserId = async (req, res) => {
 };
 
 const updatePostById = async (req, res) => {
+  /*
+PUT http://localhost:5000/posts/:post_id
+
+{
+    "content": "description"
+}
+  */
   const userId = req.token.userId;
   const { post_id } = req.params;
   const { content } = req.body;
@@ -105,27 +130,31 @@ const updatePostById = async (req, res) => {
 };
 
 const deletePostById = async (req, res) => {
+    /*
+DELETE http://localhost:5000/posts/:post_id
+
+  */
   const userId = req.token.userId;
   const { post_id } = req.params;
   const placeholder = [post_id, userId];
- try {
-   const deletePost = await pool.query(
-     `DELETE FROM posts
+  try {
+    const deletePost = await pool.query(
+      `DELETE FROM posts
            WHERE id=$1 AND user_id=$2  RETURNING *`,
-     placeholder
-   );
-   res.status(200).json({
-     success: true,
-     message: "Deleted successfully",
-     result: deletePost,
-   });
- } catch (error) {
-  res.status(200).json({
-    success: true,
-    message: "Deleted successfully",
-    error,
-  });
- }
+      placeholder
+    );
+    res.status(200).json({
+      success: true,
+      message: "Deleted successfully",
+      result: deletePost,
+    });
+  } catch (error) {
+    res.status(200).json({
+      success: true,
+      message: "Deleted successfully",
+      error,
+    });
+  }
 };
 
 module.exports = {
