@@ -11,13 +11,13 @@ pool.query(`INSERT INTO comments(user_id,post_id,comment)VALUES($1,$2,$3) RETURN
     res.status(201).json({
         success: true,
         message: 'Comment created successfully',
-        results: result.rows[0],
+        results: result.rows[0]
       });
-}).catch((err)=>{
+}).catch((error)=>{
     res.status(404).json({
         success: false,
         message: 'Server error',
-        err: err.message,
+        error: error.message
       });
 })
 }
@@ -42,11 +42,11 @@ pool.query(`INSERT INTO comments(user_id,post_id,comment)VALUES($1,$2,$3) RETURN
     throw new Error("Error happened while updating comments");
 
   }
-  }).catch((err)=>{
+  }).catch((error)=>{
     return res.status(500).json({
       success: false,
       message: 'Server error',
-      err
+      error
     });
   })
 }
@@ -60,18 +60,18 @@ pool.query(`INSERT INTO comments(user_id,post_id,comment)VALUES($1,$2,$3) RETURN
     if(result.rows.length ){
       return res.status(200).json({
         success: true,
-        article: result.rows[0]
+        result: result.rows[0]
       });
     }else {
       throw new Error("Error happened while updating comments");
 
     }
     
-  }).catch((err)=>{
+  }).catch((error)=>{
     return res.status(500).json({
       success: false,
       message: 'Server error',
-      err: err.message
+      error: error.message
     });
   })
 }
@@ -86,11 +86,11 @@ const DeleteComments = (req, res) => {
         result
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       return res.status(500).json({
         success: false,
         message: 'Server error',
-        err: err.message,
+        error: error.message,
       });
     });
 };
@@ -107,17 +107,17 @@ const getCommentsById = (req, res) => {
         return res.status(200).json({
           success: true,
           message: `The comment with id: ${comment_id}`,
-          comment: result.rows,
+          result: result.rows,
         });
       } else {
         throw new Error("Error happened while getting comments");
       }
     })
-    .catch((err) => {
+    .catch((error) => {
       return res.status(500).json({
         success: false,
         message: "Server error",
-        err: err.message,
+        error: error.message,
       });
     });
 };
@@ -136,17 +136,17 @@ const UpdateCommentsById = (req, res) => {
         return res.status(200).json({
           success: true,
           message: `Comment with id: ${comment_id} updated successfully`,
-          comment: result.rows[0],
+          result: result.rows[0],
         });
       } else {
         throw new Error("Error happened while updating comments");
       }
     })
-    .catch((err) => {
+    .catch((error) => {
       return res.status(500).json({
         success: false,
         message: "Server error",
-        err: err.message,
+        error: error.message,
       });
     });
 };
