@@ -27,7 +27,9 @@ const createNewPost = async (req, res) => {
 
 const getAllPost = async (req, res) => {
   try {
-    const post = await pool.query(`SELECT * FROM posts`);
+    const post = await pool.query(
+      `SELECT * FROM posts INNER JOIN comments ON posts.id=comments.post_id;`
+    );
     res.status(200).json({
       success: true,
       message: "Created successfully",
@@ -42,12 +44,17 @@ const getAllPost = async (req, res) => {
   }
 };
 
+// SELECT content FROM posts  WHERE user_id = $1
+//       UNION ALL
+//       SELECT comment FROM comments INNER JOIN posts ON posts.id=comments.post_id
 const getPostByUserId = async (req, res) => {
   const userId = req.token.userId;
   const placeholder = [userId];
   try {
     const post = await pool.query(
-      `SELECT * FROM posts WHERE user_id = $1`,
+      `SELECT posts.content,comments.comment FROM posts
+      INNER JOIN comments ON posts.id=comments.post_id
+      WHERE posts.user_id=$1 `,
       placeholder
     );
     res.status(200).json({

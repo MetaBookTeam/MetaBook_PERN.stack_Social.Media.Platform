@@ -1,5 +1,6 @@
 const pool = require("../models/db");
 
+// user can like multi times
 const createNewPostLike = async (req, res) => {
   const user_id = req.token.userId;
   const { postId } = req.params;
@@ -9,6 +10,7 @@ const createNewPostLike = async (req, res) => {
       `INSERT INTO posts_likes (post_id,user_id) VALUES ($1,$2) RETURNING *`,
       placeholder
     );
+    console.log(newLike);
     res.status(200).json({
         success:true,
         message:"Like added successfully",
@@ -22,6 +24,7 @@ const createNewPostLike = async (req, res) => {
     })
   }
 };
+
 const deletePostLikeById = async (req, res) => {
     const user_id = req.token.userId;
     const { postId } = req.params;
