@@ -235,25 +235,25 @@ GET http://localhost:5000/users/:user_id
   pool
     .query(query, data)
     .then((result) => {
-      if (result.rows.length === 0) {
+      if (!result.rows.length) {
         console.log(`there is no user with id= ${user_id}`);
-
-        // status 204 will not return and response
-        res.status(204).json({
+        // res.status(204) will not send back a response
+        res.status(404).json({
           success: true,
           message: `there is no user with id= ${user_id}`,
         });
-      } else if (result.rows.length) {
-        console.log(`getUserById done`);
-        res.status(200).json({
-          success: true,
-          message: `getUserById done`,
-          result: result.rows,
-        });
-      } else throw Error;
+        return;
+      }
+
+      console.log(`getUserById done`);
+      res.status(200).json({
+        success: true,
+        message: `getUserById done`,
+        result: result.rows,
+      });
     })
     .catch((error) => {
-      res.status(403).json({
+      res.status(500).json({
         success: false,
         message: "getUserById error",
         error,
@@ -264,9 +264,6 @@ GET http://localhost:5000/users/:user_id
 // //? updateUserById  /////////////////////////////////
 
 const updateUserById = (req, res) => {
-
-
-
   /* 
 PUT http://localhost:5000/users/2
 
@@ -275,7 +272,7 @@ PUT http://localhost:5000/users/2
     "city": "Zarqa City"
 }
 */
-//! add new route for password only {"password": "123456"}
+  //! add new route for password only {"password": "123456"}
   /* //! we need to check: 
   1. who have the authority the see the user info and what information shall we share with them:
     a. admin and the account owner (user) => all info
@@ -283,49 +280,80 @@ PUT http://localhost:5000/users/2
     c. anyone else =>
 */
 
-const { user_id } = req.params;
+  const {
+    email,
+    user_name,
+    // password,
+    image,
+    first_name,
+    last_name,
+    birthday,
+    gender,
+    phone_number,
+    school,
+    address,
+    city,
+    country,
+  } = req.body;
+  const { user_id } = req.params;
 
-const query = `
-SELECT * 
-FROM users 
-FULL OUTER JOIN user_profile 
-ON users.id = user_profile.user_id 
-WHERE users.id = $1
-AND users.is_deleted = 0;
+  const query = `
+  UPDATE users
+  SET ( email, user_name, image ) 
+  = ( COALESCE($2, email), COALESCE($3, user_name), COALESCE($4, image) ) 
+  WHERE id=$1;
+
+  UPDATE user_profile
+  SET ( first_name, last_name, birthday, gender, phone_number, school, address, city, country ) 
+  = ( COALESCE($5, first_name), COALESCE($6, last_name), COALESCE($7, birthday), COALESCE($8, gender), COALESCE($9, phone_number), COALESCE($10, school), COALESCE($11, address), COALESCE($12, city), COALESCE($13, country) ) 
+  WHERE id=$1 RETURNING *;
 `;
 
-const data = [user_id];
+  const data = [
+    user_id,
+    email,
+    user_name,
+    image,
+    first_name,
+    last_name,
+    birthday,
+    gender,
+    phone_number,
+    school,
+    address,
+    city,
+    country,
+  ];
 
-pool
-  .query(query, data)
-  .then((result) => {
-    if (result.rows.length === 0) {
-      console.log(`there is no user with id= ${user_id}`);
+  pool
+    .query(query, data)
+    .then((result) => {
+      console.log("result", result);
+      if (!result.rows.length) {
+        console.log(`there is no user with id= ${user_id}`);
+        // status 204 will not return and response
+        res.status(204).json({
+          success: true,
+          message: `there is no user with id= ${user_id}`,
+        });
+        return;
+      }
 
-      // status 204 will not return and response
-      res.status(204).json({
-        success: true,
-        message: `there is no user with id= ${user_id}`,
-      });
-    } else if (result.rows.length) {
-      console.log(`getUserById done`);
+      console.log(`updateUserById done`);
       res.status(200).json({
         success: true,
-        message: `getUserById done`,
+        message: `updateUserById done`,
         result: result.rows,
       });
-    } else throw Error;
-  })
-  .catch((error) => {
-    res.status(403).json({
-      success: false,
-      message: "getUserById error",
-      error,
+    })
+    .catch((error) => {
+      console.log("error", error);
+      res.status(403).json({
+        success: false,
+        message: "updateUserById error",
+        error,
+      });
     });
-  });
-
-
-
 
   //   /*
   //     postman params /:id ==>

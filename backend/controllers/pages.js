@@ -63,7 +63,7 @@ const getAllPages = (req, res) => {
 
 const getPageByUser = (req, res) => {
   const user_id = req.token.userId;
-  const query = `SELECT * FROM pages WHERE user_id =$1 AND is_deleted=0`;
+  const query = `SELECT * FROM pages WHERE user_id =$1 AND is_deleted=0;`;
   const data = [user_id];
 
   pool
@@ -85,7 +85,7 @@ const getPageByUser = (req, res) => {
     .catch((err) => {
       res.status(500).json({
         success: false,
-        message: "Server Erorr",
+        message: "Server Error",
         err: err.message,
       });
     });
@@ -131,7 +131,7 @@ const getPageById = (req, res) => {
 const updatePageById = (req, res) => {
   const { id } = req.params;
   const { page_name } = req.body;
-  const query = `UPDATE pages SET page_name= $1 WHERE id=$2 RETRUNING * `;
+  const query = `UPDATE pages SET page_name= $1 WHERE id=$2 RETURNING *;`;
   const data = [id, page_name];
   pool
     .query(query, data)
