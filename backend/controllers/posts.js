@@ -1,22 +1,23 @@
 const pool = require("../models/db");
 
 const createNewPost = async (req, res) => {
-  const user_id = req.token.userId;
+  const { userId } = req.token;
   const { content } = req.body;
 
-  const placeholder = [user_id, content];
+  const placeholder = [userId, content];
+
   try {
     const newPost = await pool.query(
-      `INSERT INTO posts (user_id,content) VALUES ($1,$2) RETURNING *`,
+      `INSERT INTO posts (user_id,content) VALUES ($1,$2) RETURNING *;`,
       placeholder
     );
     res.status(200).json({
       success: true,
-      message: "Created successfully",
+      message: "Post created successfully",
       res: newPost.rows,
     });
   } catch (error) {
-    res.status(404).json({
+    res.status(500).json({
       success: false,
       message: "server error",
       res: error.message,
@@ -33,7 +34,7 @@ const getAllPost = async (req, res) => {
       res: post.rows,
     });
   } catch (error) {
-    res.status(404).json({
+    res.status(500).json({
       success: false,
       message: "server error",
       res: error.message,
@@ -55,7 +56,7 @@ const getPostByUserId = async (req, res) => {
       res: post.rows,
     });
   } catch (error) {
-    res.status(404).json({
+    res.status(500).json({
       success: false,
       message: "Server error",
       res: error.message,
@@ -67,7 +68,7 @@ const updatePostById = async (req, res) => {
   const userId = req.token.userId;
   const { post_id } = req.params;
   const { content } = req.body;
-  const placeholder = [post_id, content,userId];
+  const placeholder = [post_id, content, userId];
   if (content) {
     try {
       const updatePost = await pool.query(
@@ -82,7 +83,7 @@ const updatePostById = async (req, res) => {
         res: updatePost.rows,
       });
     } catch (error) {
-      res.status(404).json({
+      res.status(500).json({
         success: false,
         message: "Server error",
         res: error.message,
@@ -96,10 +97,10 @@ const updatePostById = async (req, res) => {
   }
 };
 
-const deletePostById = async (req, res) => { 
+const deletePostById = async (req, res) => {
   const userId = req.token.userId;
   const { post_id } = req.params;
-  const placeholder = [post_id,userId];
+  const placeholder = [post_id, userId];
   const deletePost = await pool.query(
     `DELETE FROM posts
           WHERE id=$1 AND user_id=$2  RETURNING *`,
