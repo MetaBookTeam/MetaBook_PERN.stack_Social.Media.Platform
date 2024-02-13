@@ -10,6 +10,9 @@ const {
   getAllRolePermission,
 } = require("../controllers/roles");
 
+const authentication = require("../middlewares/authentication");
+const authorization = require("../middlewares/authorization");
+
 const rolesRouter = express.Router();
 
 //* endpoint for the POST request
