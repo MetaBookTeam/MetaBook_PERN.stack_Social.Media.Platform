@@ -1,5 +1,6 @@
 const pool = require("../models/db");
 
+// user can like multi times
 const createNewPostLike = async (req, res) => {
   const user_id = req.token.userId;
   const { postId } = req.params;
@@ -12,16 +13,17 @@ const createNewPostLike = async (req, res) => {
     res.status(200).json({
         success:true,
         message:"Like added successfully",
-        res:newLike.rows
+        result:newLike.rows
     })
   } catch (error) {
     res.status(404).json({
         success:false,
         message:"Server error",
-        res:error
+        error
     })
   }
 };
+
 const deletePostLikeById = async (req, res) => {
     const user_id = req.token.userId;
     const { postId } = req.params;
@@ -35,16 +37,18 @@ const deletePostLikeById = async (req, res) => {
       res.status(200).json({
           success:true,
           message:"Remove like successfully",
-          res:deleteLike.rows
+          result:deleteLike.rows
       })
+      console.log(deleteLike);
     } catch (error) {
       res.status(404).json({
           success:false,
           message:"Server error",
-          res:error
+          error
       })
     }
 };
+
 module.exports = {
   createNewPostLike,
   deletePostLikeById,
