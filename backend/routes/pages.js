@@ -11,6 +11,9 @@ const {
   deletePageByUser,
 } = require("../controllers/pages");
 
+const authentication = require("../middlewares/authentication");
+const authorization = require("../middlewares/authorization");
+
 // Create pages router
 const pagesRouter = express.Router();
 

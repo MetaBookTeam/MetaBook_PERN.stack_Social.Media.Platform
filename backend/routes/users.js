@@ -9,8 +9,9 @@ const {
   softDeleteUserById,
   hardDeleteUserById
 } = require("../controllers/users");
+
 const authentication = require("../middlewares/authentication");
-// const authorization = require("../middlewares/authorization");
+const authorization = require("../middlewares/authorization");
 
 const usersRouter = express.Router();
 
