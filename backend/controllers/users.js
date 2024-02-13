@@ -39,7 +39,7 @@ POST http://localhost:5000/users/register
     country,
   } = req.body;
 
-  const role_id = "2"; //! edit the value of role_id depend on role id in role table.
+  const role_id = "1"; //! edit the value of role_id depend on role id in role table.
 
   const encryptedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -96,6 +96,7 @@ POST http://localhost:5000/users/register
       res.status(200).json({
         success: true,
         message: "Account created successfully",
+        result: result.rows,
       });
     })
     .catch((error) => {
@@ -282,10 +283,10 @@ PUT http://localhost:5000/users/2
     "country": "Jordan Edited"
 }
 */
-  //! add new route for password only {"password": "123456"}
-  //! after updating the Email or password the user shall logout.
-  //! check if the user he is the one how edit the profile.
-  
+  //@ add new route for password only {"password": "123456"}
+  //@ after updating the Email or password the user shall logout.
+  //@ check if the user he is the one how edit the profile.
+
   /* //! we need to check: 
   1. who have the authority the see the user info and what information shall we share with them:
     a. admin and the account owner (user) => all info
@@ -325,7 +326,7 @@ UPDATE user_profile
   = ( COALESCE($5, first_name), COALESCE($6, last_name), COALESCE($7, birthday), COALESCE($8, gender), COALESCE($9, phone_number), COALESCE($10, school), COALESCE($11, address), COALESCE($12, city), COALESCE($13, country) ) 
   WHERE id=$1 RETURNING *;
 `;
-//! this combined query will retune update data from user_profile table only.
+  //! this combined query will retune update data from user_profile table only.
 
   const data = [
     user_id,
@@ -356,7 +357,7 @@ UPDATE user_profile
       } else throw Error;
     })
     .catch((error) => {
-      console.log("error", error);
+      console.log("updateUserById error");
       res.status(403).json({
         success: false,
         message: "updateUserById error",
@@ -460,9 +461,41 @@ UPDATE user_profile
   //     });
 };
 
-// //? deleteUserById  /////////////////////////////////
+//? softDeleteUserById  /////////////////////////////////
+const softDeleteUserById = (req, res) => {
+  /* 
+DELETE http://localhost:5000/users/3
+*/
+  //@ after deleting the user the app shall logout.
+  //@ check if the user he is the one who delete the profile.
 
-const deleteUserById = (req, res) => {
+  const { user_id } = req.params;
+
+  const query = `UPDATE users SET is_deleted = 1 WHERE id=$1 RETURNING *;`;
+
+  const data = [user_id];
+
+  pool
+    .query(query, data)
+    .then((result) => {
+      if (result.rows.length) {
+        console.log(`softDeleteUserById done`);
+        res.status(410).json({
+          success: true,
+          message: `softDeleteUserById done`,
+          result: result.rows,
+        });
+      } else throw Error;
+    })
+    .catch((error) => {
+      console.log("softDeleteUserById error");
+      res.status(500).json({
+        success: false,
+        message: "softDeleteUserById error",
+        error,
+      });
+    });
+
   //   /*
   //     postman params /:id ==>
   //     DELETE http://localhost:5000/users/65975437a31cc98f9b7c61e2
@@ -521,11 +554,54 @@ const deleteUserById = (req, res) => {
   //     });
 };
 
+//? hardDeleteUserById  /////////////////////////////////
+const hardDeleteUserById = (req, res) => {
+  /* 
+DELETE http://localhost:5000/users/delete/3
+*/
+  //@ after deleting the user the app shall logout.
+  //@ check if the user he is the one who delete the profile.
+
+  const { user_id } = req.params;
+
+  const query = `DELETE FROM users WHERE id=$1 RETURNING *;`;
+  const data = [user_id];
+
+  pool
+    .query(query, data)
+    .then((result) => {
+      if (!result.rows.length) {
+        console.log(`user not found or already deleted.`);
+        res.status(410).json({
+          success: true,
+          message: `user not found or already deleted.`,
+        });
+        return;
+      }
+
+      console.log(`hardDeleteUserById done`);
+      res.status(410).json({
+        success: true,
+        message: `hardDeleteUserById done`,
+        result: result.rows,
+      });
+    })
+    .catch((error) => {
+      console.log("hardDeleteUserById error");
+      res.status(500).json({
+        success: false,
+        message: "hardDeleteUserById error",
+        error,
+      });
+    });
+};
+
 module.exports = {
   register,
   login,
   getAllUsers,
   getUserById,
   updateUserById,
-  deleteUserById,
+  softDeleteUserById,
+  hardDeleteUserById,
 };

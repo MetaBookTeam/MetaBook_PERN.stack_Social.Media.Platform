@@ -7,7 +7,8 @@ const {
   getAllUsers,
   getUserById,
   updateUserById,
-  deleteUserById,
+  softDeleteUserById,
+  hardDeleteUserById
 } = require("../controllers/users");
 
 const authentication = require("../middlewares/authentication");
@@ -47,7 +48,14 @@ usersRouter.delete(
   "/:user_id",
   authentication,
   authorization("MANAGE_USERS"),
-  deleteUserById
+  softDeleteUserById
+);
+
+usersRouter.delete(
+  "/delete/:user_id",
+  authentication,
+  authorization("MANAGE_USERS"),
+  hardDeleteUserById
 );
 
 module.exports = usersRouter;
