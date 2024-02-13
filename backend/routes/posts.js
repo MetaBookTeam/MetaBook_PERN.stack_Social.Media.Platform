@@ -18,9 +18,9 @@ postsRouter.post("/", authentication, createNewPost);
 postsRouter.post("/like/:postId", authentication, createNewPostLike);
 
 // GET
-//@ add authentication to getAllPost
 postsRouter.get("/", getAllPost);
-postsRouter.get("/profile", authentication, getPostByUserId);
+postsRouter.get("/profile", authentication,getPostByUserId);
+
 
 // UPDATE
 postsRouter.put("/:post_id", authentication, updatePostById);

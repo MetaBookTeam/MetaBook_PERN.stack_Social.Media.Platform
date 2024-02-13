@@ -12,11 +12,10 @@ POST http://localhost:5000/posts
   const { userId } = req.token;
   const { content } = req.body;
 
-  const placeholder = [userId, content];
-
+  const placeholder = [user_id, content];
   try {
     const newPost = await pool.query(
-      `INSERT INTO posts (user_id,content) VALUES ($1,$2) RETURNING *;`,
+      `INSERT INTO posts (user_id,content) VALUES ($1,$2) RETURNING *`,
       placeholder
     );
     res.status(200).json({
@@ -25,7 +24,7 @@ POST http://localhost:5000/posts
       result: newPost.rows,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(404).json({
       success: false,
       message: "server error",
       error,
@@ -49,7 +48,7 @@ GET http://localhost:5000/posts
       result: post.rows,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(404).json({
       success: false,
       message: "server error",
       error,
@@ -81,7 +80,7 @@ GET http://localhost:5000/posts/profile
       result: post.rows,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(404).json({
       success: false,
       message: "Server error",
       error,
@@ -100,7 +99,7 @@ PUT http://localhost:5000/posts/:post_id
   const userId = req.token.userId;
   const { post_id } = req.params;
   const { content } = req.body;
-  const placeholder = [post_id, content, userId];
+  const placeholder = [post_id, content,userId];
   if (content) {
     try {
       const updatePost = await pool.query(
@@ -115,7 +114,7 @@ PUT http://localhost:5000/posts/:post_id
         result: updatePost.rows,
       });
     } catch (error) {
-      res.status(500).json({
+      res.status(404).json({
         success: false,
         message: "Server error",
         error,
