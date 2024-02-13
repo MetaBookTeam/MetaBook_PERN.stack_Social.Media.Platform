@@ -1,5 +1,6 @@
 const express = require("express");
 // Import pages controller
+
 const {
   createNewPage,
   getAllPages,
@@ -13,8 +14,8 @@ const {
 //* Create pages router
 const pagesRouter = express.Router();
 
-//* endpoint for the POST request
-pagesRouter.post("/", createNewPage);
+// endpoint for the POST request
+pagesRouter.post("/",authentication,createNewPage)
 
 //* endpoint for the GET request
 pagesRouter.get("/", getAllPages);
