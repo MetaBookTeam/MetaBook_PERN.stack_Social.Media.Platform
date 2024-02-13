@@ -268,11 +268,24 @@ const updateUserById = (req, res) => {
 PUT http://localhost:5000/users/2
 
 {
-    "user_name": "user3 edited",
-    "city": "Zarqa City"
+    "email": "user3edited@gmail.com",
+    "user_name": "user3 Edited",
+    "image": "img_url Edited",
+    "first_name": "fName Edited",
+    "last_name": "lName Edited",
+    "birthday": "2000-11-11",
+    "gender": "female",
+    "phone_number": "0790000014",
+    "school": "school Edited",
+    "address": "home Edited",
+    "city": "Amman Edited",
+    "country": "Jordan Edited"
 }
 */
   //! add new route for password only {"password": "123456"}
+  //! after updating the Email or password the user shall logout.
+  //! check if the user he is the one how edit the profile.
+  
   /* //! we need to check: 
   1. who have the authority the see the user info and what information shall we share with them:
     a. admin and the account owner (user) => all info
@@ -295,19 +308,24 @@ PUT http://localhost:5000/users/2
     city,
     country,
   } = req.body;
+
   const { user_id } = req.params;
 
   const query = `
-  UPDATE users
-  SET ( email, user_name, image ) 
-  = ( COALESCE($2, email), COALESCE($3, user_name), COALESCE($4, image) ) 
-  WHERE id=$1;
+WITH updated_user AS (
+    UPDATE users
+    SET ( email, user_name, image ) 
+    = ( COALESCE($2, email), COALESCE($3, user_name), COALESCE($4, image) ) 
+    WHERE id=$1
+    RETURNING *
+)
 
-  UPDATE user_profile
+UPDATE user_profile
   SET ( first_name, last_name, birthday, gender, phone_number, school, address, city, country ) 
   = ( COALESCE($5, first_name), COALESCE($6, last_name), COALESCE($7, birthday), COALESCE($8, gender), COALESCE($9, phone_number), COALESCE($10, school), COALESCE($11, address), COALESCE($12, city), COALESCE($13, country) ) 
   WHERE id=$1 RETURNING *;
 `;
+//! this combined query will retune update data from user_profile table only.
 
   const data = [
     user_id,
@@ -328,23 +346,14 @@ PUT http://localhost:5000/users/2
   pool
     .query(query, data)
     .then((result) => {
-      console.log("result", result);
-      if (!result.rows.length) {
-        console.log(`there is no user with id= ${user_id}`);
-        // status 204 will not return and response
-        res.status(204).json({
+      if (result.rows.length) {
+        console.log(`updateUserById done`);
+        res.status(200).json({
           success: true,
-          message: `there is no user with id= ${user_id}`,
+          message: `updateUserById done`,
+          result: result.rows,
         });
-        return;
-      }
-
-      console.log(`updateUserById done`);
-      res.status(200).json({
-        success: true,
-        message: `updateUserById done`,
-        result: result.rows,
-      });
+      } else throw Error;
     })
     .catch((error) => {
       console.log("error", error);
