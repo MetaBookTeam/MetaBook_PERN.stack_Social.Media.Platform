@@ -9,7 +9,8 @@ const {
   updateUserById,
   softDeleteUserById,
   hardDeleteUserById,
-  getAllFriends
+  getAllFriends,
+  addFriend
 } = require("../controllers/users");
 
 const authentication = require("../middlewares/authentication");
@@ -21,6 +22,12 @@ const usersRouter = express.Router();
 //* endpoint for the POST request
 usersRouter.post("/register", register);
 usersRouter.post("/login", login);
+// friend
+usersRouter.post(
+  "/friends/:friend_id",
+  authentication,
+  addFriend
+);
 
 //* endpoint for the GET request
 usersRouter.get(

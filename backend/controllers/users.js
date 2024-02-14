@@ -637,6 +637,28 @@ const getAllFriends = async (req,res) => {
   }
 
 }
+
+const addFriend = async (req,res) => {
+  const {userId} = req.token;
+  const {friend_id} = req.params;
+  const placeholder = [userId,friend_id]
+  console.log(placeholder);
+  try {
+    const addFriend = await pool.query(`INSERT INTO friends (user_id,friend_id) VALUES ($1,$2) RETURNING *`,placeholder);
+    res.status(200).json({
+      success:true,
+      message:"Friend added successfully",
+      result:addFriend.rows
+    })
+    console.log(addFriend);
+  } catch (error) {
+    res.status(500).json({
+      success:false,
+      message:"Server error",
+      error
+    })
+  } 
+}
 module.exports = {
   register,
   login,
@@ -645,5 +667,6 @@ module.exports = {
   updateUserById,
   softDeleteUserById,
   hardDeleteUserById,
-  getAllFriends
+  getAllFriends,
+  addFriend
 };
