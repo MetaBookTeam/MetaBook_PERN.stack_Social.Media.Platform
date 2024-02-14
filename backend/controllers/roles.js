@@ -11,8 +11,9 @@ POST http://localhost:5000/roles/
 
   const { role } = req.body;
 
-  const query = `INSERT INTO roles (role) VALUES ($1) RETURNING *`;
+  const query = `INSERT INTO roles (role) VALUES ($1) RETURNING *;`;
   const data = [role];
+
   pool
     .query(query, data)
     .then((result) => {
@@ -22,11 +23,11 @@ POST http://localhost:5000/roles/
         result: result.rows,
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       res.status(500).json({
         success: false,
         message: `Server error`,
-        err: err,
+        error,
       });
     });
 };
@@ -52,11 +53,11 @@ POST http://localhost:5000/roles/permission
         result: result.rows,
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       res.status(500).json({
         success: false,
         message: `Server error`,
-        err: err,
+        error,
       });
     });
 };
@@ -67,12 +68,14 @@ POST http://localhost:5000/roles/role_permission/
 
 {
     "role_id": 1,
-    "permission_id": 3
+    "permission_id": 7
 }
 */
   const { role_id, permission_id } = req.body;
-  const query = `INSERT INTO role_permission (role_id,
-    permission_id) VALUES ($1,$2) RETURNING *`;
+  const query = `
+    INSERT INTO role_permission (role_id,permission_id) 
+    VALUES ($1,$2) RETURNING *
+    `;
   const data = [role_id, permission_id];
 
   pool
@@ -84,11 +87,11 @@ POST http://localhost:5000/roles/role_permission/
         result: result.rows,
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       res.status(500).json({
         success: false,
         message: `Server error`,
-        err: err,
+        error,
       });
     });
 };

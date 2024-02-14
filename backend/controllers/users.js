@@ -110,7 +110,8 @@ POST http://localhost:5000/users/register
 
   const encryptedPassword = await bcrypt.hash(password, saltRounds);
 
-  const query = `INSERT INTO users (email, user_name, password, image, role_id) VALUES ($1,$2,$3,$4,$5) RETURNING *;`;
+  const query = `INSERT INTO users (email, user_name, password, image, role_id) VALUES ($1,$2,$3,$4,$5) RETURNING *;
+  `;
 
   const data = [
     email.toLowerCase(),
@@ -126,7 +127,8 @@ POST http://localhost:5000/users/register
       // add extra information to user_profile
       const user_id = result.rows[0].id;
 
-      const query = `INSERT INTO user_profile 
+      const query = `
+      INSERT INTO user_profile 
       (user_id, first_name, last_name, birthday, gender, phone_number, school, address, city, country) 
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10);`;
 
@@ -148,11 +150,11 @@ POST http://localhost:5000/users/register
         .then((result) => {
           console.log("user_profile created");
         })
-        .catch((err) => {
+        .catch((error) => {
           console.log({
             success: false,
             message: "user_profile error",
-            err,
+            error,
           });
         });
 
@@ -164,11 +166,11 @@ POST http://localhost:5000/users/register
         result: result.rows,
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       res.status(409).json({
         success: false,
         message: "The email already exists",
-        err,
+        error,
       });
     });
 };
@@ -185,8 +187,9 @@ POST http://localhost:5000/users/login
 
   const { email, password } = req.body;
 
-  const query = `SELECT * FROM users WHERE email = $1`;
+  const query = `SELECT * FROM users WHERE email = $1 AND is_deleted = 0;`;
   const data = [email.toLowerCase()];
+
   pool
     .query(query, data)
     .then((result) => {
@@ -201,6 +204,7 @@ POST http://localhost:5000/users/login
             const options = { expiresIn: "1d" };
             const secret = process.env.SECRET;
             const token = jwt.sign(payload, secret, options);
+
             if (token) {
               return res.status(200).json({
                 token,
@@ -220,12 +224,12 @@ POST http://localhost:5000/users/login
         });
       } else throw Error;
     })
-    .catch((err) => {
+    .catch((error) => {
       res.status(403).json({
         success: false,
         message:
           "The email doesn’t exist or the password you’ve entered is incorrect",
-        err,
+        error,
       });
     });
 };
@@ -243,28 +247,28 @@ const getAllUsers = (req, res) => {
   pool
     .query(query)
     .then((result) => {
-      if (result.rows.length === 0) {
+      if (!result.rows.length) {
         console.log(`there is no users in DB`);
-
-        res.status(204).json({
+        // res.status(204) will not send back a response
+        res.status(404).json({
           success: true,
           message: `there is no users in DB`,
         });
-      } else if (result.rows.length) {
-        console.log(`getAllUsers done`);
+        return;
+      }
 
-        res.status(200).json({
-          success: true,
-          message: `getAllUsers done`,
-          results: result.rows,
-        });
-      } else throw Error;
+      console.log(`getAllUsers done`);
+      res.status(200).json({
+        success: true,
+        message: `getAllUsers done`,
+        result: result.rows,
+      });
     })
-    .catch((err) => {
+    .catch((error) => {
       res.status(403).json({
         success: false,
         message: "getAllUsers error",
-        err,
+        error,
       });
     });
 };
@@ -306,20 +310,21 @@ GET http://localhost:5000/users/:user_id
           success: true,
           message: `there is no user with id= ${user_id}`,
         });
-      } else if (result.rows.length) {
-        console.log(`getUserById done`);
-        res.status(200).json({
-          success: true,
-          message: `getUserById done`,
-          result: result.rows,
-        });
-      } else throw Error;
+        return;
+      }
+
+      console.log(`getUserById done`);
+      res.status(200).json({
+        success: true,
+        message: `getUserById done`,
+        result: result.rows,
+      });
     })
     .catch((error) => {
-      res.status(403).json({
+      res.status(500).json({
         success: false,
         message: "getUserById error",
-        err,
+        error,
       });
     });
 };
@@ -327,18 +332,28 @@ GET http://localhost:5000/users/:user_id
 // //? updateUserById  /////////////////////////////////
 
 const updateUserById = (req, res) => {
-
-
-
   /* 
 PUT http://localhost:5000/users/2
 
 {
-    "user_name": "user3 edited",
-    "city": "Zarqa City"
+    "email": "user3edited@gmail.com",
+    "user_name": "user3 Edited",
+    "image": "img_url Edited",
+    "first_name": "fName Edited",
+    "last_name": "lName Edited",
+    "birthday": "2000-11-11",
+    "gender": "female",
+    "phone_number": "0790000014",
+    "school": "school Edited",
+    "address": "home Edited",
+    "city": "Amman Edited",
+    "country": "Jordan Edited"
 }
 */
-//! add new route for password only {"password": "123456"}
+  //@ add new route for password only {"password": "123456"}
+  //@ after updating the Email or password the user shall logout.
+  //@ check if the user he is the one how edit the profile.
+
   /* //! we need to check: 
   1. who have the authority the see the user info and what information shall we share with them:
     a. admin and the account owner (user) => all info
@@ -346,49 +361,76 @@ PUT http://localhost:5000/users/2
     c. anyone else =>
 */
 
-const { user_id } = req.params;
+  const {
+    email,
+    user_name,
+    // password,
+    image,
+    first_name,
+    last_name,
+    birthday,
+    gender,
+    phone_number,
+    school,
+    address,
+    city,
+    country,
+  } = req.body;
 
-const query = `
-SELECT * 
-FROM users 
-FULL OUTER JOIN user_profile 
-ON users.id = user_profile.user_id 
-WHERE users.id = $1
-AND users.is_deleted = 0;
+  const { user_id } = req.params;
+
+  const query = `
+WITH updated_user AS (
+    UPDATE users
+    SET ( email, user_name, image ) 
+    = ( COALESCE($2, email), COALESCE($3, user_name), COALESCE($4, image) ) 
+    WHERE id=$1
+    RETURNING *
+)
+
+UPDATE user_profile
+  SET ( first_name, last_name, birthday, gender, phone_number, school, address, city, country ) 
+  = ( COALESCE($5, first_name), COALESCE($6, last_name), COALESCE($7, birthday), COALESCE($8, gender), COALESCE($9, phone_number), COALESCE($10, school), COALESCE($11, address), COALESCE($12, city), COALESCE($13, country) ) 
+  WHERE id=$1 RETURNING *;
 `;
+  //! this combined query will retune update data from user_profile table only.
 
-const data = [user_id];
+  const data = [
+    user_id,
+    email,
+    user_name,
+    image,
+    first_name,
+    last_name,
+    birthday,
+    gender,
+    phone_number,
+    school,
+    address,
+    city,
+    country,
+  ];
 
-pool
-  .query(query, data)
-  .then((result) => {
-    if (result.rows.length === 0) {
-      console.log(`there is no user with id= ${user_id}`);
-
-      // status 204 will not return and response
-      res.status(204).json({
-        success: true,
-        message: `there is no user with id= ${user_id}`,
+  pool
+    .query(query, data)
+    .then((result) => {
+      if (result.rows.length) {
+        console.log(`updateUserById done`);
+        res.status(200).json({
+          success: true,
+          message: `updateUserById done`,
+          result: result.rows,
+        });
+      } else throw Error;
+    })
+    .catch((error) => {
+      console.log("updateUserById error");
+      res.status(403).json({
+        success: false,
+        message: "updateUserById error",
+        error,
       });
-    } else if (result.rows.length) {
-      console.log(`getUserById done`);
-      res.status(200).json({
-        success: true,
-        message: `getUserById done`,
-        result: result.rows,
-      });
-    } else throw Error;
-  })
-  .catch((error) => {
-    res.status(403).json({
-      success: false,
-      message: "getUserById error",
-      error,
     });
-  });
-
-
-
 
   //   /*
   //     postman params /:id ==>
@@ -460,12 +502,12 @@ pool
   //             message: "user updated",
   //             user: updatedUser,
   //           });
-  //         } catch (err) {
-  //           console.log(err);
+  //         } catch (error) {
+  //           console.log(error);
   //           res.status(500).json({
   //             success: false,
   //             message: "Server Error",
-  //             err,
+  //             error,
   //           });
   //         }
   //       } else {
@@ -476,12 +518,12 @@ pool
   //         });
   //       }
   //     })
-  //     .catch((err) => {
-  //       console.log(err);
+  //     .catch((error) => {
+  //       console.log(error);
   //       res.status(500).json({
   //         success: false,
   //         message: " .findById(userId) Server Error",
-  //         err,
+  //         error,
   //       });
   //     });
 };
@@ -553,12 +595,12 @@ DELETE http://localhost:5000/users/3
   //             success: true,
   //             message: "user deleted",
   //           });
-  //         } catch (err) {
-  //           console.log(err);
+  //         } catch (error) {
+  //           console.log(error);
   //           res.status(500).json({
   //             success: false,
   //             message: "Server Error",
-  //             err,
+  //             error,
   //           });
   //         }
   //       } else {
@@ -569,12 +611,12 @@ DELETE http://localhost:5000/users/3
   //         });
   //       }
   //     })
-  //     .catch((err) => {
-  //       console.log(err);
+  //     .catch((error) => {
+  //       console.log(error);
   //       res.status(500).json({
   //         success: false,
   //         message: " .findById(userId) Server Error",
-  //         err,
+  //         error,
   //       });
   //     });
 };

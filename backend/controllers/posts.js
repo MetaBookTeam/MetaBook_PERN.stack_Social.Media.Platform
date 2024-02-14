@@ -69,8 +69,10 @@ GET http://localhost:5000/posts/profile
   const placeholder = [userId];
   try {
     const post = await pool.query(
-      `SELECT posts.content,comments.comment FROM posts
-      INNER JOIN comments ON posts.id=comments.post_id
+      `SELECT posts.content,comments.comment 
+      FROM posts
+      INNER JOIN comments 
+      ON posts.id=comments.post_id
       WHERE posts.user_id=$1 `,
       placeholder
     );
