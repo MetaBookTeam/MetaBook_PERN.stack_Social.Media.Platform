@@ -30,5 +30,11 @@ postsRouter.put("/:post_id", authentication, updatePostById);
 postsRouter.delete("/:post_id", authentication, deletePostById);
 // POST LIKE 
 postsRouter.delete("/like/:postId", authentication, deletePostLikeById);
+//shares <require today>
+//* endpoint for shares get request
+//* endpoint for shares post request
+//* endpoint for shares update request
+//* endpoint for shares delete request
+
 
 module.exports = postsRouter;

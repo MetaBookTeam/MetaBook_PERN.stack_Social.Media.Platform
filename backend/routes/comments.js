@@ -29,12 +29,15 @@ commentsRouter.get("/:comment_id", authentication,getCommentsById);
 //put ==>http://localhost:5000/:comment_id
 commentsRouter.put("/comments/:id",authentication,UpdateCommentsById);
 
-//* endpoint for CommentLike
-commentsRouter.delete("/",authentication,DeleteComments); 
+//* endpoint for CommentLike POST request
 commentsRouter.post('/comment_like',authentication,createCommentLike)
-commentsRouter.get('/like/:id',authentication,getCommentLikeById)
-commentsRouter.put('/comment_like/:id',authentication,updateCommentLikeById)
+//* endpoint for CommentLike delete request
+commentsRouter.delete("/",authentication,DeleteComments); 
 commentsRouter.delete('/comment_like/:id',authentication,deleteCommentLikeById)
+//* endpoint for CommentLike get request
+commentsRouter.get('/like/:id',authentication,getCommentLikeById)
+//* endpoint for CommentLike update request
+commentsRouter.put('/comment_like/:id',authentication,updateCommentLikeById)
 /* //* endpoint for the POST request
 commentsRouter.post("/",authentication,CreateComments);
 
