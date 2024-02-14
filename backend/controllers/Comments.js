@@ -1,5 +1,4 @@
 const pool = require("../models/db");
-//dont forget to import pool
 //create comments
 const CreateComments = (req, res) => {
   //endpoint and method (post,/CreateComment)
@@ -23,7 +22,7 @@ const CreateComments = (req, res) => {
       res.status(404).json({
         success: false,
         message: "Server error",
-        error: error.message,
+        error,
       });
     });
 };
@@ -85,7 +84,9 @@ const UpdateComments = (req, res) => {
       return res.status(500).json({
         success: false,
         message: "Server error",
-        error: error.message,
+
+        error,
+
       });
     });
 };
@@ -105,7 +106,9 @@ const DeleteComments = (req, res) => {
       return res.status(500).json({
         success: false,
         message: "Server error",
-        error: error.message,
+
+        error,
+
       });
     });
 };
@@ -113,7 +116,9 @@ const DeleteComments = (req, res) => {
 const getCommentsById = (req, res) => {
   const { comment_id } = req.params;
   pool
-    .query(`SELECT * FROM comments  WHERE is_deleted = 1 AND id=$1 `, [
+    .query(`SELECT * FROM comments  WHERE is_deleted = 0 AND id=$1 `, [
+
+
       comment_id,
     ])
     .then((result) => {
@@ -131,7 +136,7 @@ const getCommentsById = (req, res) => {
       return res.status(500).json({
         success: false,
         message: "Server error",
-        error: error.message,
+        error,
       });
     });
 };
@@ -160,7 +165,7 @@ const UpdateCommentsById = (req, res) => {
       return res.status(500).json({
         success: false,
         message: "Server error",
-        error: error.message,
+        error,
       });
     });
 };
@@ -284,8 +289,4 @@ module.exports = {
   getCommentsByPostId,
   UpdateComments,
   getCommentsById,
-  getCommentLikeById,
-  updateCommentLikeById,
-  deleteCommentLikeById,
-  createCommentLike,
 };

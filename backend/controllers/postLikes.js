@@ -21,6 +21,7 @@ POST http://localhost:5000/posts/like/:post_id
       result: newLike.rows,
     });
   } catch (error) {
+
     res.status(500).json({
       success: false,
       message: "createNewPostLike Server error",
