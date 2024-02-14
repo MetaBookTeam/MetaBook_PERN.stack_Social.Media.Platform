@@ -28,7 +28,7 @@ pagesRouter.get("/search_1/:id",getPageById)
 pagesRouter.get("/likes",authentication,createNewPage)
 
 // endpoint for the PUT request
-pagesRouter.put("/:id",authentication,updatePageById)
+pagesRouter.put("/:id",updatePageById)
 
 // endpoint for the DELETE request ///
 pagesRouter.delete("/:id",authentication,deletePageById)

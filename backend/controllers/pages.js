@@ -64,7 +64,7 @@ const getAllPages=(req,res)=>{
 }
 // 3- this function getPageByUserId
 
-//GET  http://localhost:5000/pages/id
+//GET  http://localhost:5000/pages/user/
 
 const getPageByUser = (req, res) => {
   const user_id = req.token.userId;
@@ -135,9 +135,9 @@ pool
  //PUT  http://localhost:5000/pages/:id
 
 const updatePageById = (req, res) => {
-  const { id } = req.params;
-  const { page_name } = req.body;
-  const query = `UPDATE pages SET page_name= $1 WHERE id=$2 RETURNING *;`;
+  const {id} = req.params;
+  const {page_name} = req.body;
+  const query = `UPDATE pages SET page_name= $2 WHERE id=$1 RETURNING *;`;
   const data = [id, page_name];
   pool
     .query(query, data)
