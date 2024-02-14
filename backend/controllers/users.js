@@ -106,7 +106,6 @@ POST http://localhost:5000/users/register
   } = req.body;
 
   const role_id = "1"; //! edit the value of role_id depend on role id in role table.
-  const role_id = "1"; //! edit the value of role_id depend on role id in role table.
 
   const encryptedPassword = await bcrypt.hash(password, saltRounds);
 
