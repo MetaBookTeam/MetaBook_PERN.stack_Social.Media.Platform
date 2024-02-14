@@ -13,6 +13,7 @@ const {
 
 const authentication = require("../middlewares/authentication");
 const authorization = require("../middlewares/authorization");
+const { deletePageLikeById } = require("../controllers/pagesLikes");
 
 // Create pages router
 const pagesRouter = express.Router();
@@ -22,14 +23,16 @@ pagesRouter.post("/",authentication,createNewPage)
 
 // endpoint for the GET request
 pagesRouter.get("/",getAllPages)
-pagesRouter.get("/user",getPageByUser)
+pagesRouter.get("/user",authentication,getPageByUser)
 pagesRouter.get("/search_1/:id",getPageById)
+pagesRouter.get("/likes",authentication,createNewPage)
 
 // endpoint for the PUT request
-pagesRouter.put("/:id",updatePageById)
+pagesRouter.put("/:id",authentication,updatePageById)
 
 // endpoint for the DELETE request ///
-pagesRouter.delete("/:id",deletePageById)
-pagesRouter.delete("/:id/user",deletePageByUser)
+pagesRouter.delete("/:id",authentication,deletePageById)
+pagesRouter.delete("/:id/user",authentication,deletePageByUser)
+pagesRouter.delete("/likes/:id",authentication,deletePageLikeById)
 
 module.exports = pagesRouter;
