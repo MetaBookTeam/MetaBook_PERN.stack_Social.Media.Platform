@@ -12,7 +12,8 @@ POST http://localhost:5000/posts
   const { userId } = req.token;
   const { content } = req.body;
 
-  const placeholder = [user_id, content];
+  const placeholder = [userId, content];
+
   try {
     const newPost = await pool.query(
       `INSERT INTO posts (user_id,content) VALUES ($1,$2) RETURNING *`,
@@ -24,33 +25,35 @@ POST http://localhost:5000/posts
       result: newPost.rows,
     });
   } catch (error) {
-    res.status(404).json({
+    res.status(500).json({
       success: false,
-      message: "server error",
+      message: "createNewPost server error",
       error,
     });
   }
 };
 
 const getAllPost = async (req, res) => {
-   /* 
+  /* 
 GET http://localhost:5000/posts
-
 */
-  
+
   try {
     const post = await pool.query(
-      `SELECT * FROM posts INNER JOIN comments ON posts.id=comments.post_id;`
+      `SELECT * FROM posts 
+        INNER JOIN comments 
+        ON posts.id=comments.post_id
+        WHERE is_deleted = 0;`
     );
     res.status(200).json({
       success: true,
-      message: "Created successfully",
+      message: "getAllPost done",
       result: post.rows,
     });
   } catch (error) {
-    res.status(404).json({
+    res.status(500).json({
       success: false,
-      message: "server error",
+      message: "getAllPost server error",
       error,
     });
   }
@@ -60,31 +63,33 @@ GET http://localhost:5000/posts
 //       UNION ALL
 //       SELECT comment FROM comments INNER JOIN posts ON posts.id=comments.post_id
 const getPostByUserId = async (req, res) => {
-   /* 
+  /* 
 GET http://localhost:5000/posts/profile
-
-
 */
-  const userId = req.token.userId;
+
+  const { userId } = req.token;
+
   const placeholder = [userId];
+
   try {
     const post = await pool.query(
       `SELECT posts.content,comments.comment 
       FROM posts
       INNER JOIN comments 
       ON posts.id=comments.post_id
-      WHERE posts.user_id=$1 `,
+      WHERE posts.user_id=$1
+      AND is_deleted = 0;`,
       placeholder
     );
     res.status(200).json({
       success: true,
-      message: "Created successfully",
+      message: "getPostByUserId done",
       result: post.rows,
     });
   } catch (error) {
-    res.status(404).json({
+    res.status(500).json({
       success: false,
-      message: "Server error",
+      message: "getPostByUserId Server error",
       error,
     });
   }
@@ -98,27 +103,31 @@ PUT http://localhost:5000/posts/:post_id
     "content": "description"
 }
   */
-  const userId = req.token.userId;
+
+  const { userId } = req.token;
   const { post_id } = req.params;
   const { content } = req.body;
-  const placeholder = [post_id, content,userId];
+
+  const placeholder = [post_id, content, userId];
+
   if (content) {
     try {
       const updatePost = await pool.query(
         `UPDATE posts
           SET content = $2
-          WHERE id=$1 AND user_id=$3 RETURNING *`,
+          WHERE id=$1 
+          AND user_id=$3 RETURNING *;`,
         placeholder
       );
       res.status(200).json({
         success: true,
-        message: "Created successfully",
+        message: "updatePostById done",
         result: updatePost.rows,
       });
     } catch (error) {
-      res.status(404).json({
+      res.status(500).json({
         success: false,
-        message: "Server error",
+        message: "updatePostById Server error",
         error,
       });
     }
@@ -131,17 +140,18 @@ PUT http://localhost:5000/posts/:post_id
 };
 
 const deletePostById = async (req, res) => {
-    /*
+  /*
 DELETE http://localhost:5000/posts/:post_id
-
   */
-  const userId = req.token.userId;
+ 
+  const { userId } = req.token;
   const { post_id } = req.params;
+
   const placeholder = [post_id, userId];
+
   try {
     const deletePost = await pool.query(
-      `DELETE FROM posts
-           WHERE id=$1 AND user_id=$2  RETURNING *`,
+      `DELETE FROM posts WHERE id=$1 AND user_id=$2 RETURNING *;`,
       placeholder
     );
     res.status(200).json({
@@ -150,9 +160,9 @@ DELETE http://localhost:5000/posts/:post_id
       result: deletePost,
     });
   } catch (error) {
-    res.status(200).json({
+    res.status(500).json({
       success: true,
-      message: "Deleted successfully",
+      message: "deletePostById server error",
       error,
     });
   }

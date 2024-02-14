@@ -1,13 +1,18 @@
 const pool = require("../models/db");
 
-// user can like multi times
+//! user still can like multiple times
 const createNewPostLike = async (req, res) => {
+  /* 
+POST http://localhost:5000/posts/like/:post_id
+*/
   const user_id = req.token.userId;
-  const { postId } = req.params;
-  const placeholder = [postId, user_id];
+  const { post_id } = req.params;
+
+  const placeholder = [post_id, user_id];
+
   try {
     const newLike = await pool.query(
-      `INSERT INTO posts_likes (post_id,user_id) VALUES ($1,$2) RETURNING *`,
+      `INSERT INTO posts_likes (post_id,user_id) VALUES ($1,$2) RETURNING *;`,
       placeholder
     );
     res.status(200).json({
@@ -16,18 +21,24 @@ const createNewPostLike = async (req, res) => {
       result: newLike.rows,
     });
   } catch (error) {
-    res.status(404).json({
+
+    res.status(500).json({
       success: false,
-      message: "Server error",
+      message: "createNewPostLike Server error",
       error,
     });
   }
 };
 
 const deletePostLikeById = async (req, res) => {
+  /* 
+DELETE http://localhost:5000/posts/like/:post_id
+*/
   const user_id = req.token.userId;
-  const { postId } = req.params;
-  const placeholder = [postId, user_id];
+  const { post_id } = req.params;
+
+  const placeholder = [post_id, user_id];
+
   try {
     const deleteLike = await pool.query(
       `DELETE FROM posts_likes
@@ -39,11 +50,11 @@ const deletePostLikeById = async (req, res) => {
       message: "Remove like successfully",
       result: deleteLike.rows,
     });
-    console.log(deleteLike);
+    console.log(deleteLike.rows);
   } catch (error) {
-    res.status(404).json({
+    res.status(500).json({
       success: false,
-      message: "Server error",
+      message: "deletePostLikeById Server error",
       error,
     });
   }
