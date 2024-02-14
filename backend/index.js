@@ -9,6 +9,7 @@ const usersRouter = require("./routes/users");
 const pagesRouter = require("./routes/pages");
 const postsRouter = require("./routes/posts");
 const commentsRouter = require("./routes/comments");
+const commentLikeRouter = require("./routes/CommentLike");
 
 const app = express();
 
