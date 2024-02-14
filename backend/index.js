@@ -9,6 +9,7 @@ const usersRouter = require("./routes/users");
 const pagesRouter = require("./routes/pages");
 const postsRouter = require("./routes/posts");
 const commentsRouter = require("./routes/comments");
+const commentLikeRouter = require("./routes/CommentLike");
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use("/posts", postsRouter);
 
 // TABLES comments / comment_likes
 app.use("/comments", commentsRouter);
+
 
 const PORT = process.env.PORT || 5000;
 // Handles any other endpoints [unassigned - endpoints]
