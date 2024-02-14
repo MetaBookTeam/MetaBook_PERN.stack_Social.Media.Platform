@@ -1,16 +1,18 @@
 const express = require("express");
 
-//* controllers
+//controllers
 const {
   createNewRole,
   createNewPermission,
   createNewRolePermission,
+  getAllRoles,
+  getAllPermissions,
+  getAllRolePermission,
 } = require("../controllers/roles");
 
 const authentication = require("../middlewares/authentication");
 const authorization = require("../middlewares/authorization");
 
-//* Create roles router
 const rolesRouter = express.Router();
 
 //* endpoint for the POST request
