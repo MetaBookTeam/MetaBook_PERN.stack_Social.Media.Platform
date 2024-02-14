@@ -618,6 +618,25 @@ DELETE http://localhost:5000/users/delete/3
     });
 };
 
+const getAllFriends = async (req,res) => {
+  const {userId} = req.token;
+  const placeholder = [userId]
+  try {
+    const friend = await pool.query(`SELECT * FROM friends WHERE user_id=$1`,placeholder)
+    res.status(200).json({
+      success:true,
+      message: "All friends",
+      result:friend.rows
+    })
+  } catch (error) {
+    res.status(500).json({
+      success:false,
+      message: "Server error",
+      error
+    })
+  }
+
+}
 module.exports = {
   register,
   login,
@@ -626,4 +645,5 @@ module.exports = {
   updateUserById,
   softDeleteUserById,
   hardDeleteUserById,
+  getAllFriends
 };

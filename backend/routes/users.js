@@ -9,6 +9,7 @@ const {
   updateUserById,
   softDeleteUserById,
   hardDeleteUserById,
+  getAllFriends
 } = require("../controllers/users");
 
 const authentication = require("../middlewares/authentication");
@@ -27,6 +28,12 @@ usersRouter.get(
   authentication,
   authorization("MANAGE_USERS"),
   getAllUsers
+);
+// friend
+usersRouter.get(
+  "/friends",
+  authentication,
+  getAllFriends
 );
 
 usersRouter.get(
