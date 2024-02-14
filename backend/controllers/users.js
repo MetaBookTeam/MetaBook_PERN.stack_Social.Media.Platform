@@ -659,6 +659,26 @@ const addFriend = async (req,res) => {
     })
   } 
 }
+
+const deleteFriend = async (req,res) => {
+  const {userId} = req.token;
+  const {friend_id} = req.params;
+  const placeholder = [friend_id]
+  try {
+    const deleteFriend = await pool.query(`DELETE FROM friends WHERE friend_id=$1`,placeholder)
+    res.status(200).json({
+      success:true,
+      message: "Deleted Successfully",
+      result:deleteFriend.rows
+    })
+  } catch (error) {
+    res.status(500).json({
+      success:false,
+      message: "Server error",
+      error
+    })
+  }
+}
 module.exports = {
   register,
   login,
@@ -668,5 +688,6 @@ module.exports = {
   softDeleteUserById,
   hardDeleteUserById,
   getAllFriends,
-  addFriend
+  addFriend,
+  deleteFriend
 };

@@ -10,7 +10,8 @@ const {
   softDeleteUserById,
   hardDeleteUserById,
   getAllFriends,
-  addFriend
+  addFriend,
+  deleteFriend
 } = require("../controllers/users");
 
 const authentication = require("../middlewares/authentication");
@@ -72,5 +73,10 @@ usersRouter.delete(
   authorization("MANAGE_USERS"),
   hardDeleteUserById
 );
-
+// friend
+usersRouter.delete(
+  "/friends/:friend_id",
+  authentication,
+  deleteFriend
+);
 module.exports = usersRouter;
