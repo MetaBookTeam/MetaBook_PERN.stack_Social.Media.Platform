@@ -18,9 +18,7 @@ const CreateComments = (req, res) => {
         result: result.rows[0],
       });
     })
-    .catch((error) => {
-      res.status(404).json({
-    })
+
     .catch((error) => {
       res.status(404).json({
         success: false,
@@ -87,9 +85,7 @@ const UpdateComments = (req, res) => {
       return res.status(500).json({
         success: false,
         message: "Server error",
-
         error,
-
       });
     });
 };
@@ -111,7 +107,6 @@ const DeleteComments = (req, res) => {
         message: "Server error",
 
         error,
-
       });
     });
 };
@@ -120,8 +115,6 @@ const getCommentsById = (req, res) => {
   const { comment_id } = req.params;
   pool
     .query(`SELECT * FROM comments  WHERE is_deleted = 0 AND id=$1 `, [
-
-
       comment_id,
     ])
     .then((result) => {
@@ -129,7 +122,7 @@ const getCommentsById = (req, res) => {
         return res.status(200).json({
           success: true,
           message: `The comment with id: ${userId}`,
-          comment: result.rows
+          comment: result.rows,
         });
       } else {
         throw new Error("Error happened while getting comments");
@@ -158,7 +151,7 @@ const UpdateCommentsById = (req, res) => {
         return res.status(200).json({
           success: true,
           message: `comments with id: ${post_id} updated successfully`,
-          result: result.rows[0]
+          result: result.rows[0],
         });
       } else {
         throw new Error("Error happened while updating comments");
@@ -173,7 +166,6 @@ const UpdateCommentsById = (req, res) => {
     });
 };
 //commentslike
-
 
 module.exports = {
   CreateComments,
