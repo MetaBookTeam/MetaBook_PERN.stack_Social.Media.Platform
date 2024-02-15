@@ -167,9 +167,16 @@ const updatePageById = (req, res) => {
 
  //DELETE  http://localhost:5000/pages/:id
  const deletePageById=(req,res)=>{
+
     const id=req.params.id
-    const query=`DELETE FROM pages WHERE id=$1 `
+    
+    const query=`SELECT FROM pages WHERE id=$1 `
     const data=[id]
+    pool
+    .query(query,data)
+    .then((result)=>{
+        if(result.rows[0].user_id===req.token.userId){
+             const query=`UPDATE FROM pages WHERE id=$1`// set is deleted=1
     pool
     .query(query,data)
     .then((result)=>{
@@ -191,7 +198,13 @@ const updatePageById = (req, res) => {
             err: err,
           });
     })
- }
+        }
+    }
+      
+    
+
+   
+ )}
 
 
  // 7- this function  deletePageByUser.
