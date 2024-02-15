@@ -27,7 +27,7 @@ POST http://localhost:5000/posts
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "createNewPost server error",
+      message: "server error",
       error,
     });
   }
@@ -38,6 +38,30 @@ const getAllPost = async (req, res) => {
 GET http://localhost:5000/posts
 */
 
+
+/* 
+//@ 
+
+ SELECT
+    users.name,
+    orders.user_id,
+    COUNT (orders.user_id) AS num_of_orders
+  FROM orders INNER JOIN users ON orders.user_id = users.user_id
+  WHERE orders.shipping_status='completed'
+  GROUP BY users.name, orders.user_id
+  ORDER BY orders.user_id DESC;
+
+
+
+COUNT comments
+COUNT shares
+COUNT likes
+
+//@ 
+
+
+
+*/
   try {
     const post = await pool.query(
       `SELECT * FROM posts 
@@ -53,7 +77,7 @@ GET http://localhost:5000/posts
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "getAllPost server error",
+      message: "server error",
       error,
     });
   }
@@ -62,7 +86,7 @@ GET http://localhost:5000/posts
 // SELECT content FROM posts  WHERE user_id = $1
 //       UNION ALL
 //       SELECT comment FROM comments INNER JOIN posts ON posts.id=comments.post_id
-const getPostByUserId = async (req, res) => {
+const getYourPosts = async (req, res) => {
   /* 
 GET http://localhost:5000/posts/profile
 */
@@ -83,13 +107,46 @@ GET http://localhost:5000/posts/profile
     );
     res.status(200).json({
       success: true,
-      message: "getPostByUserId done",
+      message: "getYourPosts done",
       result: post.rows,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "getPostByUserId Server error",
+      message: "Server error",
+      error,
+    });
+  }
+};
+
+const getPostByUserId = async (req, res) => {
+  /* 
+GET http://localhost:5000/posts/:user_id
+*/
+
+  const { user_id } = req.params;
+
+  const placeholder = [user_id];
+
+  try {
+    const post = await pool.query(
+      `SELECT posts.content,comments.comment 
+      FROM posts
+      INNER JOIN comments 
+      ON posts.id=comments.post_id
+      WHERE posts.user_id=$1
+      AND is_deleted = 0;`,
+      placeholder
+    );
+    res.status(200).json({
+      success: true,
+      message: "getYourPosts done",
+      result: post.rows,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server error",
       error,
     });
   }
@@ -101,14 +158,23 @@ PUT http://localhost:5000/posts/:post_id
 
 {
     "content": "description"
+    "photo_url": "new post photo URL"
 }
-  */
 
+
+
+//@
+photo_url //! add update the post photo 
+
+//@
+use content = COALESCE($2,content)
+not content = $2
+*/
   const { userId } = req.token;
   const { post_id } = req.params;
   const { content } = req.body;
 
-  const placeholder = [post_id, content, userId];
+  const placeholder = [post_id, content, /* photo_url */, userId];
 
   if (content) {
     try {
@@ -142,7 +208,12 @@ PUT http://localhost:5000/posts/:post_id
 const deletePostById = async (req, res) => {
   /*
 DELETE http://localhost:5000/posts/:post_id
-  */
+
+
+
+//@
+ ! make it soft delete ==> UPDATE is_deleted = 1 
+*/
  
   const { userId } = req.token;
   const { post_id } = req.params;
@@ -171,6 +242,7 @@ DELETE http://localhost:5000/posts/:post_id
 module.exports = {
   createNewPost,
   getAllPost,
+  getYourPosts,
   getPostByUserId,
   updatePostById,
   deletePostById,

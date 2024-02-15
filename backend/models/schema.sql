@@ -102,7 +102,7 @@ CREATE TABLE
     city VARCHAR(255),
     country VARCHAR(255),
     cover_photo TEXT DEFAULT 'https://colorfully.eu/wp-content/uploads/2013/07/beautiful-sea-view-facebook-cover.jpg',
-    bio VARCHAR(255) DEFAULT "add bio"
+    bio VARCHAR(255) DEFAULT 'add bio'
   );
 
 -- insert users
@@ -117,7 +117,7 @@ INSERT INTO
     school,
     address,
     city,
-    country,
+    country
   )
 VALUES
   (
@@ -167,7 +167,7 @@ CREATE TABLE
     page_name VARCHAR(255) NOT NULL UNIQUE,
     image TEXT DEFAULT 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=identicon&f=y&s=200',
     cover_photo TEXT DEFAULT 'https://colorfully.eu/wp-content/uploads/2013/07/beautiful-sea-view-facebook-cover.jpg',
-    bio VARCHAR(255) DEFAULT "add bio",
+    bio VARCHAR(255) DEFAULT 'add bio',
     created_at TIMESTAMP DEFAULT NOW (),
     is_deleted SMALLINT DEFAULT 0
   );
@@ -245,7 +245,8 @@ CREATE TABLE
     id SERIAL PRIMARY KEY NOT NULL,
     user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     page_id INT REFERENCES pages (id) ON DELETE CASCADE,
-    content TEXT NOT NULL,
+    content VARCHAR(255) NOT NULL,
+    photo_url TEXT DEFAULT '',
     created_at TIMESTAMP DEFAULT NOW (),
     is_deleted SMALLINT DEFAULT 0
   );
@@ -276,25 +277,6 @@ VALUES
   (2, 1),
   (1, 2),
   (2, 2) RETURNING *;
-
--- Create a table called **photos** in the database
-DROP TABLE IF EXISTS photos CASCADE;
-
-CREATE TABLE
-  photos (
-    id SERIAL PRIMARY KEY NOT NULL,
-    post_id INT NOT NULL REFERENCES posts (id) ON DELETE CASCADE,
-    photo_url TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT NOW (),
-    is_deleted SMALLINT DEFAULT 0
-  );
-
--- insert photos
-INSERT INTO
-  photos (post_id, photo_url)
-VALUES
-  (1, 'image URL1'),
-  (2, 'image URL2') RETURNING *;
 
 -- Create a table called **shares** in the database
 DROP TABLE IF EXISTS shares CASCADE;
