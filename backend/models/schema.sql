@@ -69,8 +69,7 @@ CREATE TABLE
     email TEXT UNIQUE NOT NULL,
     user_name VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    image TEXT,
-    -- ! type VARCHAR(255)[]
+    image TEXT DEFAULT 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y&s=200',
     role_id INT NOT NULL REFERENCES roles (id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT NOW (),
     is_deleted SMALLINT DEFAULT 0
@@ -101,7 +100,9 @@ CREATE TABLE
     school VARCHAR(255),
     address VARCHAR(255),
     city VARCHAR(255),
-    country VARCHAR(255)
+    country VARCHAR(255),
+    cover_photo TEXT DEFAULT 'https://colorfully.eu/wp-content/uploads/2013/07/beautiful-sea-view-facebook-cover.jpg',
+    bio VARCHAR(255) DEFAULT "add bio"
   );
 
 -- insert users
@@ -116,7 +117,7 @@ INSERT INTO
     school,
     address,
     city,
-    country
+    country,
   )
 VALUES
   (
@@ -164,6 +165,9 @@ CREATE TABLE
     id SERIAL PRIMARY KEY NOT NULL,
     user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     page_name VARCHAR(255) NOT NULL UNIQUE,
+    image TEXT DEFAULT 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=identicon&f=y&s=200',
+    cover_photo TEXT DEFAULT 'https://colorfully.eu/wp-content/uploads/2013/07/beautiful-sea-view-facebook-cover.jpg',
+    bio VARCHAR(255) DEFAULT "add bio",
     created_at TIMESTAMP DEFAULT NOW (),
     is_deleted SMALLINT DEFAULT 0
   );
@@ -240,6 +244,7 @@ CREATE TABLE
   posts (
     id SERIAL PRIMARY KEY NOT NULL,
     user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    page_id INT REFERENCES pages (id) ON DELETE CASCADE,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW (),
     is_deleted SMALLINT DEFAULT 0
@@ -299,6 +304,7 @@ CREATE TABLE
     id SERIAL PRIMARY KEY NOT NULL,
     post_id INT NOT NULL REFERENCES posts (id) ON DELETE CASCADE,
     user_id INT REFERENCES users (id) ON DELETE CASCADE
+    -- content
     -- OR page_id INT REFERENCES pages (id) ON DELETE CASCADE
   );
 

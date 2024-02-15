@@ -23,9 +23,9 @@ POST http://localhost:5000/users/register
     "country": "Jordan"
 }
 */
-//http://localhost:5000/users/register
+  //http://localhost:5000/users/register
 
-/*test in ahmad {
+  /*test in ahmad {
     "email": "ahmad@gmail.com",
     "user_name": "ahmad",
     "password": "123456",
@@ -40,11 +40,7 @@ POST http://localhost:5000/users/register
     "city": "zarqa",
     "country": "Jordan"
 } */
-/* http://localhost:5000/users/login
-{
-    "email": "ahmad@gmail.com",
-    "password": "123456"
-} */
+
   const {
     email,
     user_name,
@@ -303,6 +299,8 @@ PUT http://localhost:5000/users/2
     "address": "home Edited",
     "city": "Amman Edited",
     "country": "Jordan Edited"
+    "cover_photo": "cover photo URL",
+    "bio": "Updated BIO"
 }
 */
   //@ add new route for password only {"password": "123456"}
@@ -330,6 +328,8 @@ PUT http://localhost:5000/users/2
     address,
     city,
     country,
+    cover_photo,
+    bio,
   } = req.body;
 
   const { user_id } = req.params;
@@ -344,8 +344,8 @@ WITH updated_user AS (
 )
 
 UPDATE user_profile
-  SET ( first_name, last_name, birthday, gender, phone_number, school, address, city, country ) 
-  = ( COALESCE($5, first_name), COALESCE($6, last_name), COALESCE($7, birthday), COALESCE($8, gender), COALESCE($9, phone_number), COALESCE($10, school), COALESCE($11, address), COALESCE($12, city), COALESCE($13, country) ) 
+  SET ( first_name, last_name, birthday, gender, phone_number, school, address, city, country, cover_photo, bio ) 
+  = ( COALESCE($5, first_name), COALESCE($6, last_name), COALESCE($7, birthday), COALESCE($8, gender), COALESCE($9, phone_number), COALESCE($10, school), COALESCE($11, address), COALESCE($12, city), COALESCE($13, country), COALESCE($14, cover_photo), COALESCE($15, bio) ) 
   WHERE id=$1 RETURNING *;
 `;
   //! this combined query will retune update data from user_profile table only.
@@ -364,6 +364,8 @@ UPDATE user_profile
     address,
     city,
     country,
+    cover_photo,
+    bio,
   ];
 
   pool
