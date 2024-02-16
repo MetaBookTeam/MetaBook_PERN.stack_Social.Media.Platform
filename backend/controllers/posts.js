@@ -20,6 +20,16 @@ POST http://localhost:5000/posts
       `INSERT INTO posts (user_id,content,photo_url) VALUES ($1,$2,$3) RETURNING *`,
       placeholder
     );
+    const placeholder2 = [newPost.rows[0].id];
+    console.log(placeholder2);
+    const newLike = await pool.query(
+      ` INSERT INTO
+      posts_likes (user_id, post_id)
+    VALUES
+      (1, $1) RETURNING *;`,
+      placeholder2
+    );
+
     res.status(200).json({
       success: true,
       message: "Post created successfully",
@@ -57,17 +67,15 @@ COUNT comments
 COUNT shares
 COUNT likes
 
-//@ 
-
-
 
 */
   try {
     const post = await pool.query(
-      `SELECT * FROM posts 
-        INNER JOIN comments 
-        ON posts.id=comments.post_id
-        WHERE is_deleted = 0;`
+      `SELECT posts.id,posts.content,comments.post_id,posts.is_deleted,posts_likes.post_id
+       COUNT (comments.post_id) AS num_of_comments
+       FROM posts INNER JOIN comments ON posts.id = comments.post_id 
+       GROUP BY posts.id,posts.content,comments.post_id,posts.is_deleted
+        `
     );
     res.status(200).json({
       success: true,
@@ -82,7 +90,6 @@ COUNT likes
     });
   }
 };
-
 
 const getYourPosts = async (req, res) => {
   /* 
@@ -184,8 +191,6 @@ PUT http://localhost:5000/posts/:post_id
     });
   }
 };
-
-
 
 const deletePostById = async (req, res) => {
   /*
