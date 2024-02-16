@@ -41,20 +41,20 @@ const getAllPages = (req, res) => {
   const query = `SELECT * FROM pages WHERE is_deleted=0`;
   pool
     .query(query)
-    .then((result) => {
-      res.status(200).json({
-        success: true,
-        message: "All pages",
-        result: result.rows,
-      });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        success: false,
-        message: "Server Error",
-        err: err.message,
-      });
-    });
+    .then((result)=>{
+     
+        res.status(200).json({
+            success:true,
+            message:"All pages",
+            result:result.rows
+        })
+    }).catch((err)=>{
+        res.status(500).json({
+            success:false,
+            message:"Server Error",
+            err:err.message
+        })
+
 };
 // 3- this function getPageByUserId
 
@@ -135,7 +135,7 @@ const updatePageById = (req, res) => {
   pool
     .query(query, data)
     .then((result) => {
-      if (result.rows.length === 0) {
+      if (!result.rows.length) {
         res.status(404).json({
           success: false,
           message: `There is no ${id} with is page`,
@@ -148,78 +148,88 @@ const updatePageById = (req, res) => {
         });
       }
     })
-    .catch((err) => {
+    .catch((error) => {
       res.status(500).json({
         success: false,
         message: "Server Error",
-        err: err.message,
+        error,
       });
     });
 };
 
 // 6- this function  deletePageById.
 
-//DELETE  http://localhost:5000/pages/:id
-const deletePageById = (req, res) => {
-  const id = req.params.id;
-  const query = `DELETE FROM pages WHERE id=$1 `;
-  const data = [id];
-  pool
-    .query(query, data)
-    .then((result) => {
-      if (result.rows.length) {
-        res.status(404).json({
-          success: false,
-          message: `There is no ${id} with is page`,
-        });
-      } else {
-        res.status(200).json({
-          success: true,
-          message: `Page with id: ${id} deleted successfully`,
-        });
-      }
+ //DELETE  http://localhost:5000/pages/:id
+ const deletePageById=(req,res)=>{
+
+    const id=req.params.id
+    
+    const query=`SELECT FROM pages WHERE id=$1 `
+    const data=[id]
+    pool
+    .query(query,data)
+    .then((result)=>{
+        if(result.rows[0].user_id===req.token.userId){
+          
+     const query=`UPDATE FROM pages SET is_deleted = 1 WHERE id=$1`// 
+    pool
+    .query(query,data)
+    .then((result)=>{
+        if(!result.rows.length){
+            res.status(404).json({
+            success:false,
+            message:`There is no ${id} with is page` 
+            })
+        }else{
+            res.status(200).json({
+          success:true,
+         message:`Page with id: ${id} deleted successfully`
+            })
+        }
+    }).catch((error)=>{
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error,
+          });
     })
-    .catch((err) => {
-      res.status(500).json({
-        success: false,
-        message: "Server error",
-        err: err,
-      });
-    });
+        }
+    }
+     
+ )}
+
+
+ // 7- this function  deletePageByUser.
+
+ //DELETE  http://localhost:5000/pages/:id/user
+
+ const deletePageByUser=(req,res)=>{
+    const user_id=req.token.id
+    const query=`DELETE FROM pages WHERE user_id=$1 `
+    const data=[user_id]
+    pool
+    .query(query,data)
+    .then((result)=>{
+        if(result.rows.length===0){
+            res.status(404).json({
+                success:false,
+                message:`There is no ${user_id} with is page` 
+                })
+        }else{
+            res.status(200).json({
+                success:true,
+               message:`Page with User: ${user_id} deleted successfully`
+                  })
+        }
+    }).catch((error)=>{
+        es.status(500).json({
+            success: false,
+            message: "Server error",
+            error,
+          });
+       });
 };
-
-// 7- this function  deletePageByUser.
-
-//DELETE  http://localhost:5000/pages/:id/user
-
-const deletePageByUser = (req, res) => {
-  const user_id = req.token.id;
-  const query = `DELETE FROM pages WHERE user_id=$1 `;
-  const data = [user_id];
-  pool
-    .query(query, data)
-    .then((result) => {
-      if (result.rows.length === 0) {
-        res.status(404).json({
-          success: false,
-          message: `There is no ${user_id} with is page`,
-        });
-      } else {
-        res.status(200).json({
-          success: true,
-          message: `Page with User: ${user_id} deleted successfully`,
-        });
-      }
-    })
-    .catch((err) => {
-      es.status(500).json({
-        success: false,
-        message: "Server error",
-        err: err,
-      });
-    });
-};
-
+             
 module.exports = {
   createNewPage,
   getAllPages,

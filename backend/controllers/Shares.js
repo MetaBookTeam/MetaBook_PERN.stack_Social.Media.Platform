@@ -21,7 +21,7 @@ WHERE shares.post_id = $1;`,
       res.status(500).json({
         success: false,
         message: "Server Error",
-        errorr: errorrr.message,
+        error,
       });
     });
 };
@@ -35,24 +35,27 @@ const createShareByPostId = (req, res) => {
 VALUES ($1,$2,$3)
 RETURNING id;`,
       [post_id,user_id,content]
+
     )
     .then((result) => {
       res.status(200).json({
         success: true,
         message: "create share succesfully",
-        result: result.rows[0].id,
+        result: result.rows,
       });
     })
     .catch((error) => {
       res.status(500).json({
         success: false,
         message: "Server Error",
-        error: error.message,
+        error,
       });
     });
 };
 const softDeleteShare = (req, res) => {
+
   const { share_id } = req.params;
+
   pool
     .query(
       ` UPDATE shares
@@ -71,7 +74,7 @@ const softDeleteShare = (req, res) => {
       res.status(500).json({
         success: false,
         message: "Server Error",
-        error: error,
+        error,
       });
     });
 };

@@ -10,7 +10,6 @@ const {
 } = require("../controllers/comments");
 
 const {
-  // getCommentLikeById,
   getLikesByCommentId,
   deleteCommentLikeById,
   createCommentLike,
@@ -29,16 +28,13 @@ commentsRouter.post("/likes/:comment_id", authentication, createCommentLike);
 //* endpoint for GET request
 commentsRouter.get("/:post_id/comments", authentication, getCommentsByPostId);
 commentsRouter.get("/:comment_id", authentication, getCommentById);
-//! this function must be getLikesByCommentId ==> it will give us all users who likes this comment.
 commentsRouter.get('/:comment_id/likes',authentication,getLikesByCommentId)
-// commentsRouter.get("/likes/:comment_id", authentication, getCommentLikeById);
 
 //* endpoint for PUT request
 commentsRouter.put("/:comment_id", authentication, updateComment);
 
 //* endpoint for DELETE request
 commentsRouter.delete("/:comment_id", authentication, deleteComment);
-
 commentsRouter.delete("/likes/:user_id", authentication, deleteCommentLikeById);
 
 module.exports = commentsRouter;
