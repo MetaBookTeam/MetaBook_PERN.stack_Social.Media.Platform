@@ -241,6 +241,9 @@ CREATE TABLE
     id SERIAL PRIMARY KEY NOT NULL,
     user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     content TEXT NOT NULL,
+    num_of_like INT,
+    num_of_comments INT,
+    num_of_shares INT,
     created_at TIMESTAMP DEFAULT NOW (),
     is_deleted SMALLINT DEFAULT 0
   );

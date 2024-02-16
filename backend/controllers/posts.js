@@ -59,27 +59,20 @@ COUNT likes
 
 //@ 
 
+
+
 */
   try {
-    const posts_likes = await pool.query(
-      `SELECT COUNT(*)
-      FROM posts_likes`
+    const post = await pool.query(
+      `SELECT * FROM posts 
+        INNER JOIN comments 
+        ON posts.id=comments.post_id
+        WHERE is_deleted = 0;`
     );
-    const comm = await pool.query(
-      `SELECT COUNT(*)
-      FROM comments`
-    );
-    const shares = await pool.query(
-      `SELECT COUNT(*)
-      FROM shares `
-    );
-    console.log(shares);
     res.status(200).json({
       success: true,
       message: "getAllPost done",
-      posts_likes: posts_likes.rows,
-      comment:comm.rows,
-      shares:shares.rows
+      result: post.rows,
     });
   } catch (error) {
     res.status(500).json({
@@ -90,20 +83,18 @@ COUNT likes
   }
 };
 
+
 const getYourPosts = async (req, res) => {
   /* 
 GET http://localhost:5000/posts/profile
 */
 
-  const { userId } = req.token;
-
-  const placeholder = [userId];
-
   try {
     const post = await pool.query(
-      `SELECT *
+      `SELECT posts.content,comments.comment 
       FROM posts
-      WHERE user_id=$1
+      INNER JOIN comments 
+      ON posts.id=comments.post_id
       AND is_deleted = 0;`,
       placeholder
     );
@@ -191,6 +182,8 @@ PUT http://localhost:5000/posts/:post_id
     });
   }
 };
+
+
 
 const deletePostById = async (req, res) => {
   /*
