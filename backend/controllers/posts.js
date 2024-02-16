@@ -59,20 +59,27 @@ COUNT likes
 
 //@ 
 
-
-
 */
   try {
-    const post = await pool.query(
-      `SELECT * FROM posts 
-        INNER JOIN comments 
-        ON posts.id=comments.post_id
-        WHERE is_deleted = 0;`
+    const posts_likes = await pool.query(
+      `SELECT COUNT(*)
+      FROM posts_likes`
     );
+    const comm = await pool.query(
+      `SELECT COUNT(*)
+      FROM comments`
+    );
+    const shares = await pool.query(
+      `SELECT COUNT(*)
+      FROM shares `
+    );
+    console.log(shares);
     res.status(200).json({
       success: true,
       message: "getAllPost done",
-      result: post.rows,
+      posts_likes: posts_likes.rows,
+      comment:comm.rows,
+      shares:shares.rows
     });
   } catch (error) {
     res.status(500).json({
@@ -83,9 +90,6 @@ COUNT likes
   }
 };
 
-// SELECT content FROM posts  WHERE user_id = $1
-//       UNION ALL
-//       SELECT comment FROM comments INNER JOIN posts ON posts.id=comments.post_id
 const getYourPosts = async (req, res) => {
   /* 
 GET http://localhost:5000/posts/profile
@@ -97,11 +101,9 @@ GET http://localhost:5000/posts/profile
 
   try {
     const post = await pool.query(
-      `SELECT posts.content,comments.comment 
+      `SELECT *
       FROM posts
-      INNER JOIN comments 
-      ON posts.id=comments.post_id
-      WHERE posts.user_id=$1
+      WHERE user_id=$1
       AND is_deleted = 0;`,
       placeholder
     );
@@ -157,7 +159,7 @@ const updatePostById = async (req, res) => {
 PUT http://localhost:5000/posts/:post_id
 
 {
-    "content": "description"
+    "content": "description",
     "photo_url": "new post photo URL"
 }
 */
