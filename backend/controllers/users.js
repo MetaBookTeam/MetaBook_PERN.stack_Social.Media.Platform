@@ -24,53 +24,6 @@ POST http://localhost:5000/users/register
 }
 */
 //http://localhost:5000/users/register
-<<<<<<< HEAD
-=======
-/* 
-{
-    "email": "ahmad@gmail.com",
-    "user_name": "ahmad",
-    "password": "123456",
-    "image": "img_url",
-    "first_name": "fName",
-    "last_name": "lName",
-    "birthday": "2000-01-01",
-    "gender": "male",
-    "phone_number": "0789894881",
-    "school": "school",
-    "address": "home",
-    "city": "zarqa",
-    "country": "Jordan"
-} */
-/*  http://localhost:5000/users/login
- "email": "ahmad@gmail.com",
-    
-    "password": "123456"
-*/
-//http://localhost:5000/users/register
-/* 
-{
-    "email": "ahmad@gmail.com",
-    "user_name": "ahmad",
-    "password": "123456",
-    "image": "img_url",
-    "first_name": "fName",
-    "last_name": "lName",
-    "birthday": "2000-01-01",
-    "gender": "male",
-    "phone_number": "0789894881",
-    "school": "school",
-    "address": "home",
-    "city": "zarqa",
-    "country": "Jordan"
-} */
-/*  http://localhost:5000/users/login
- "email": "ahmad@gmail.com",
-    
-    "password": "123456"
-*/
-//http://localhost:5000/users/register
->>>>>>> 51c33588e2de5e2b49cb9afb9eb9c50cec9d30fb
 
 /*test in ahmad {
     "email": "ahmad@gmail.com",
@@ -108,7 +61,7 @@ POST http://localhost:5000/users/register
     country,
   } = req.body;
 
-  const role_id = "1"; //! edit the value of role_id depend on role id in role table.
+ // const role_id = "1"; //! edit the value of role_id depend on role id in role table.
   const role_id = "1"; //! edit the value of role_id depend on role id in role table.
 
   const encryptedPassword = await bcrypt.hash(password, saltRounds);

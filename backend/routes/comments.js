@@ -8,47 +8,39 @@ const {
   getCommentsById,
   UpdateCommentsById,
 } = require("../controllers/Comments");
-const{getCommentLikeById, updateCommentLikeById, deleteCommentLikeById,createCommentLike}=require('../controllers/CommentLikes')
+const {
+  getCommentLikeById,
+  updateCommentLikeById,
+  deleteCommentLikeById,
+  createCommentLike,
+} = require("../controllers/CommentLikes");
 //controllers
-// const {} = require("../controllers/comments");
-//controllers
-// const {} = require("../controllers/comments");
 const authentication = require("../middlewares/authentication");
 const authorization = require("../middlewares/authorization");
 const commentsRouter = express.Router();
-//post ==>http://localhost:5000/comments/1
-commentsRouter.post("/:id", authentication,CreateComments);
-//get==>http://localhost:5000/comments/1/comments
-commentsRouter.get("/:id/comments",authentication,getCommentsByPostId);
-//put ==>http://localhost:5000/comments/1
-commentsRouter.put("/:comment_id",authentication, UpdateComments);
-//delete ==>http://localhost:5000/:post_id/comments
-commentsRouter.delete("/:post_id/comments",authentication,DeleteComments);
-//get ==>http://localhost:5000/:comment_id
-commentsRouter.get("/:comment_id", authentication,getCommentsById);
-//put ==>http://localhost:5000/:comment_id
-commentsRouter.put("/comments/:id",authentication,UpdateCommentsById);
-
 //* endpoint for CommentLike
-commentsRouter.delete("/",authentication,DeleteComments); 
-commentsRouter.post('/comment_like',authentication,createCommentLike)
-commentsRouter.get('/like/:id',authentication,getCommentLikeById)
-commentsRouter.put('/comment_like/:id',authentication,updateCommentLikeById)
-commentsRouter.delete('/comment_like/:id',authentication,deleteCommentLikeById)
-/* //* endpoint for the POST request
-commentsRouter.post("/",authentication,CreateComments);
+
+ //* endpoint for the POST request
+commentsRouter.post("/:id", authentication, CreateComments);
+commentsRouter.post("/comment_like", authentication, createCommentLike);
 
 //* endpoint for the GET request
-commentsRouter.get("/",authentication,getComments);
 commentsRouter.get("/comments/:id",authentication, getCommentsById);
+commentsRouter.get("/:id/comments", authentication, getCommentsByPostId);
+commentsRouter.get("/comment_like/:id", authentication, getCommentLikeById);
 
 //* endpoint for the PUT request
 commentsRouter.put("/",authentication,UpdateComments);
+commentsRouter.put("/:comment_id", authentication, UpdateComments);
+commentsRouter.put("/comments/:id", authentication, UpdateCommentsById);
+commentsRouter.put("/comment_like/:id", authentication, updateCommentLikeById);
 
 
 //* endpoint for the DELETE request
-
+commentsRouter.delete("/:post_id/comments", authentication, DeleteComments);
+commentsRouter.delete("/", authentication, DeleteComments);
+commentsRouter.delete( "/comment_like/:id",authentication,deleteCommentLikeById);
 
 
 module.exports = commentsRouter;
-/* eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGUiOjIsImlhdCI6MTcwNzg1MjE3NCwiZXhwIjoxNzA3OTM4NTc0fQ.fZMso0BUexUhU1ujyAAwgoLAsILN4Spau3LLwGfjv6E */
+
