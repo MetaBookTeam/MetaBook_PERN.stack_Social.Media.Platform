@@ -1,161 +1,107 @@
+const pool = require("../models/db");
 
+//! see route/comments.js from more notes
+// const getCommentLikeById = async (req, res) => {
 
-/* // READ operation
-async function getCommentLikeById(id) {
-  const query = {
-    text: 'SELECT * FROM comment_likes WHERE id = $1',
-    values: [id],
-  };
+//   /*
+// GET http://localhost:5000/comments/likes/:comment_id
+// */
 
-  try {
-    const res = await client.query(query);
-    console.log('Comment like found:', res.rows[0]);
-  } catch (err) {
-    console.error('Error executing query', err);
-  }
-}
+//   const { comment_id } = req.params;
 
-// UPDATE operation
-async function updateCommentLike(id, user_id, comment_id) {
-  const query = {
-    text: 'UPDATE comment_likes SET user_id = $2, comment_id = $3 WHERE id = $1 RETURNING *',
-    values: [id, user_id, comment_id],
-  };
+//   pool
+//     .query(`SELECT * FROM comment_likes WHERE id = $1`, [comment_id])
+//     .then((result) => {
+//       if (result.rows.length > 0) {
+//         return res.status(200).json({
+//           success: true,
+//           message: `The comment_like ${like} `,
+//           result: result.rows,
+//         });
+//       } else {
+//         throw new Error("Error happened while getting comments");
+//       }
+//     })
+//     .catch((error) => {
+//       return res.status(500).json({
+//         success: false,
+//         message: "cannot found",
+//         error: error.message,
+//       });
+//     });
+// };
 
-  try {
-    const res = await client.query(query);
-    console.log('Comment like updated:', res.rows[0]);
-  } catch (err) {
-    console.error('Error executing query', err);
-  }
-}
+const deleteCommentLikeById = async (req, res) => {
+  /* 
+DELETE http://localhost:5000/comments/likes/:like_id
+*/
 
-// DELETE operation
-async function deleteCommentLike(id) {
-  const query = {
-    text: 'DELETE FROM comment_likes WHERE id = $1 RETURNING *',
-    values: [id],
-  };
-
-  try {
-    const res = await client.query(query);
-    console.log('Comment like deleted:', res.rows[0]);
-  } catch (err) {
-    console.error('Error executing query', err);
-  }
-}
-
-// Example usage
-createCommentLike(1, 1); // Create a new comment like
-getCommentLikeById(1); // Get the comment like with id 1
-updateCommentLike(1, 2, 2); // Update the comment like with id 1
-deleteCommentLike(1); // Delete the comment like with id 1
-------------------------------------------------------------
-const express = require('express');
-const bodyParser = require('body-parser');
-const { Client } = require('pg');
-
-const app = express();
-const port = 3000;
-
-// Connection information
-const client = new Client({
-  user: 'your_username',
-  host: 'localhost',
-  database: 'your_database_name',
-  password: 'your_password',
-  port: 5432, // Default PostgreSQL port
-});
-
-// Connect to the database
-client.connect();
-
-// Middleware to parse JSON bodies
-app.use(bodyParser.json());
-
-// Endpoint to create a new comment like
-app.post('/comment-likes', async (req, res) => {
-  const { user_id, comment_id } = req.body;
-  
-  const query = {
-    text: 'INSERT INTO comment_likes(user_id, comment_id) VALUES($1, $2) RETURNING *',
-    values: [user_id, comment_id],
-  };
+  const { user_id } = req.params;
 
   try {
-    const result = await client.query(query);
-    res.json(result.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+    const result = await pool.query(
+      "DELETE FROM comment_likes WHERE user_id = $1",
+      [user_id]
+    );
 
-// Endpoint to get a comment like by ID
-app.get('/comment-likes/:id', async (req, res) => {
-  const id = req.params.id;
-
-  const query = {
-    text: 'SELECT * FROM comment_likes WHERE id = $1',
-    values: [id],
-  };
-
-  try {
-    const result = await client.query(query);
-    if (result.rows.length === 0) {
-      res.status(404).json({ error: 'Comment like not found' });
-    } else {
-      res.json(result.rows[0]);
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: `User with ID ${user_id} like on this comment not found`,
+      });
     }
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+
+    res.status(200).json({
+      success: true,
+      message: `user ${user_id} unliked this comment`,
+    });
+  } catch (error) {
+    console.error("Error occurred while deleting comment like:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
   }
-});
+};
+//
+const createCommentLike = async (req, res) => {
+  /* 
+POST http://localhost:5000/comments/likes/:comment_id
 
-// Endpoint to update a comment like
-app.put('/comment-likes/:id', async (req, res) => {
-  const id = req.params.id;
-  const { user_id, comment_id } = req.body;
-
-  const query = {
-    text: 'UPDATE comment_likes SET user_id = $2, comment_id = $3 WHERE id = $1 RETURNING *',
-    values: [id, user_id, comment_id],
-  };
+*/
+  const user_id = req.token.userId;
+  const { comment_id } = req.params;
 
   try {
-    const result = await client.query(query);
-    if (result.rows.length === 0) {
-      res.status(404).json({ error: 'Comment like not found' });
-    } else {
-      res.json(result.rows[0]);
+    const result = await pool.query(
+      "INSERT INTO comment_likes (comment_id, user_id) VALUES ($1, $2) RETURNING *",
+      [comment_id, user_id]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({
+        success: false,
+        message: "Failed to create comment like",
+      });
     }
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+
+    return res.status(201).json({
+      success: true,
+      message: "Comment like created successfully",
+      result: result.rows,
+    });
+  } catch (error) {
+    console.error("Error occurred while creating comment like:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error,
+    });
   }
-});
-
-// Endpoint to delete a comment like
-app.delete('/comment-likes/:id', async (req, res) => {
-  const id = req.params.id;
-
-  const query = {
-    text: 'DELETE FROM comment_likes WHERE id = $1 RETURNING *',
-    values: [id],
-  };
-
-  try {
-    const result = await client.query(query);
-    if (result.rows.length === 0) {
-      res.status(404).json({ error: 'Comment like not found' });
-    } else {
-      res.json(result.rows[0]);
-    }
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
- */
+};
+module.exports = {
+  // getCommentLikeById,
+  deleteCommentLikeById,
+  createCommentLike,
+};

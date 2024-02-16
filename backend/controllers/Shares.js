@@ -1,6 +1,2 @@
-const Shares=(req,res)=>{
-
-}
-module.exports={
-    
-}
+const Shares = (req, res) => {};
+module.exports = {};

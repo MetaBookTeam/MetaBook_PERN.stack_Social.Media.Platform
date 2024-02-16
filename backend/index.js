@@ -16,12 +16,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-
-// 
-
-
-
-
 // router middleware
 
 // TABLES roles / permissions / role_permission
@@ -39,9 +33,10 @@ app.use("/posts", postsRouter);
 // TABLES comments / comment_likes
 app.use("/comments", commentsRouter);
 
-const PORT = process.env.PORT || 5000;
 // Handles any other endpoints [unassigned - endpoints]
 app.use("*", (req, res) => res.status(404).json("NO content at this path"));
+
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`server on ${PORT}`);
 });
