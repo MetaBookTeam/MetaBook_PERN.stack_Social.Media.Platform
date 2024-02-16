@@ -5,18 +5,19 @@ const createNewPost = async (req, res) => {
 POST http://localhost:5000/posts
 
 {
-    "content": "description"
+    "content": "description",
+    "photo_url":"imageLink"
 }
 */
 
   const { userId } = req.token;
-  const { content } = req.body;
+  const { content ,photo_url} = req.body;
 
-  const placeholder = [userId, content];
+  const placeholder = [userId, content,photo_url];
 
   try {
     const newPost = await pool.query(
-      `INSERT INTO posts (user_id,content) VALUES ($1,$2) RETURNING *`,
+      `INSERT INTO posts (user_id,content,photo_url) VALUES ($1,$2,$3) RETURNING *`,
       placeholder
     );
     res.status(200).json({
