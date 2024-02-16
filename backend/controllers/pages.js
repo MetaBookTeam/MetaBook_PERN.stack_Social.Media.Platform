@@ -47,7 +47,7 @@ const getAllPages=(req,res)=>{
     pool
     .query(query)
     .then((result)=>{
-
+     
         res.status(200).json({
             success:true,
             message:"All pages",
