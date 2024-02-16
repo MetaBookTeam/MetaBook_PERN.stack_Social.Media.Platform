@@ -5,18 +5,19 @@ const createNewPost = async (req, res) => {
 POST http://localhost:5000/posts
 
 {
-    "content": "description"
+    "content": "description",
+    "photo_url":"imageLink"
 }
 */
 
   const { userId } = req.token;
-  const { content } = req.body;
+  const { content, photo_url } = req.body;
 
-  const placeholder = [userId, content];
+  const placeholder = [userId, content, photo_url];
 
   try {
     const newPost = await pool.query(
-      `INSERT INTO posts (user_id,content) VALUES ($1,$2) RETURNING *`,
+      `INSERT INTO posts (user_id,content,photo_url) VALUES ($1,$2,$3) RETURNING *`,
       placeholder
     );
     res.status(200).json({
@@ -38,8 +39,7 @@ const getAllPost = async (req, res) => {
 GET http://localhost:5000/posts
 */
 
-
-/* 
+  /* 
 //@ 
 
  SELECT
@@ -83,9 +83,7 @@ COUNT likes
   }
 };
 
-// SELECT content FROM posts  WHERE user_id = $1
-//       UNION ALL
-//       SELECT comment FROM comments INNER JOIN posts ON posts.id=comments.post_id
+
 const getYourPosts = async (req, res) => {
   /* 
 GET http://localhost:5000/posts/profile
@@ -101,7 +99,6 @@ GET http://localhost:5000/posts/profile
       FROM posts
       INNER JOIN comments 
       ON posts.id=comments.post_id
-      WHERE posts.user_id=$1
       AND is_deleted = 0;`,
       placeholder
     );
@@ -157,53 +154,40 @@ const updatePostById = async (req, res) => {
 PUT http://localhost:5000/posts/:post_id
 
 {
-    "content": "description"
+    "content": "description",
     "photo_url": "new post photo URL"
 }
-
-
-
-//@
-photo_url //! add update the post photo 
-
-//@
-use content = COALESCE($2,content)
-not content = $2
 */
   const { userId } = req.token;
   const { post_id } = req.params;
-  const { content } = req.body;
+  const { content, photo_url } = req.body;
 
-  const placeholder = [post_id, content, /* photo_url */, userId];
+  const placeholder = [post_id, content, userId, photo_url];
 
-  if (content) {
-    try {
-      const updatePost = await pool.query(
-        `UPDATE posts
-          SET content = $2
+  try {
+    const updatePost = await pool.query(
+      `UPDATE posts
+      SET (content, photo_url) 
+      = ( COALESCE($2, content), COALESCE($4, photo_url) ) 
           WHERE id=$1 
           AND user_id=$3 RETURNING *;`,
-        placeholder
-      );
-      res.status(200).json({
-        success: true,
-        message: "updatePostById done",
-        result: updatePost.rows,
-      });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "updatePostById Server error",
-        error,
-      });
-    }
-  } else {
-    res.status(404).json({
+      placeholder
+    );
+    res.status(200).json({
+      success: true,
+      message: "updatePostById done",
+      result: updatePost.rows,
+    });
+  } catch (error) {
+    res.status(500).json({
       success: false,
-      message: "Enter data",
+      message: "updatePostById Server error",
+      error,
     });
   }
 };
+
+
 
 const deletePostById = async (req, res) => {
   /*
@@ -214,7 +198,7 @@ DELETE http://localhost:5000/posts/:post_id
 //@
  ! make it soft delete ==> UPDATE is_deleted = 1 
 */
- 
+
   const { userId } = req.token;
   const { post_id } = req.params;
 
