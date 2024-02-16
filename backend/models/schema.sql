@@ -247,6 +247,9 @@ CREATE TABLE
     page_id INT REFERENCES pages (id) ON DELETE CASCADE,
     content VARCHAR(255) NOT NULL,
     photo_url TEXT DEFAULT '',
+    num_of_likes INT,
+    num_of_comments INT,
+    num_of_shares INT,
     created_at TIMESTAMP DEFAULT NOW (),
     is_deleted SMALLINT DEFAULT 0
   );
