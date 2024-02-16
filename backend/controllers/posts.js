@@ -71,12 +71,34 @@ COUNT likes
 */
   try {
     const post = await pool.query(
-      `SELECT posts.id,posts.content,comments.post_id,posts.is_deleted,posts_likes.post_id
-       COUNT (comments.post_id) AS num_of_comments
-       FROM posts INNER JOIN comments ON posts.id = comments.post_id 
-       GROUP BY posts.id,posts.content,comments.post_id,posts.is_deleted
+      `SELECT posts.id,posts.content,comments.post_id,posts_likes.post_id,shares.post_id,
+       COUNT (comments.post_id) AS num_of_comments,
+       COUNT (posts_likes.post_id) AS num_of_likes,
+       COUNT (shares.post_id) AS num_of_shares
+       FROM posts
+       INNER JOIN comments ON posts.id = comments.post_id 
+       INNER JOIN posts_likes ON posts.id = posts_likes.post_id
+       INNER JOIN shares ON posts.id = shares.post_id
+       GROUP BY posts.id,posts.content,comments.post_id,posts_likes.post_id,shares.post_id
         `
     );
+    const postl = await pool.query(
+      `SELECT posts.id,posts.content,posts_likes.post_id,
+       COUNT (posts_likes.post_id) AS num_of_likes
+       FROM posts INNER JOIN posts_likes ON posts.id = posts_likes.post_id 
+       GROUP BY posts.id,posts.content,posts_likes.post_id
+        `
+    );
+    const post1 = await pool.query(
+      `SELECT posts.id,posts.content,posts_likes.post_id,
+       COUNT (*) AS num_of_likes
+       FROM posts INNER JOIN posts_likes ON posts.id = posts_likes.post_id 
+       GROUP BY posts.id,posts.content,posts_likes.post_id
+        `
+    );
+
+
+
     res.status(200).json({
       success: true,
       message: "getAllPost done",
