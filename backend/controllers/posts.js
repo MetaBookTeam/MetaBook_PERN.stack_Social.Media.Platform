@@ -95,11 +95,9 @@ GET http://localhost:5000/posts/profile
 
   try {
     const post = await pool.query(
-      `SELECT posts.content,comments.comment 
+      `SELECT content
       FROM posts
-      INNER JOIN comments 
-      ON posts.id=comments.post_id
-      AND is_deleted = 0;`,
+      `,
       placeholder
     );
     res.status(200).json({
