@@ -259,7 +259,7 @@ DELETE http://localhost:5000/posts/:post_id
 
   try {
     const deletePost = await pool.query(
-      `DELETE FROM posts WHERE id=$1 AND user_id=$2 RETURNING *;`,
+      `UPDATE posts SET is_deleted=1 WHERE id=$1 AND user_id=$2 RETURNING *;`,
       placeholder
     );
     res.status(200).json({
