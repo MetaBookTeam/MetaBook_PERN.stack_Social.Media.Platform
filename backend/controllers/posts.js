@@ -71,30 +71,33 @@ COUNT likes
 */
   try {
     const post = await pool.query(
-      `SELECT posts.id,posts.content,comments.post_id,posts_likes.post_id,shares.post_id,
-       COUNT (comments.post_id) AS num_of_comments,
-       COUNT (posts_likes.post_id) AS num_of_likes,
-       COUNT (shares.post_id) AS num_of_shares
-       FROM posts
-       INNER JOIN comments ON posts.id = comments.post_id 
-       INNER JOIN posts_likes ON posts.id = posts_likes.post_id
-       INNER JOIN shares ON posts.id = shares.post_id
-       GROUP BY posts.id,posts.content,comments.post_id,posts_likes.post_id,shares.post_id
-        `
-    );
-    const postl = await pool.query(
-      `SELECT posts.id,posts.content,posts_likes.post_id,
-       COUNT (posts_likes.post_id) AS num_of_likes
-       FROM posts INNER JOIN posts_likes ON posts.id = posts_likes.post_id 
-       GROUP BY posts.id,posts.content,posts_likes.post_id
-        `
-    );
-    const post1 = await pool.query(
-      `SELECT posts.id,posts.content,posts_likes.post_id,
-       COUNT (*) AS num_of_likes
-       FROM posts INNER JOIN posts_likes ON posts.id = posts_likes.post_id 
-       GROUP BY posts.id,posts.content,posts_likes.post_id
-        `
+      `with cte_likes as (
+        select post_id, count(*) as total_likes
+        from posts_likes
+        group by post_id
+        ), 
+        cte_comments as (
+          select post_id, count(*) as total_comments
+          from comments
+          group by post_id
+          ), 
+        cte_shares as (
+          select post_id, count(*) as total_shares
+          from shares
+          group by post_id
+          )
+      select p.id, 
+      p.content,
+      coalesce(l.total_likes, 0) as likes, 
+      coalesce(c.total_comments, 0) as comments,
+      coalesce(s.total_shares, 0) as shares
+      from posts p
+      left join cte_likes l
+        on p.id = l.post_id
+      left join cte_comments c
+        on p.id = c.post_id
+        left join cte_shares s
+        on p.id = s.post_id`
     );
 
 
@@ -124,8 +127,8 @@ GET http://localhost:5000/posts/profile
 
   try {
     const post = await pool.query(
-      `SELECT content
-      FROM posts
+      `SELECT *
+      FROM posts WHERE user_id=$1
       `,
       placeholder
     );
