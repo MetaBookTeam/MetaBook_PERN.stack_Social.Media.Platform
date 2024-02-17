@@ -41,8 +41,7 @@ const getAllPages = (req, res) => {
   const query = `SELECT * FROM pages WHERE is_deleted=0`;
   pool
     .query(query)
-    .then((result)=>{
-     
+    .then((result)=>{ 
         res.status(200).json({
             success:true,
             message:"All pages",
@@ -54,8 +53,8 @@ const getAllPages = (req, res) => {
             message:"Server Error",
             err:err.message
         })
-
-};
+});
+}
 // 3- this function getPageByUserId
 
 //GET  http://localhost:5000/pages/user/
@@ -160,7 +159,7 @@ const updatePageById = (req, res) => {
 // 6- this function  deletePageById.
 
  //DELETE  http://localhost:5000/pages/:id
- const deletePageById=(req,res)=>{
+const deletePageById=(req,res)=>{
 
     const id=req.params.id
     
@@ -171,7 +170,7 @@ const updatePageById = (req, res) => {
     .then((result)=>{
         if(result.rows[0].user_id===req.token.userId){
           
-     const query=`UPDATE FROM pages SET is_deleted = 1 WHERE id=$1`// 
+    const query=`UPDATE FROM pages SET is_deleted = 1 WHERE id=$1`
     pool
     .query(query,data)
     .then((result)=>{
@@ -182,8 +181,8 @@ const updatePageById = (req, res) => {
             })
         }else{
             res.status(200).json({
-          success:true,
-         message:`Page with id: ${id} deleted successfully`
+            success:true,
+            message:`Page with id: ${id} deleted successfully`
             })
         }
     }).catch((error)=>{
@@ -194,16 +193,15 @@ const updatePageById = (req, res) => {
           });
     })
         }
-    }
-     
- )}
+    }   
+)} 
 
 
  // 7- this function  deletePageByUser.
 
  //DELETE  http://localhost:5000/pages/:id/user
 
- const deletePageByUser=(req,res)=>{
+const deletePageByUser=(req,res)=>{
     const user_id=req.token.id
     const query=`DELETE FROM pages WHERE user_id=$1 `
     const data=[user_id]
@@ -218,18 +216,17 @@ const updatePageById = (req, res) => {
         }else{
             res.status(200).json({
                 success:true,
-               message:`Page with User: ${user_id} deleted successfully`
+                message:`Page with User: ${user_id} deleted successfully`
                   })
         }
     }).catch((error)=>{
-        es.status(500).json({
+        res.status(500).json({
             success: false,
             message: "Server error",
             error,
           });
-       });
-};
-             
+   });
+}; 
 module.exports = {
   createNewPage,
   getAllPages,
