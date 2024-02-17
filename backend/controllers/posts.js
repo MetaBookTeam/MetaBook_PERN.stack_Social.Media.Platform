@@ -47,26 +47,6 @@ POST http://localhost:5000/posts
 const getAllPost = async (req, res) => {
   /* 
 GET http://localhost:5000/posts
-*/
-
-  /* 
-//@ 
-
- SELECT
-    users.name,
-    orders.user_id,
-    COUNT (orders.user_id) AS num_of_orders
-  FROM orders INNER JOIN users ON orders.user_id = users.user_id
-  WHERE orders.shipping_status='completed'
-  GROUP BY users.name, orders.user_id
-  ORDER BY orders.user_id DESC;
-
-
-
-COUNT comments
-COUNT shares
-COUNT likes
-
 
 */
   try {
@@ -100,8 +80,6 @@ COUNT likes
         on p.id = s.post_id`
     );
 
-
-
     res.status(200).json({
       success: true,
       message: "getAllPost done",
@@ -127,8 +105,33 @@ GET http://localhost:5000/posts/profile
 
   try {
     const post = await pool.query(
-      `SELECT *
-      FROM posts WHERE user_id=$1
+      `with cte_likes as (
+        select post_id, count(*) as total_likes
+        from posts_likes
+        group by post_id
+        ), 
+        cte_comments as (
+          select post_id, count(*) as total_comments
+          from comments
+          group by post_id
+          ), 
+        cte_shares as (
+          select post_id, count(*) as total_shares
+          from shares
+          group by post_id
+          )
+      select p.id, 
+      p.content,
+      coalesce(l.total_likes, 0) as likes, 
+      coalesce(c.total_comments, 0) as comments,
+      coalesce(s.total_shares, 0) as shares
+      from posts p
+      left join cte_likes l
+        on p.id = l.post_id
+      left join cte_comments c
+        on p.id = c.post_id
+        left join cte_shares s
+        on p.id = s.post_id WHERE user_id=$1
       `,
       placeholder
     );
