@@ -18,6 +18,7 @@ export default function Posts() {
   return (
     <div className="posts">
       <h2>POSTS</h2>
+      <h1>aa</h1>
       <p>
         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis,
         adipisci.
@@ -34,6 +35,7 @@ export default function Posts() {
                     return (
                       <div key={post.id}>
                         <h3>post {post.id}</h3>
+                        
                         {/* <Post post={post} />; */}
                       </div>
                     );
