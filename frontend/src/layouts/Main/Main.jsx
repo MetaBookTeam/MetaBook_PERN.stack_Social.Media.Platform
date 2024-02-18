@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import NavBar from "../../components/NavBar";
+import NavBar from "../../components/NavBar/NavBar";
 
 const Main = () => {
   return (
@@ -11,6 +11,7 @@ const Main = () => {
         {/* Outlet : it the subRouter of Main {children:[]} */}
         <Outlet />
       </main>
+      <footer></footer>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { useLoaderData, Await } from "react-router-dom";
 import axios from "axios";
-import Post from "../../components/Post";
+import Post from "../../components/Post/Post";
 
 export default function Posts() {
   // destructuring the results object
@@ -23,6 +23,8 @@ export default function Posts() {
         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis,
         adipisci.
       </p>
+      <p>What's on your mind</p>
+      
       <Suspense fallback={<p>Loading data...</p>}>
         <Await resolve={results} errorElement={<p>Error loading data</p>}>
           {(results) => {
@@ -35,8 +37,7 @@ export default function Posts() {
                     return (
                       <div key={post.id}>
                         <h3>post {post.id}</h3>
-                        
-                        {/* <Post post={post} />; */}
+                        <Post post={post} />;
                       </div>
                     );
                   })}
@@ -48,19 +49,3 @@ export default function Posts() {
     </div>
   );
 }
-
-// data loader
-
-export const postsLoader = async () => {
-  // handling the promise async/await will be inside the <Suspense><Await> see above.
-  //! don't put await here or the useLoaderData will block the return until the promise response received.
-
-  const results = axios.get("http://localhost:5000/posts/");
-  //* if I don't want to return the whole results I'll use .then()
-  //   .then((response) => {
-  //     return response.data.result; //! this return an array not object ==> change from results.data.result.map() to results.map()
-  //   });
-
-  // return an object with results
-  return { results };
-};

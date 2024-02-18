@@ -3,7 +3,7 @@ import axios from "axios";
 // import useDispatch and useSelector to dispatch and subscribe to the store
 import { useDispatch, useSelector } from "react-redux";
 // import the actions
-import { setPosts, addPost } from "../../Service/redux/reducers/Posts/index";
+import { setPosts, addPost } from "../../Service/redux/reducers/Posts/postsSlice";
 
 
 
