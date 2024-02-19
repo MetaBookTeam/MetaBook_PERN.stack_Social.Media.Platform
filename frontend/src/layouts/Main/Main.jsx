@@ -1,17 +1,21 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "../../components/NavBar/NavBar";
+import Footer from "../../components/footer/footer";
+
 
 const Main = () => {
   return (
     <div className="root-layout">
       <header>
-        <NavBar />
+        <NavBar/>
       </header>
       <main>
         {/* Outlet : it the subRouter of Main {children:[]} */}
-        <Outlet />
+        <Outlet/>
       </main>
-      <footer></footer>
+      <footer>
+       <Footer/>
+      </footer>
     </div>
   );
 };
