@@ -12,13 +12,13 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import Container from '@mui/material/Container'
 import { useState } from "react";
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-const [, set] = useState();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -38,7 +38,9 @@ const [, set] = useState();
   return (
     <nav>
        <AppBar position="static">
+        <Container>
         <Toolbar disableGutters>
+          
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
@@ -155,7 +157,7 @@ const [, set] = useState();
             </Menu>
           </Box>
         </Toolbar>
-    
+        </Container>
     </AppBar>
       
       <NavLink to="/">Home</NavLink>
