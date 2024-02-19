@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"
 import axios from "axios";
 // import useDispatch and useSelector to dispatch and subscribe to the store
 import { useDispatch, useSelector } from "react-redux";
