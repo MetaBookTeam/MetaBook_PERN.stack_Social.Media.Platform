@@ -15,11 +15,13 @@ export default function Posts() {
   //* Redux
   const dispatch = useDispatch();
 
-  const { auth, posts } = useSelector((state) => {
-    return { auth: state.auth, posts: state.posts.posts };
-  });
+  // const { auth, posts } = useSelector((state) => {
+  //   return { auth: state.auth, posts: state.posts.posts };
+  // });
+  const auth = useSelector((state) => state.auth);
   // console.log("auth ======>", auth);
   // auth.isLoggedIn, auth.token, auth.userId;
+  const posts = useSelector((state) => state.posts.posts);
   // console.log("all posts ======> ", posts);
   // all posts;
 
@@ -64,22 +66,14 @@ export default function Posts() {
 
       <p>What's on your mind</p>
 
-      {/* {(results) => {
-        console.log(results.data.result);
-        return (
-          <div className="post">
-            {results.data.result &&
-              results.data.result.map((post) => {
-                return (
-                  <div key={post.id}>
-                    <h3>post {post.id}</h3>
-                    <Post post={post} />;
-                  </div>
-                );
-              })}
-          </div>
-        );
-      }} */}
+      {posts &&
+        posts.map((post) => {
+          return (
+            <div key={post.id}>
+              <Post post={post} />;
+            </div>
+          );
+        })}
     </div>
   );
 }

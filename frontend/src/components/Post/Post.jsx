@@ -6,27 +6,17 @@ import {
   addPost,
 } from "../../Service/redux/reducers/Posts/postsSlice";
 
-const Post = () => {
+const Post = ({ post }) => {
   // useDispatch allows us to dispatch actions to the reducers
   const dispatch = useDispatch();
   // useSelector gives us access to the store
-  const state = useSelector((state) => {
-    return {
-      posts: state.posts.posts,
-    };
-  });
+  const posts = useSelector((state) => state.posts.posts);
 
-  const [Post, setPost] = useState("");
   return (
     <>
       <div className="post">
-        Post
-        <input
-          type="text"
-          onChange={(e) => {
-            setPost(e.target.value);
-          }}
-        />
+        <h3>POST {post.id}</h3>
+        <p>{post.content}</p>
       </div>
     </>
   );
