@@ -15,7 +15,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import Container from '@mui/material/Container'
 import { useState } from "react";
 const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Profile', 'Logout'];
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -29,14 +29,16 @@ const NavBar = () => {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+   
   };
 
   const handleCloseUserMenu = () => {
+ 
     setAnchorElUser(null);
+  
   };
 
   return (
-    <nav>
        <AppBar position="static">
         <Container>
         <Toolbar disableGutters>
@@ -152,24 +154,24 @@ const NavBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+            
+                <MenuItem  onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">
+                  <NavLink to="/users/login">Logout</NavLink>
+                  </Typography>
                 </MenuItem>
-              ))}
+                <MenuItem  onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">
+                  <NavLink to="/users/login">Profile</NavLink>
+                  </Typography>
+                </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
         </Container>
     </AppBar>
       
-     
-      <NavLink to="/about">About</NavLink>
-      <NavLink to="/help">Help</NavLink>
-      <NavLink to="/posts">Posts</NavLink>
-      <NavLink to="/users/login">Login</NavLink>
-     
-    </nav>
+   
   );
 };
 
