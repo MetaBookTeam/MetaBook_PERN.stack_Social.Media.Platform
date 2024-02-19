@@ -2,18 +2,19 @@ import axios from "axios";
 
 import { useSelector } from "react-redux";
 
-export const postsLoader = async () => {
+export default async function postsLoader() {
   const auth = useSelector((state) => state.auth);
+
   console.log(auth);
 
-  const results = axios.get("http://localhost:5000/posts/", {
+  const results = axios.get("http://localhost:5000/posts", {
     headers: {
       Authorization: `Bearer ${auth.token}`,
     },
   });
 
   return { results };
-};
+}
 
 // export const postsLoader = async () => {
 //   const auth = useSelector((state) => state.auth);

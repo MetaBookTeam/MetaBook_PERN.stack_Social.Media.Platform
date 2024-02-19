@@ -31,15 +31,13 @@ export default function Login() {
   //* Redux
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
-  // const { auth } = useSelector((state) => {
-  //   return { auth: state.auth };
+  // const state = useSelector((state) => {
+  //   return { auth: state.auth.auth };
   // });
   // console.log(auth);
   // auth.isLoggedIn, auth.token, auth.userId;
 
-  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [password, setPassword] = useState("");
   const [status, setStatus] = useState(false);
 
   //===============================================================
@@ -76,21 +74,11 @@ export default function Login() {
 
   useEffect(() => {
     if (auth.isLoggedIn) {
-      navigate("/posts");
+      // navigate("/");
     }
-  }, []);
+  }, [auth.isLoggedIn]);
 
   //===============================================================
-
-  //* handleSubmit
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
 
   return (
     <>
