@@ -4,4 +4,8 @@
     box-sizing: border-box;
     font-family: "Roboto";
 }
+.Home{
+    text-decoration: none;
+    color: white;
+}
 

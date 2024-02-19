@@ -57,9 +57,11 @@ const NavBar = () => {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            
+              <NavLink className={"Home"} to="/">Home</NavLink>
+           
           </Typography>
-
+        
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -113,10 +115,11 @@ const NavBar = () => {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            
+            <NavLink className={"Home"} to="/">Home</NavLink>
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {/* {pages.map((page) => (
+            {pages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
@@ -124,7 +127,7 @@ const NavBar = () => {
               >
                 {page}
               </Button>
-            ))} */}
+            ))}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
@@ -160,7 +163,7 @@ const NavBar = () => {
         </Container>
     </AppBar>
       
-      <NavLink to="/">Home</NavLink>
+     
       <NavLink to="/about">About</NavLink>
       <NavLink to="/help">Help</NavLink>
       <NavLink to="/posts">Posts</NavLink>
