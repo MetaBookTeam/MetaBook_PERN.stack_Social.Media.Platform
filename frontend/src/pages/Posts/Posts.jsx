@@ -8,6 +8,7 @@ import {
 } from "../../Service/redux/reducers/Posts/postsSlice";
 
 import Post from "../../components/Post/Post";
+import { Container } from "@mui/material";
 
 export default function Posts() {
   // const { results } = useLoaderData();
@@ -18,7 +19,9 @@ export default function Posts() {
   // const { auth, posts } = useSelector((state) => {
   //   return { auth: state.auth, posts: state.posts.posts };
   // });
+
   const auth = useSelector((state) => state.auth);
+  // const {isLoggedIn,token,userId} = useSelector((state) => state.auth);
   // console.log("auth ======>", auth);
   // auth.isLoggedIn, auth.token, auth.userId;
   const posts = useSelector((state) => state.posts.posts);
@@ -59,21 +62,23 @@ export default function Posts() {
 
   return (
     <div className="posts">
-      <h2>POSTS</h2>
-      {status
-        ? message && <div className="SuccessMessage">{message}</div>
-        : message && <div className="ErrorMessage">{message}</div>}
+      <Container >
+        <h2>POSTS</h2>
+        {status
+          ? message && <div className="SuccessMessage">{message}</div>
+          : message && <div className="ErrorMessage">{message}</div>}
 
-      <p>What's on your mind</p>
+        <p>What's on your mind</p>
 
-      {posts &&
-        posts.map((post) => {
-          return (
-            <div key={post.id}>
-              <Post post={post} />;
-            </div>
-          );
-        })}
+        {posts &&
+          posts.map((post) => {
+            return (
+              <div key={post.id}>
+                <Post post={post} />;
+              </div>
+            );
+          })}
+      </Container>
     </div>
   );
 }
