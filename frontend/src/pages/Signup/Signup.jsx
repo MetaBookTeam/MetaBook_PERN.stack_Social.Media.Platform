@@ -25,7 +25,7 @@ import {
 
 const defaultTheme = createTheme();
 
-export default function Login() {
+export default function Signup() {
   const navigate = useNavigate();
 
   //* Redux
@@ -42,7 +42,7 @@ export default function Login() {
 
   //===============================================================
 
-  const login = async (event) => {
+  const signup = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
@@ -51,7 +51,7 @@ export default function Login() {
     });
 
     try {
-      const result = await axios.post("http://localhost:5000/users/login", {
+      const result = await axios.post("http://localhost:5000/users/register", {
         email: data.get("email"),
         password: data.get("password"),
       });
@@ -66,7 +66,7 @@ export default function Login() {
         setStatus(true);
         return setMessage(error.response.data.message);
       }
-      setMessage("Error happened while Login, please try again");
+      setMessage("Error happened while Signup, please try again");
     }
   };
 
@@ -124,13 +124,13 @@ export default function Login() {
                 <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
-                Login
+                Signup
               </Typography>
               <Box
                 component="form"
                 noValidate
                 // onSubmit={handleSubmit}
-                onSubmit={login}
+                onSubmit={signup}
                 sx={{ mt: 1 }}
               >
                 <TextField
@@ -163,17 +163,13 @@ export default function Login() {
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  Login
+                  Sign up
                 </Button>
                 <Grid container>
-                  <Grid item xs>
-                    <Link href="#" variant="body2">
-                      Forgot password?
-                    </Link>
-                  </Grid>
+                  <Grid item xs></Grid>
                   <Grid item>
-                    <Link href="/signup" variant="body2">
-                      {"Don't have an account? Sign Up"}
+                    <Link href="/login" variant="body2">
+                      {"already have an account? Login"}
                     </Link>
                   </Grid>
                 </Grid>

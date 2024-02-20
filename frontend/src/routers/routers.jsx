@@ -7,6 +7,7 @@ import FAQ from "../pages/FAQ/FAQ";
 import Contact from "../pages/Contact/Contact";
 import NotFound from "../pages/NotFound/NotFound";
 import Login from "../pages/Login/Login";
+import Signup from "../pages/Signup/Signup";
 import Post from "../components/Post/Post";
 import Posts from "../pages/Posts/Posts";
 import WelcomePage from "../pages/WelcomePage/WelcomePage";
@@ -50,11 +51,16 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/users/login",
+    path: "/login",
     element: <Login />,
-  },{
-    path:"/welcome",
-    element:<WelcomePage/>
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
+  },
+  {
+    path: "/welcome",
+    element: <WelcomePage />,
   },
   {
     path: "*",
