@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+//import { useState, useEffect } from "react";
+//import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import{setcomments,
@@ -20,7 +20,7 @@ import{setcomments,
             dispatch(setLoading());
             try {
               const response = await axios.get(`http://localhost:5000/comments/${postId}/comments`);
-              dispatch(setComments(response.data.result)); // Assuming the API response has a 'result' property containing comments
+              dispatch(getCommentsByPostId(response.data.result)); 
             } catch (error) {
               dispatch(setError(error.message));
             }
@@ -29,7 +29,7 @@ import{setcomments,
            const deleteComment = (commentId) => async (dispatch) => {
             try {
               await axios.delete(`http://localhost:5000/comments/${commentId}`);
-              dispatch(removeComment(commentId));
+              dispatch(deleteComment(commentId));
             } catch (error) {
               dispatch(setError(error.message));
             }
@@ -38,7 +38,7 @@ import{setcomments,
            const updateComment = (commentId, updatedComment) => async (dispatch) => {
             try {
               await axios.put(`http://localhost:5000/comments/${commentId}`, { comment: updatedComment });
-              dispatch(updateSingleComment({ id: commentId, updatedComment }));
+              dispatch(updateComment({ id: commentId, updatedComment }));
             } catch (error) {
               dispatch(setError(error.message));
             }
@@ -48,7 +48,7 @@ import{setcomments,
             dispatch(setLoading());
             try {
               const response = await axios.get(`http://localhost:5000/comments/${commentId}`);
-              dispatch(setSingleComment(response.data.result)); // Assuming the API response has a 'result' property containing the single comment
+              dispatch(getCommentById(response.data.result)); 
             } catch (error) {
               dispatch(setError(error.message));
             }
