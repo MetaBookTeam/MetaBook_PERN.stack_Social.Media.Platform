@@ -4,18 +4,31 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
+import CssBaseline from "@mui/material/CssBaseline";
+import FilledInput from "@mui/material/FilledInput";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormHelperText from "@mui/material/FormHelperText";
 import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import Input from "@mui/material/Input";
+import InputAdornment from "@mui/material/InputAdornment";
+import InputLabel from "@mui/material/InputLabel";
+import Link from "@mui/material/Link";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import MenuItem from "@mui/material/MenuItem";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import Paper from "@mui/material/Paper";
+import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+const defaultTheme = createTheme();
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -23,10 +36,30 @@ import {
   setUserId,
 } from "../../Service/redux/reducers/auth/authSlice";
 
-const defaultTheme = createTheme();
+const genders = [
+  {
+    value: "male",
+    label: "Male",
+  },
+  {
+    value: "female",
+    label: "Female",
+  },
+];
 
 export default function Signup() {
   const navigate = useNavigate();
+  //===============================================================
+  //* show/hide Password
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+  //===============================================================
 
   //* Redux
   const dispatch = useDispatch();
@@ -126,37 +159,114 @@ export default function Signup() {
               <Typography component="h1" variant="h5">
                 Signup
               </Typography>
-              <Box
-                component="form"
-                noValidate
-                // onSubmit={handleSubmit}
-                onSubmit={signup}
-                sx={{ mt: 1 }}
-              >
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  autoFocus
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                />
-                <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  label="Remember me"
-                />
+              <Box component="form" noValidate onSubmit={signup} sx={{ mt: 1 }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      name="first_name"
+                      fullWidth
+                      id="first_name"
+                      label="First Name"
+                      autoFocus
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      name="last_name"
+                      fullWidth
+                      id="last_name"
+                      label="Last Name"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      name="user_name"
+                      fullWidth
+                      id="user_name"
+                      label="User Name"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      id="email"
+                      label="Email Address"
+                      name="email"
+                      autoComplete="email"
+                    />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <FormControl fullWidth required>
+                      <InputLabel htmlFor="password">Password</InputLabel>
+                      <OutlinedInput
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                              edge="end"
+                            >
+                              {showPassword ? (
+                                <VisibilityOff />
+                              ) : (
+                                <Visibility />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                        label="Password"
+                        name="password"
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      name="re_password"
+                      label="Repeat Password"
+                      type="password"
+                      id="re_password"
+                      // error
+                      // helperText="Incorrect entry."
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      id="gender"
+                      select
+                      label="Gender"
+                      defaultValue="male"
+                      helperText="Please select your gender"
+                      name="gender"
+                      type="gender"
+                    >
+                      {genders.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Grid>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography sx={{ mt: 1, color: "red" }}>
+                    all fields with * are required
+                  </Typography>
+                  <FormControlLabel
+                    sx={{ mt: 2 }}
+                    control={
+                      <Checkbox value="allowExtraEmails" color="primary" />
+                    }
+                    label="I want to receive inspiration, marketing promotions and updates via email."
+                  />
+                </Grid>
                 <Button
                   type="submit"
                   fullWidth
