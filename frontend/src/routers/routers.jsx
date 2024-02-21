@@ -10,7 +10,9 @@ import Login from "../pages/Login/Login";
 import Signup from "../pages/Signup/Signup";
 import Post from "../components/Post/Post";
 import Posts from "../pages/Posts/Posts";
+
 import WelcomePage from "../pages/WelcomePage/WelcomePage";
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -51,6 +53,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
+
     path: "/login",
     element: <Login />,
   },
@@ -61,6 +64,7 @@ export const router = createBrowserRouter([
   {
     path: "/welcome",
     element: <WelcomePage />,
+
   },
   {
     path: "*",
