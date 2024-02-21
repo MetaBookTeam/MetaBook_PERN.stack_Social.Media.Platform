@@ -18,18 +18,18 @@
  import Face from '@mui/icons-material/Face';
  import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
 
-import { useDispatch, useSelector } from "react-redux";
-import {
-  setPosts,
-  addPost,
-} from "../../Service/redux/reducers/Posts/postsSlice";
+// import { useDispatch, useSelector } from "react-redux";
+// import {
+//   setPosts,
+//   addPost,
+// } from "../../Service/redux/reducers/Posts/postsSlice";
 
 const Post = ({ post }) => {
   // useDispatch allows us to dispatch actions to the reducers
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   // useSelector gives us access to the store
-  const posts = useSelector((state) => state.posts.posts);
-
+  // const posts = useSelector((state) => state.posts.posts);
+  // console.log(post);
   return (
 
     <Card
@@ -56,17 +56,17 @@ const Post = ({ post }) => {
                     'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)',
                 },
               }}
-            >
+            > 
               <Avatar
                 size="sm"
-                src="/static/logo.png"
-                sx={{ p: 0.5, border: '2px solid', borderColor: 'background.body' }}
+                src={post.image}
+                // sx={{ p: 0.5, border: '2px solid', borderColor: 'background.body' }}
               />
             </Box>
-            <Typography fontWeight="lg">{post.user_id}</Typography>
-            <IconButton variant="plain" color="neutral" size="sm" sx={{ ml: 'auto' }}>
+            <Typography fontWeight="lg">{post.user_name}</Typography>
+            {/* <IconButton variant="plain" color="neutral" size="sm" sx={{ ml: 'auto' }}>
               <MoreHoriz />
-            </IconButton>
+            </IconButton> */}
           </CardContent>
           <CardOverflow>
             <AspectRatio>
@@ -82,10 +82,11 @@ const Post = ({ post }) => {
                 <ModeCommentOutlined />
               </IconButton>
               <IconButton variant="plain" color="neutral" size="sm">
+                
                 <SendOutlined />
               </IconButton>
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mx: 'auto' }}>
+            {/* <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mx: 'auto' }}>
               {[...Array(5)].map((_, index) => (
                 <Box
                   key={index}
@@ -102,7 +103,7 @@ const Post = ({ post }) => {
               <IconButton variant="plain" color="neutral" size="sm">
                 <BookmarkBorderRoundedIcon />
               </IconButton>
-            </Box>
+            </Box> */}
           </CardContent>
           <CardContent>
             <Link
@@ -144,7 +145,11 @@ const Post = ({ post }) => {
               placeholder="Add a comment…"
               sx={{ flex: 1, px: 0, '--Input-focusedThickness': '0px' }}
             />
-            <Link disabled underline="none" role="button">
+            <Link 
+            // onClick={
+            //   dispatch(updatePost(res.id))
+            //   }
+               underline="none" role="button">
               Post
             </Link>
           </CardContent>
