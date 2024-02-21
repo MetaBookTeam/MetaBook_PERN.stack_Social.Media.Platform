@@ -167,16 +167,17 @@ POST http://localhost:5000/users/login
               throw Error;
             }
           } else {
-            res.status(403).json({
+            res.status(500).json({
               success: false,
               message: `The email doesn’t exist or the password you’ve entered is incorrect`,
+            
             });
           }
         });
       } else throw Error;
     })
     .catch((error) => {
-      res.status(403).json({
+      res.status(500).json({
         success: false,
         message:
           "The email doesn’t exist or the password you’ve entered is incorrect",

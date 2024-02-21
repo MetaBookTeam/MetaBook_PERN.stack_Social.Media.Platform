@@ -1,3 +1,4 @@
+
  import { useState } from "react";
  import * as React from 'react';
  import AspectRatio from '@mui/joy/AspectRatio';
@@ -16,6 +17,7 @@
  import SendOutlined from '@mui/icons-material/SendOutlined';
  import Face from '@mui/icons-material/Face';
  import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   setPosts,
@@ -29,6 +31,7 @@ const Post = ({ post }) => {
   const posts = useSelector((state) => state.posts.posts);
 
   return (
+
     <Card
           variant="outlined"
           sx={{
@@ -156,6 +159,7 @@ const Post = ({ post }) => {
           </CardContent>
         </Card>
   )
+
 };
 
 export default Post;

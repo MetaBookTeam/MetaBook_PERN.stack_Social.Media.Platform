@@ -32,10 +32,9 @@ const createShareByPostId = (req, res) => {
   pool
     .query(
       ` INSERT INTO shares (post_id, user_id,content)
-VALUES ($1,$2,$3)
-RETURNING id;`,
+        VALUES ($1,$2,$3)
+        RETURNING id;`,
       [post_id,user_id,content]
-
     )
     .then((result) => {
       res.status(200).json({

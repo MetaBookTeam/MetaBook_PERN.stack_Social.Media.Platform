@@ -60,6 +60,9 @@ export default function Login() {
         setMessage(result.data.message);
         dispatch(setLogin(result.data.token));
         dispatch(setUserId(result.data.userId));
+
+        navigate("/");
+
       } else throw Error;
     } catch (error) {
       if (error.response && error.response.data) {
@@ -74,7 +77,9 @@ export default function Login() {
 
   useEffect(() => {
     if (auth.isLoggedIn) {
-      navigate("/");
+
+      // navigate("/");
+
     }
   }, [auth.isLoggedIn]);
 
@@ -124,7 +129,9 @@ export default function Login() {
                 <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
+
                 Login
+
               </Typography>
               <Box
                 component="form"

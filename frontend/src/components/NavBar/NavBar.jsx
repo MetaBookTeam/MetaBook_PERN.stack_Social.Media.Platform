@@ -29,6 +29,7 @@ const NavBar = () => {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+
    
   };
 
@@ -59,6 +60,7 @@ const NavBar = () => {
               textDecoration: 'none',
             }}
           >
+
             
               <NavLink className={"Home"} to="/">Home</NavLink>
            
@@ -117,11 +119,13 @@ const NavBar = () => {
               textDecoration: 'none',
             }}
           >
+
             
             <NavLink className={"Home"} to="/">Home</NavLink>
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
+
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
@@ -129,7 +133,9 @@ const NavBar = () => {
               >
                 {page}
               </Button>
+
             ))}
+
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
@@ -154,6 +160,7 @@ const NavBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+
             
                 <MenuItem  onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">
