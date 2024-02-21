@@ -2,11 +2,17 @@
 //import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import{setcomments,
+import{ setLoading,
+    setError,setcomments,
     getCommentsByPostId,
     deletecomments,
     updateComment,
-    getCommentById,setSingleComment} from "../../Service/redux/reducers/comments/commentsSlice"
+    getCommentById,setSingleComment,setLikes,
+    setShares,
+    addShare,
+    deleteShare,
+    removeLike,
+    addLike} from "../../Service/redux/reducers/comments/commentsSlice"
     export default function Posts() {
       
       
@@ -78,6 +84,34 @@ import{setcomments,
               dispatch(setError(error.message));
             }
           };
-       
+          const getShareByPostId = (postId) => async (dispatch) => {
+            dispatch(setLoading());
+            try {
+              const response = await axios.get(`http://localhost:5000/posts/${postId}/shares`);
+              dispatch(setShares(response.data.result));
+              dispatch(getShareByPostId())
+            } catch (error) {
+              dispatch(setError(error.message));
+            }
+          };
+          const createShareByPostId = (postId, shareData) => async (dispatch) => {
+            try {
+              const response = await axios.post(`http://localhost:5000/posts/${postId}/shares`, shareData);
+              dispatch(addShare(response.data.result));
+              dispatch(createShareByPostId());
+            } catch (error) {
+              dispatch(setError(error.message));
+            }
+          };
+          
+           const softDeleteShare = (shareId) => async (dispatch) => {
+            try {
+              await axios.put(`http://localhost:5000/shares/${shareId}`, { isDeleted: true });
+              dispatch(deleteShare(shareId))
+              dispatch(softDeleteShare())
+            } catch (error) {
+              dispatch(setError(error.message));
+            }
+        }
     }
     //export default commentsSlice.reducer;
