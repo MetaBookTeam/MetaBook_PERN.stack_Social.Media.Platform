@@ -91,4 +91,3 @@ export const {
 } = commentsSlice.actions;
 
 export default commentsSlice.reducer;
-//shares getShareByPostId, createShareByPostId, softDeleteShare
