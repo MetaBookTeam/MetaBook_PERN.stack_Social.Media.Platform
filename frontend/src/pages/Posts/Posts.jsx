@@ -1,15 +1,23 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import Grid from '@mui/material/Grid';
 import { useDispatch, useSelector } from "react-redux";
 import {
   setPosts,
   addPost,
 } from "../../Service/redux/reducers/Posts/postsSlice";
+import Paper from '@mui/material/Paper';
+import { styled } from '@mui/material/styles';
 
 import Post from "../../components/Post/Post";
 import { Container } from "@mui/material";
-
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 export default function Posts() {
   // const { results } = useLoaderData();
 
@@ -62,23 +70,34 @@ export default function Posts() {
 
   return (
     <div className="posts">
-      <Container >
+      {/* <Container > */}
         <h2>POSTS</h2>
         {status
           ? message && <div className="SuccessMessage">{message}</div>
           : message && <div className="ErrorMessage">{message}</div>}
 
         <p>What's on your mind</p>
-
+        <Grid container spacing={2}   
+        direction="row"
+  justifyContent="center"
+  alignItems="center"
+>
+        <Grid item xs={2} >
+        <Item>xs=3</Item>
+            </Grid>
         {posts &&
           posts.map((post) => {
             return (
-              <div key={post.id}>
-                <Post post={post} />;
-              </div>
+              <Grid item xs={6} key={post.id}>
+                <Item><Post post={post} /></Item>
+            </Grid>
             );
           })}
-      </Container>
+          <Grid item xs={2} >
+          <Item>xs=3</Item>
+          </Grid>
+          </Grid>
+      {/* </Container> */}
     </div>
   );
 }
