@@ -1,11 +1,9 @@
-<<<<<<< HEAD
+
 import React, { useState, useEffect } from "react"
 import axios from "axios";
 // import useDispatch and useSelector to dispatch and subscribe to the store
-=======
-import { useState } from "react";
 
->>>>>>> 08b873e18331857471e10e9d28be84cdb037f8eb
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   setPosts,

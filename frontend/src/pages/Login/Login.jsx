@@ -60,6 +60,7 @@ export default function Login() {
         setMessage(result.data.message);
         dispatch(setLogin(result.data.token));
         dispatch(setUserId(result.data.userId));
+        navigate("/");
       } else throw Error;
     } catch (error) {
       if (error.response && error.response.data) {

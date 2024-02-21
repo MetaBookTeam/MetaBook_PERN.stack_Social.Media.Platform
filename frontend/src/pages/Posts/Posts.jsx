@@ -56,7 +56,7 @@ export default function Posts() {
   useEffect(() => {
     getAllPosts();
   }, []);
-
+  const [post, setPost] = useState("")
   return (
     <div className="posts">
       <h2>POSTS</h2>
@@ -65,13 +65,28 @@ export default function Posts() {
         : message && <div className="ErrorMessage">{message}</div>}
 
       <p>What's on your mind</p>
+        <textarea placeholder="what's on your mind" onChange={(e)=>{
+          setPost(e.target.value)
+        }}>
+        </textarea>
+      
+        <br/>
+        <button onClick={()=>{
+          dispatch(addPost(post))
+        }}>Add Post</button>
 
+        
       {posts &&
         posts.map((post) => {
+        
           return (
             <div key={post.id}>
-              <Post post={post} />;
-            </div>
+              <li>
+                
+              </li>
+             {/* <Post post={post} />; */}
+             </div>
+            
           );
         })}
     </div>
