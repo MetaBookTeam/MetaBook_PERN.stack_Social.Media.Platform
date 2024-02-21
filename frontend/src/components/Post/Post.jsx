@@ -60,14 +60,14 @@ const Post = ({ post }) => {
                 sx={{ p: 0.5, border: '2px solid', borderColor: 'background.body' }}
               />
             </Box>
-            <Typography fontWeight="lg">MUI</Typography>
+            <Typography fontWeight="lg">{post.user_id}</Typography>
             <IconButton variant="plain" color="neutral" size="sm" sx={{ ml: 'auto' }}>
               <MoreHoriz />
             </IconButton>
           </CardContent>
           <CardOverflow>
             <AspectRatio>
-              <img src="/static/images/cards/yosemite.jpeg" alt="" loading="lazy" />
+              <img src={post.photo_url} alt="" loading="lazy" />
             </AspectRatio>
           </CardOverflow>
           <CardContent orientation="horizontal" sx={{ alignItems: 'center', mx: -1 }}>
@@ -118,9 +118,9 @@ const Post = ({ post }) => {
                 fontWeight="lg"
                 textColor="text.primary"
               >
-                {post.content}
+                
               </Link>{' '}
-              The React component library you always wanted
+              {post.content}
             </Typography>
             <Link
               component="button"
