@@ -9,9 +9,6 @@ import {
   addPost,
 } from "../../Service/redux/reducers/Posts/postsSlice";
 
-
-import Post from "../../components/Post/Post";
-
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 
@@ -78,35 +75,6 @@ export default function Posts() {
     getAllPosts();
   }, []);
 
-
-  //===============================================================
-  const getAllPosts = () => {
-    axios
-      .get("http://localhost:5000/posts", {
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
-        },
-      })
-      .then((results) => {
-        if (results.data.success) {
-          setStatus(true);
-          // setMessage(results.data.message);
-          dispatch(setPosts(results.data.result));
-        } else throw Error;
-      })
-      .catch((error) => {
-        if (!error.response.data.success) {
-          return setMessage(error.response.data.message);
-        }
-        setMessage("Error happened while Get Data, please try again");
-      });
-  };
-
-  //===============================================================
-
-  useEffect(() => {
-    getAllPosts();
-  }, []);
   const [post, setPost] = useState("")
   return (
     <div className="posts">
@@ -124,11 +92,13 @@ export default function Posts() {
         direction="row"
         justifyContent="center"
       >
-        <Grid item xs={2}>
+        <Grid item xs={3}>
           <Item>xs=3</Item>
+         
         </Grid>
 
         <Grid item xs={5} >
+          
           {posts &&
             posts.map((post) => {
               return (
@@ -139,7 +109,7 @@ export default function Posts() {
             })}
         </Grid>
 
-        <Grid item xs={2}>
+        <Grid item xs={3}>
           <Item>xs=3</Item>
         </Grid>
       </Grid>

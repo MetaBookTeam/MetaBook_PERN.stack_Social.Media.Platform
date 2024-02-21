@@ -121,19 +121,10 @@ const Post = ({ post }) => {
                 fontWeight="lg"
                 textColor="text.primary"
               >
-                
               </Link>{' '}
               {post.content}
             </Typography>
-            <Link
-              component="button"
-              underline="none"
-              fontSize="sm"
-              startDecorator="…"
-              sx={{ color: 'text.tertiary' }}
-            >
-              more
-            </Link>
+          
             <Link
               component="button"
               underline="none"
