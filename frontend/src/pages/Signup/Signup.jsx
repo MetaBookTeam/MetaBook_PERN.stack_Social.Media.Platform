@@ -35,6 +35,7 @@ import {
   setLogin,
   setUserId,
 } from "../../Service/redux/reducers/auth/authSlice";
+import PhoneNumber from "../../components/PhoneNumber/PhoneNumber";
 
 const genders = [
   {
@@ -280,7 +281,7 @@ export default function Signup() {
                       select
                       label="Gender"
                       defaultValue="male"
-                      helperText="Please select your gender"
+                      helperText="Select your gender"
                       name="gender"
                       type="gender"
                     >
@@ -298,9 +299,15 @@ export default function Signup() {
                       id="birthday"
                       name="birthday"
                       type="date"
-                      helperText="Please select your birthday"
+                      helperText="Select your birthday"
                     />
                   </Grid>
+
+                  <Grid item xs={12}>
+                    <PhoneNumber  />
+                  </Grid>
+
+
                 </Grid>
 
                 <Grid item xs={12}>
