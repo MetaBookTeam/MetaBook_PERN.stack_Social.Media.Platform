@@ -60,6 +60,16 @@ export default function Signup() {
     event.preventDefault();
   };
   //===============================================================
+  //* show/hide Repeat Password
+
+  const [showRePassword, setShowRePassword] = useState(false);
+
+  const handleClickShowRePassword = () => setShowRePassword((show) => !show);
+
+  const handleMouseDownRePassword = (event) => {
+    event.preventDefault();
+  };
+  //===============================================================
 
   //* Redux
   const dispatch = useDispatch();
@@ -170,6 +180,7 @@ export default function Signup() {
                       autoFocus
                     />
                   </Grid>
+
                   <Grid item xs={12} sm={6}>
                     <TextField
                       name="last_name"
@@ -178,6 +189,7 @@ export default function Signup() {
                       label="Last Name"
                     />
                   </Grid>
+
                   <Grid item xs={12}>
                     <TextField
                       required
@@ -185,15 +197,19 @@ export default function Signup() {
                       fullWidth
                       id="user_name"
                       label="User Name"
+                      type="text"
                     />
                   </Grid>
+
                   <Grid item xs={12}>
                     <TextField
+                      required
                       fullWidth
                       id="email"
                       label="Email Address"
                       name="email"
                       autoComplete="email"
+                      type="email"
                     />
                   </Grid>
 
@@ -224,19 +240,40 @@ export default function Signup() {
                       />
                     </FormControl>
                   </Grid>
+
                   <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      name="re_password"
-                      label="Repeat Password"
-                      type="password"
-                      id="re_password"
-                      // error
-                      // helperText="Incorrect entry."
-                    />
+                    <FormControl fullWidth required>
+                      <InputLabel htmlFor="re_password">
+                        Repeat Password
+                      </InputLabel>
+                      <OutlinedInput
+                        id="re_password"
+                        type={showRePassword ? "text" : "password"}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle repeat password visibility"
+                              onClick={handleClickShowRePassword}
+                              onMouseDown={handleMouseDownRePassword}
+                              edge="end"
+                            >
+                              {showRePassword ? (
+                                <VisibilityOff />
+                              ) : (
+                                <Visibility />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                        label="re_password"
+                        name="re_password"
+                        // error
+                        // helperText="Incorrect entry."
+                      />
+                    </FormControl>
                   </Grid>
-                  <Grid item xs={12}>
+
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       fullWidth
                       id="gender"
@@ -254,7 +291,18 @@ export default function Signup() {
                       ))}
                     </TextField>
                   </Grid>
+
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      id="birthday"
+                      name="birthday"
+                      type="date"
+                      helperText="Please select your birthday"
+                    />
+                  </Grid>
                 </Grid>
+
                 <Grid item xs={12}>
                   <Typography sx={{ mt: 1, color: "red" }}>
                     all fields with * are required
