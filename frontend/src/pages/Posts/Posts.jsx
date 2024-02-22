@@ -94,9 +94,7 @@ export default function Posts() {
       >
         <Grid item xs={3}>
           <Item>xs=3</Item>
-         
         </Grid>
-
         <Grid item xs={5} >
           
           {posts &&
