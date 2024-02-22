@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
+import GeoLocation from "../../components/GeoLocation/GeoLocation";
+
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -179,6 +181,7 @@ export default function Signup() {
                       id="first_name"
                       label="First Name"
                       autoFocus
+                      autoComplete=""
                     />
                   </Grid>
 
@@ -188,6 +191,7 @@ export default function Signup() {
                       fullWidth
                       id="last_name"
                       label="Last Name"
+                      autoComplete=""
                     />
                   </Grid>
 
@@ -198,7 +202,6 @@ export default function Signup() {
                       fullWidth
                       id="user_name"
                       label="User Name"
-                      type="text"
                     />
                   </Grid>
 
@@ -209,8 +212,8 @@ export default function Signup() {
                       id="email"
                       label="Email Address"
                       name="email"
-                      autoComplete="email"
                       type="email"
+                      autoComplete=""
                     />
                   </Grid>
 
@@ -303,11 +306,42 @@ export default function Signup() {
                     />
                   </Grid>
 
-                  <Grid item xs={12}>
-                    <PhoneNumber  />
+                  <Grid item xs={12} marginBottom={3}>
+                    <PhoneNumber />
                   </Grid>
 
+                  {/* <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      id="school"
+                      label="School Name"
+                      name="school"
+                    />
+                  </Grid> */}
 
+                  {/* <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      id="address"
+                      label="Address"
+                      name="address"
+                    />
+                  </Grid> */}
+
+                  {/* <Grid item xs={12} sm={6}>
+                    <TextField fullWidth id="city" label="City" name="city" />
+                  </Grid> */}
+
+                  {/* <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      id="country"
+                      label="Country"
+                      name="country"
+                    />
+                  </Grid> */}
+
+                  <GeoLocation />
                 </Grid>
 
                 <Grid item xs={12}>
