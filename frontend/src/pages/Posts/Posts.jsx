@@ -23,30 +23,22 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 export default function Posts() {
-  // const { results } = useLoaderData();
 
   //* Redux
   const dispatch = useDispatch();
 
-  // const { auth, posts } = useSelector((state) => {
-  //   return { auth: state.auth, posts: state.posts.posts };
-  // });
 
 
   const auth = useSelector((state) => state.auth);
-  // const {isLoggedIn,token,userId} = useSelector((state) => state.auth);
 
-  // console.log("auth ======>", auth);
-  // auth.isLoggedIn, auth.token, auth.userId;
+
+
   const posts = useSelector((state) => state.posts.posts);
-  // console.log("all posts ======> ", posts);
-  // all posts;
+
 
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(false);
 
-
-  //===============================================================
   const getAllPosts = () => {
     axios
       .get("http://localhost:5000/posts", {
@@ -69,16 +61,16 @@ export default function Posts() {
       });
   };
 
-  //===============================================================
+  
 
   useEffect(() => {
     getAllPosts();
   }, []);
 
-  const [post, setPost] = useState("")
+ 
   return (
     <div className="posts">
-      {/* <Container > */}
+      
       <h2>POSTS</h2>
       {status
         ? message && <div className="SuccessMessage">{message}</div>
@@ -95,6 +87,7 @@ export default function Posts() {
         <Grid item xs={3}>
           <Item>xs=3</Item>
         </Grid>
+
         <Grid item xs={5} >
           
           {posts &&
@@ -111,7 +104,6 @@ export default function Posts() {
           <Item>xs=3</Item>
         </Grid>
       </Grid>
-      {/* </Container> */}
     </div>
   );
 }
