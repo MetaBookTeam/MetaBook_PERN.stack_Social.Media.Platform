@@ -28,6 +28,10 @@ export const router = createBrowserRouter([
         element: <About />,
       },
       {
+        path: "/profile/:user_id",
+        element: <Profile />,
+      },
+      {
         path: "help",
         element: <Help />,
         children: [
@@ -56,10 +60,6 @@ export const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
-  },
-  {
-    path: "/profile",
-    element: <Profile />,
   },
   {
     path: "/signup",
