@@ -38,6 +38,7 @@ import {
   setUserId,
 } from "../../Service/redux/reducers/auth/authSlice";
 import PhoneNumber from "../../components/PhoneNumber/PhoneNumber";
+import CloudinaryImage from "../../components/CloudinaryImage/CloudinaryImage";
 
 const genders = [
   {
@@ -321,7 +322,7 @@ export default function Signup() {
 
                   <GeoLocation />
 
-                  <Grid item xs={12}>
+                  {/* <Grid item xs={12}>
                     <TextField
                       sx={{ width: "75%" }}
                       id="image"
@@ -334,7 +335,9 @@ export default function Signup() {
                     >
                       upload
                     </Button>
-                  </Grid>
+                  </Grid> */}
+
+                  <CloudinaryImage/>
                 </Grid>
 
                 <Grid item xs={12}>
