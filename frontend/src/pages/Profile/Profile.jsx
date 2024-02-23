@@ -21,7 +21,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
-
+import {addPost} from "../../Service/redux/reducers/Posts/postsSlice"
 // extra information
 function generate(element) {
   return [0, 1, 2].map((value) =>
@@ -36,6 +36,8 @@ const Profile = () => {
   const Demo = styled("div")(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
   }));
+  const [content, setContent] = useState();
+  
   const [secondary, setSecondary] = React.useState(false);
   // End extra information
 
@@ -81,6 +83,7 @@ const Profile = () => {
   useEffect(() => {
     getUserById();
   }, []);
+
   const getPostById = async () => {
     try {
       const post = await axios.get(
@@ -92,6 +95,23 @@ const Profile = () => {
         }
       );
       setPostProfile(...post.data.result);
+      console.log(post.data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getPostById();
+  }, []);
+  const addNewPost = async () => {
+    try {
+      const post = await axios.get(`http://localhost:5000/posts`, {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
+      useDispatch(addPost());
+      console.log(content);
       console.log(post.data.result);
     } catch (error) {
       console.log(error);
@@ -178,7 +198,7 @@ const Profile = () => {
           </Grid>
           <Grid item xs={8}>
             <Item>
-              <h2>POSTS</h2>
+              <h2>New Post</h2>
 
               <Button onClick={handleOpen}>What's on your mind</Button>
               <Modal
@@ -201,25 +221,34 @@ const Profile = () => {
                       variant="h6"
                       component="h2"
                     >
-                      Text in a modal
+                      Create new post
                     </Typography>
                     <Typography
                       id="transition-modal-description"
                       sx={{ mt: 2 }}
                     >
-                      Duis mollis, est non commodo luctus, nisi erat porttitor
-                      ligula.
+                      <TextField
+                        id="outlined-basic"
+                        // onChange={(e) => {
+                        //   setContent(e.target.value);
+                        // }}
+                        label="Content"
+                        variant="outlined"
+                      />
                     </Typography>
+                    <Button onClick={addNewPost}>Add</Button>
                   </Box>
                 </Fade>
               </Modal>
             </Item>
             <Grid item xs={12}>
-              {postProfile
-                ? postProfile.map((elem) => {
-                    return <Item>{elem.content} </Item>;
-                  })
-                :<center>Dont have any post</center> }
+              {postProfile ? (
+                postProfile.map((elem) => {
+                  return <Item>{elem.content} </Item>;
+                })
+              ) : (
+                <center>Dont have any post</center>
+              )}
             </Grid>
           </Grid>
         </Grid>
