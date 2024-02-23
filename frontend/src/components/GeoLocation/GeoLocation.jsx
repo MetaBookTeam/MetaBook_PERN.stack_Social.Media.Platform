@@ -19,21 +19,24 @@ import GeoLocationHandler from "./GeoLocationHandler";
 
 const GeoLocation = () => {
   //   const classes = useStyles();
-  const [country, setCountry] = useState("");
-  const [state, setState] = useState("");
-  const [city, setCity] = useState("");
+  const [countryGeoId, setCountryGeoId] = useState("");
+  const [countryName, setCountryName] = useState("");
+  const [stateGeoId, setStateGeoId] = useState("");
+  const [stateName, setStateName] = useState("");
+  const [cityGeoId, setCityGeoId] = useState("");
+  const [cityName, setCityName] = useState("");
 
   console.log({
-    country,
-    state,
-    city,
+    countryGeoId,
+    stateGeoId,
+    cityGeoId,
+    countryName,
+    stateName,
+    cityName,
   });
 
   return (
     <Container component="main" maxWidth="lg">
-      {/* <CssBaseline /> */}
-      {/* <div className={classes.paper}>
-        <form className={classes.form}> */}
       <Box>
         <FormControl>
           <Grid container spacing={4}>
@@ -43,26 +46,37 @@ const GeoLocation = () => {
                 id="Country"
                 name="Country"
                 isCountry
-                onChange={setCountry}
+                onChange={(e, name) => {
+                  setCountryGeoId(e);
+                  setCountryName(name);
+                }}
               />
             </Grid>
             <Grid item xs={4}>
               <GeoLocationHandler
                 locationTitle="State"
-                onChange={setState}
-                geoId={country}
+                onChange={(e, name) => {
+                  setStateGeoId(e);
+                  setStateName(name);
+                }}
+                geoId={countryGeoId}
                 id="State"
                 name="State"
+                isState
               />
             </Grid>
 
             <Grid item xs={4}>
               <GeoLocationHandler
                 locationTitle="City"
-                onChange={setCity}
-                geoId={state}
+                onChange={(e, name) => {
+                  setCityGeoId(e);
+                  setCityName(name);
+                }}
+                geoId={stateGeoId}
                 id="City"
                 name="City"
+                isCity
               />
             </Grid>
           </Grid>

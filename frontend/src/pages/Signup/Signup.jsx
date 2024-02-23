@@ -319,28 +319,6 @@ export default function Signup() {
                     />
                   </Grid> */}
 
-                  {/* <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      id="address"
-                      label="Address"
-                      name="address"
-                    />
-                  </Grid> */}
-
-                  {/* <Grid item xs={12} sm={6}>
-                    <TextField fullWidth id="city" label="City" name="city" />
-                  </Grid> */}
-
-                  {/* <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      id="country"
-                      label="Country"
-                      name="country"
-                    />
-                  </Grid> */}
-
                   <GeoLocation />
                 </Grid>
 

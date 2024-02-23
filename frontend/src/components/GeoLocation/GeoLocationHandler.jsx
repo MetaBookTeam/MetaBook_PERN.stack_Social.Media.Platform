@@ -27,7 +27,7 @@ const geonames = new Geonames({
 
 export default function GeoLocationHandler(props) {
   //   const classes = useStyles();
-  const { locationTitle, geoId, onChange, isCountry } = props;
+  const { locationTitle, geoId, onChange, isCountry, isState, isCity } = props;
   const [options, setOptions] = useState([]);
   const [currentItem, setCurrentItem] = useState("");
   // const [labelWidth, setLabelWidth] = useState(0);
@@ -56,10 +56,10 @@ export default function GeoLocationHandler(props) {
 
   const inputLabel = useRef(null);
 
-  const handleChange = (e) => {
-    setCurrentItem(e.target.value);
-    onChange(e.target.value);
-  };
+  // const handleChange = (e) => {
+  //   setCurrentItem(e.target.value);
+  //   onChange(e.target.value);
+  // };
 
   return (
     // <FormControl variant="outlined" className={classes.formControl}>
@@ -72,7 +72,25 @@ export default function GeoLocationHandler(props) {
         labelId="outlined-label"
         id="select-outlined"
         value={currentItem}
-        onChange={handleChange}
+        // onChange={handleChange}
+        onChange={(e) => {
+          setCurrentItem(e.target.value);
+          options.find((v) => {
+            if (isCountry) {
+              if (e.target.value === v.geonameId) {
+                onChange(e.target.value, v.countryName);
+              }
+            } else if (isState) {
+              if (e.target.value === v.geonameId) {
+                onChange(e.target.value, v.name);
+              }
+            } else if (isCity) {
+              if (e.target.value === v.geonameId) {
+                onChange(e.target.value, v.name);
+              }
+            }
+          });
+        }}
         // labelWidth={labelWidth}
         sx={{ width: "120px" }}
       >
