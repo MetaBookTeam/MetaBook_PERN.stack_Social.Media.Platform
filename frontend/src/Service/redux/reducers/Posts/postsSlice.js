@@ -21,10 +21,13 @@ export const postsSlice = createSlice({
         }
         return elem
       })
-    }
+    },
+    setPostsLikesById :(state,action)=>{
+      console.log(state);
+    },
   },
 });
 
-export const { setPosts, addPost } = postsSlice.actions;
+export const { setPosts, addPost,setPostsLikesById } = postsSlice.actions;
 
 export default postsSlice.reducer;

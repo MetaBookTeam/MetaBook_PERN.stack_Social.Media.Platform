@@ -7,11 +7,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setPosts,
   addPost,
+  setPostsLikesById,
 } from "../../Service/redux/reducers/Posts/postsSlice";
 
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
-
 
 import Post from "../../components/Post/Post";
 import { Container } from "@mui/material";
@@ -23,19 +23,10 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 export default function Posts() {
-
   //* Redux
   const dispatch = useDispatch();
-
-
-
   const auth = useSelector((state) => state.auth);
-
-
-
   const posts = useSelector((state) => state.posts.posts);
-
-
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(false);
 
@@ -61,16 +52,32 @@ export default function Posts() {
       });
   };
 
-  
-
   useEffect(() => {
     getAllPosts();
   }, []);
 
- 
+  const getAllPostsLikes = async () => {
+    try {
+      const res = await axios.get(`http://localhost:5000/posts/like/1`, {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
+      if (res.data.success) {
+        setStatus(true);
+        dispatch(setPostsLikesById(res.data.result));
+      } else throw Error;
+    } catch (error) {
+    
+      setMessage("Error happened while Get Data, please try again");
+    }
+  };
+
+  useEffect(() => {
+    getAllPostsLikes();
+  }, []);
   return (
     <div className="posts">
-      
       <h2>POSTS</h2>
       {status
         ? message && <div className="SuccessMessage">{message}</div>
@@ -78,22 +85,16 @@ export default function Posts() {
 
       <p>What's on your mind</p>
 
-      <Grid
-        container
-        spacing={2}
-        direction="row"
-        justifyContent="center"
-      >
+      <Grid container spacing={2} direction="row" justifyContent="center">
         <Grid item xs={3}>
           <Item>xs=3</Item>
         </Grid>
 
-        <Grid item xs={5} >
-          
+        <Grid item xs={5}>
           {posts &&
             posts.map((post) => {
               return (
-                <Item  key={post.id}>
+                <Item key={post.id}>
                   <Post post={post} />
                 </Item>
               );

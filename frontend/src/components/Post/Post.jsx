@@ -20,21 +20,23 @@ import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'white',
-  border: '2px solid #000',
+  bgcolor: "white",
+  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
 
 const Post = ({ post }) => {
+  
   const [open, setOpen] = useState(false);
   const likeModel = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [postLike, setPostLike] = useState();
 
   return (
     <Card
@@ -72,6 +74,7 @@ const Post = ({ post }) => {
           />
         </Box>
         <Typography fontWeight="lg">{post.user_name}</Typography>
+
         {/* <IconButton variant="plain" color="neutral" size="sm" sx={{ ml: 'auto' }}>
               <MoreHoriz />
             </IconButton> */}
@@ -101,12 +104,26 @@ const Post = ({ post }) => {
                   id="keep-mounted-modal-title"
                   variant="h6"
                   component="h2"
+                  textAlign={"center"}
                 >
                   Likes
+                  <hr />
                 </Typography>
-                <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-                  Duis mollis, est non commodo luctus, nisi erat porttitor
-                  ligula.
+                {/* {posts.map((elem,ind)=> {
+                      
+                })} */}
+               
+                <Typography id="keep-mounted-modal-description" sx={{ mt: 6 }}>
+                <Link
+                  component="h1"
+                  underline="none"
+                  fontSize="16px"
+                  sx={{ color: "black", my: 0.5 }}
+                >
+                  <Avatar sx={{ mr: 3 }} size="sm" src={post.image} />
+                  {post.user_name}
+               
+                </Link>
                 </Typography>
               </Box>
             </Modal>
@@ -139,7 +156,7 @@ const Post = ({ post }) => {
       </CardContent>
       <CardContent>
         <Link
-        onClick={likeModel} 
+          onClick={likeModel}
           component="button"
           underline="none"
           fontSize="sm"
