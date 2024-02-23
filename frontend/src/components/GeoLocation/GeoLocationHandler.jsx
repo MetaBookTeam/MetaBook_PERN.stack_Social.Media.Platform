@@ -4,6 +4,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import Grid from "@mui/material/Grid";
 
 // import { makeStyles } from "@material-ui/core/styles";
 
@@ -63,6 +64,7 @@ export default function GeoLocationHandler(props) {
 
   return (
     // <FormControl variant="outlined" className={classes.formControl}>
+
     <FormControl variant="outlined">
       <InputLabel ref={inputLabel} id="outlined-label">
         {locationTitle}
@@ -92,16 +94,19 @@ export default function GeoLocationHandler(props) {
           });
         }}
         // labelWidth={labelWidth}
+        // sx={{ width: "15vw", maxWidth: "120px" }}
         sx={{ width: "120px" }}
       >
-        <MenuItem value="">
-          <em>-</em>
-        </MenuItem>
-        {options.map((v, index) => (
-          <MenuItem key={index} value={v.geonameId}>
-            {isCountry ? v.countryName : v.name}
-          </MenuItem>
-        ))}
+
+            <MenuItem value="">
+              <em>-</em>
+            </MenuItem>
+            {options.map((v, index) => (
+              <MenuItem key={index} value={v.geonameId}>
+                {isCountry ? v.countryName : v.name}
+              </MenuItem>
+            ))}
+
       </Select>
     </FormControl>
   );

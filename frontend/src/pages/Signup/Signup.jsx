@@ -181,7 +181,7 @@ export default function Signup() {
                       id="first_name"
                       label="First Name"
                       autoFocus
-                      autoComplete=""
+                      autoComplete="first_name"
                     />
                   </Grid>
 
@@ -320,6 +320,21 @@ export default function Signup() {
                   </Grid> */}
 
                   <GeoLocation />
+
+                  <Grid item xs={12}>
+                    <TextField
+                      sx={{ width: "75%" }}
+                      id="image"
+                      label="Choose your image ..."
+                      name="image"
+                    />
+                    <Button
+                      variant="outlined"
+                      sx={{ width: "22%", height: "100%", marginLeft: "3%" }}
+                    >
+                      upload
+                    </Button>
+                  </Grid>
                 </Grid>
 
                 <Grid item xs={12}>

@@ -26,14 +26,14 @@ const GeoLocation = () => {
   const [cityGeoId, setCityGeoId] = useState("");
   const [cityName, setCityName] = useState("");
 
-  console.log({
-    countryGeoId,
-    stateGeoId,
-    cityGeoId,
-    countryName,
-    stateName,
-    cityName,
-  });
+  // console.log({
+  //   countryGeoId,
+  //   stateGeoId,
+  //   cityGeoId,
+  //   countryName,
+  //   stateName,
+  //   cityName,
+  // });
 
   return (
     <Container component="main" maxWidth="lg">
