@@ -15,7 +15,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import Container from "@mui/material/Container";
 import { useState } from "react";
 
-import { useDispatch ,useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setLogout } from "../../Service/redux/reducers/auth/authSlice";
 
 const pages = ["Products", "Pricing", "Blog"];
@@ -68,10 +68,6 @@ const NavBar = () => {
               textDecoration: "none",
             }}
           >
-            <NavLink className={"Home"} to="/">
-              Home
-            </NavLink>
-
             <NavLink className={"Home"} to="/">
               Home
             </NavLink>

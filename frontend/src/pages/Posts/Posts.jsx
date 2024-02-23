@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +12,11 @@ import {
 
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
+import Modal from "@mui/material/Modal";
+import Backdrop from "@mui/material/Backdrop";
+import Fade from "@mui/material/Fade";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 import Post from "../../components/Post/Post";
 import { Container } from "@mui/material";
@@ -30,6 +35,22 @@ export default function Posts() {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(false);
 
+  // Start Modal new post
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+// End Modal new post
   const getAllPosts = () => {
     axios
       .get("http://localhost:5000/posts", {
@@ -82,8 +103,39 @@ export default function Posts() {
       {status
         ? message && <div className="SuccessMessage">{message}</div>
         : message && <div className="ErrorMessage">{message}</div>}
-
-      <p>What's on your mind</p>
+ <Button onClick={handleOpen}>What's on your mind</Button>
+              <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={open}
+                onClose={handleClose}
+                closeAfterTransition
+                slots={{ backdrop: Backdrop }}
+                slotProps={{
+                  backdrop: {
+                    timeout: 500,
+                  },
+                }}
+              >
+                <Fade in={open}>
+                  <Box sx={style}>
+                    <Typography
+                      id="transition-modal-title"
+                      variant="h6"
+                      component="h2"
+                    >
+                      Text in a modal
+                    </Typography>
+                    <Typography
+                      id="transition-modal-description"
+                      sx={{ mt: 2 }}
+                    >
+                      Duis mollis, est non commodo luctus, nisi erat porttitor
+                      ligula.
+                    </Typography>
+                  </Box>
+                </Fade>
+              </Modal>
 
       <Grid container spacing={2} direction="row" justifyContent="center">
         <Grid item xs={3}>
