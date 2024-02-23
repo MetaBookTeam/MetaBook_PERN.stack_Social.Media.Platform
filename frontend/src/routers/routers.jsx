@@ -12,6 +12,7 @@ import Post from "../components/Post/Post";
 import Posts from "../pages/Posts/Posts";
 
 import WelcomePage from "../pages/WelcomePage/WelcomePage";
+import Profile from "../pages/Profile/Profile";
 
 export const router = createBrowserRouter([
   {
@@ -53,9 +54,12 @@ export const router = createBrowserRouter([
     ],
   },
   {
-
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
   },
   {
     path: "/signup",
@@ -64,7 +68,6 @@ export const router = createBrowserRouter([
   {
     path: "/welcome",
     element: <WelcomePage />,
-
   },
   {
     path: "*",

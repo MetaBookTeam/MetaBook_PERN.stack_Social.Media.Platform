@@ -36,12 +36,30 @@ oldLike.rows.length ==> already liked
 const getLikesByPostId = async (req, res) => {
   /* 
 GET http://localhost:5000/posts/like/:post_id
-
-//@
-query " SELECT * FROM posts_likes WHERE post_id = $1 "
-
 */
-
+const {userId} = req.token;
+  const { post_id } = req.params;
+  const placeholder = [post_id];
+ console.log(placeholder);
+  try {
+    const postLike = await pool.query(
+      `SELECT * FROM posts_likes WHERE post_id = $1`,
+      placeholder
+    );
+    console.log(postLike);
+    res.status(200).json({
+      success: true,
+      message: "like successfully",
+      result: postLike.rows
+    });
+    
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: " Server error",
+      error,
+    });
+  }
 
 };
 
@@ -79,4 +97,5 @@ module.exports = {
   createNewPostLike,
   getLikesByPostId,
   deletePostLikeById,
+  
 };
