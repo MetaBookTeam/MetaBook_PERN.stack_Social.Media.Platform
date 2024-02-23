@@ -16,32 +16,32 @@ import Backdrop from "@mui/material/Backdrop";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
-import Grid from '@mui/material/Grid';
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Avatar from "@mui/material/Avatar";
+import Grid from "@mui/material/Grid";
 
 // extra information
 function generate(element) {
   return [0, 1, 2].map((value) =>
     React.cloneElement(element, {
       key: value,
-    }),
+    })
   );
 }
 
 const Profile = () => {
   // Start extra information
-  const Demo = styled('div')(({ theme }) => ({
+  const Demo = styled("div")(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
   }));
-  const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false);
-// End extra information
+  // End extra information
 
   const auth = useSelector((state) => state.auth);
   const [userProfile, setUserProfile] = useState([]);
+  const [postProfile, setPostProfile] = useState([]);
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
     ...theme.typography.body2,
@@ -74,7 +74,6 @@ const Profile = () => {
         }
       );
       setUserProfile(...user.data.result);
-      console.log(user.data.result);
     } catch (error) {
       console.log(error);
     }
@@ -82,11 +81,30 @@ const Profile = () => {
   useEffect(() => {
     getUserById();
   }, []);
+  const getPostById = async () => {
+    try {
+      const post = await axios.get(
+        `http://localhost:5000/posts/${auth.userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      setPostProfile(...post.data.result);
+      console.log(post.data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getPostById();
+  }, []);
   return (
     <>
       <Container>
         <Grid container spacing={2}>
-          <Grid  item xs={12}>
+          <Grid item xs={12}>
             <Item>
               <Box sx={{ borderRadius: "sm", p: 1 }}>
                 <AspectRatio minHeight={120} maxHeight={350}>
@@ -102,51 +120,60 @@ const Profile = () => {
                   src={userProfile.image}
                   sx={{ width: 80, height: 80 }}
                 />
-                 
               </Box>
               {userProfile.bio}
             </Item>
           </Grid>
           <Grid item xs={4}>
             <Item>
-            <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-           { userProfile.user_name} info
-          </Typography>
+              <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
+                {userProfile.user_name} info
+              </Typography>
 
-            <Demo>
-            <List>
-                <ListItem>
-                  <ListItemText
-                    primary="Email"
-                    secondary={secondary ? 'Secondary text' : userProfile.email}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primary="Name"
-                    secondary={secondary ? 'Secondary text' : userProfile.user_name}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primary="Phone"
-                    secondary={secondary ? 'Secondary text' : userProfile.phone_number}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primary="Address"
-                    secondary={secondary ? 'Secondary text' : userProfile.address}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primary="Gender"
-                    secondary={secondary ? 'Secondary text' : userProfile.gender}
-                  />
-                </ListItem>
-            </List>
-          </Demo>
+              <Demo>
+                <List>
+                  <ListItem>
+                    <ListItemText
+                      primary="Email"
+                      secondary={
+                        secondary ? "Secondary text" : userProfile.email
+                      }
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Name"
+                      secondary={
+                        secondary ? "Secondary text" : userProfile.user_name
+                      }
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Phone"
+                      secondary={
+                        secondary ? "Secondary text" : userProfile.phone_number
+                      }
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Address"
+                      secondary={
+                        secondary ? "Secondary text" : userProfile.address
+                      }
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Gender"
+                      secondary={
+                        secondary ? "Secondary text" : userProfile.gender
+                      }
+                    />
+                  </ListItem>
+                </List>
+              </Demo>
             </Item>
           </Grid>
           <Grid item xs={8}>
@@ -188,11 +215,13 @@ const Profile = () => {
               </Modal>
             </Item>
             <Grid item xs={12}>
-            <Item>Show All post by userId</Item>
+              {postProfile
+                ? postProfile.map((elem) => {
+                    return <Item>{elem.content} </Item>;
+                  })
+                :<center>Dont have any post</center> }
+            </Grid>
           </Grid>
-          </Grid>
-          
-          
         </Grid>
       </Container>
     </>
