@@ -11,6 +11,7 @@ import Post from "../components/Post/Post";
 import Posts from "../pages/Posts/Posts";
 
 import WelcomePage from "../pages/WelcomePage/WelcomePage";
+import Profile from "../pages/Profile/Profile";
 
 export const router = createBrowserRouter([
   {
@@ -52,13 +53,16 @@ export const router = createBrowserRouter([
     ],
   },
   {
-
     path: "/users/login",
     element: <Login />,
-  },{
-    path:"/welcome",
-    element:<WelcomePage/>
-
+  },
+  {
+    path: "/welcome",
+    element: <WelcomePage />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
   },
   {
     path: "*",
