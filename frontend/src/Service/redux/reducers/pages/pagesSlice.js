@@ -21,5 +21,5 @@ export const pagesSlice = createSlice({
   },
 });
 
-export const { setPages, getPageByUser, updatePageById } = auth.actions;
-export default auth.reducer;
+export const { setPages, getPageByUser, updatePageById } = pagesSlice.actions;
+export default pagesSlice.reducer;

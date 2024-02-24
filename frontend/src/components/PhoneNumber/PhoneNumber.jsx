@@ -3,7 +3,7 @@ import { MuiTelInput } from "mui-tel-input";
 
 const PhoneNumber = () => {
   const [value, setValue] = React.useState("");
-
+console.log("num",value);
   const handleChange = (newValue) => {
     setValue(newValue);
   };

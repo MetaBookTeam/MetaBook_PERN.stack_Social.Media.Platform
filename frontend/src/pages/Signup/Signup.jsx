@@ -34,8 +34,9 @@ const defaultTheme = createTheme();
 
 import { useDispatch, useSelector } from "react-redux";
 import { setSignup } from "../../Service/redux/reducers/auth/authSlice";
-import PhoneNumber from "../../components/PhoneNumber/PhoneNumber";
-// import CloudinaryImage from "../../components/CloudinaryImage/CloudinaryImage";
+
+// import PhoneNumber from "../../components/PhoneNumber/PhoneNumber";
+import { MuiTelInput } from "mui-tel-input";
 
 const genders = [
   {
@@ -102,6 +103,15 @@ export default function Signup() {
   };
 
   //===============================================================
+  //* Phone Number state
+
+  const [phoneNumber, setPhoneNumber] = useState("");
+  console.log("phoneNumber=", phoneNumber);
+  const handlePhoneNumber = (newValue) => {
+    setPhoneNumber(newValue);
+  };
+
+  //===============================================================
 
   const signup = async (event) => {
     event.preventDefault();
@@ -123,7 +133,7 @@ export default function Signup() {
       school: data.get("school"),
       gender: data.get("gender"),
       birthday: data.get("birthday"),
-      // phone_number: data.get("phone_number"),
+      phone_number: phoneNumber,
       // city: data.get("city"),
       // state: data.get("state"),
       // country: data.get("country"),
@@ -357,7 +367,11 @@ export default function Signup() {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <PhoneNumber id="phone_number" />
+                    {/* <PhoneNumber id="phone_number" /> */}
+                    <MuiTelInput
+                      value={phoneNumber}
+                      onChange={handlePhoneNumber}
+                    />
                   </Grid>
 
                   <Grid item xs={12} marginBottom={2}>
@@ -371,22 +385,6 @@ export default function Signup() {
 
                   <GeoLocation id="geo_location" />
 
-                  {/* <Grid item xs={12}>
-                    <TextField
-                      sx={{ width: "75%" }}
-                      id="image"
-                      label="Choose your image ..."
-                      name="image"
-                    />
-                    <Button
-                      variant="outlined"
-                      sx={{ width: "22%", height: "100%", marginLeft: "3%" }}
-                    >
-                      upload
-                    </Button>
-                  </Grid> */}
-
-                  {/* <CloudinaryImage /> */}
                   <Grid item xs={12}>
                     <TextField
                       sx={{ width: "75%" }}
@@ -394,10 +392,7 @@ export default function Signup() {
                       name="image"
                       type="file"
                       onChange={(e) => {
-                        // console.log(e.target.files[0]);
                         setImg(e.target.files[0]);
-                        // dispatch(setImage(e.target.files[0].name,e.target.files[0].type,e.target.files[0].lastModified,e.target.files[0].size));
-                        // dispatch(setImage(JSON.stringify(e.target.files[0])));
                       }}
                     />
                     <Button
