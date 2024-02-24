@@ -36,7 +36,7 @@ const style = {
 };
 
 const Post = ({ post,addComment,likeComment,dislikeComment,shareComment }) => {
-  
+    console.log("post page",post);
   const [open, setOpen] = useState(false);
   const likeModel = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -73,11 +73,11 @@ const Post = ({ post,addComment,likeComment,dislikeComment,shareComment }) => {
         >
           <Avatar
             size="sm"
-            src={post.image}
+            // src={post.image}
             // sx={{ p: 0.5, border: '2px solid', borderColor: 'background.body' }}
           />
         </Box>
-        <Typography fontWeight="lg">{post.user_name}</Typography>
+        {/* <Typography fontWeight="lg">{post.user_name}</Typography> */}
 
         {/* <IconButton variant="plain" color="neutral" size="sm" sx={{ ml: 'auto' }}>
               <MoreHoriz />
@@ -85,7 +85,7 @@ const Post = ({ post,addComment,likeComment,dislikeComment,shareComment }) => {
       </CardContent>
       <CardOverflow>
         <AspectRatio>
-          <img src={post.photo_url} alt="" loading="lazy" />
+          {/* <img src={post.photo_url} alt="" loading="lazy" /> */}
         </AspectRatio>
       </CardOverflow>
       <CardContent
@@ -124,8 +124,8 @@ const Post = ({ post,addComment,likeComment,dislikeComment,shareComment }) => {
                   fontSize="16px"
                   sx={{ color: "black", my: 0.5 }}
                 >
-                  <Avatar sx={{ mr: 3 }} size="sm" src={post.image} />
-                  {post.user_name}
+                  {/* <Avatar sx={{ mr: 3 }} size="sm" src={post.image} />
+                  {post.user_name} */}
                
                 </Link>
                 </Typography>
@@ -167,7 +167,7 @@ const Post = ({ post,addComment,likeComment,dislikeComment,shareComment }) => {
           fontWeight="lg"
           textColor="text.primary"
         >
-          {post.likes} Likes
+          {/* {post.likes} Likes */}
         </Link>
         <Typography fontSize="sm">
           <Link
@@ -176,7 +176,7 @@ const Post = ({ post,addComment,likeComment,dislikeComment,shareComment }) => {
             fontWeight="lg"
             textColor="text.primary"
           ></Link>{" "}
-          {post.content}
+          {/* {post.content} */}
         </Typography>
 
         <Link
@@ -206,7 +206,7 @@ const Post = ({ post,addComment,likeComment,dislikeComment,shareComment }) => {
           underline="none"
           role="button"
         ><>
-          <h3>{post.title}</h3>
+          {/* <h3>{post.title}</h3>
       <p>{post.body}</p>
       <button onClick={() => sharePost(post.id)}>Share</button>
       <CommentComponent postId={post.id} addComment={addComment} />
@@ -217,7 +217,7 @@ const Post = ({ post,addComment,likeComment,dislikeComment,shareComment }) => {
             likeComment={likeComment}
             dislikeComment={dislikeComment}
           />
-        ))}
+        ))} */}
       </>
           Post
         </Link>
@@ -227,64 +227,8 @@ const Post = ({ post,addComment,likeComment,dislikeComment,shareComment }) => {
 };
 
 
-// export default Post;
-
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import { Favorite, FavoriteBorder, MoreVert, Share } from "@mui/icons-material";
-import {
-  Avatar,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  Checkbox,
-  IconButton,
-  Typography,
-} from "@mui/material";
-const Post = () => {
-  return (
-    <Card sx={{ margin: 5 }}>
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
-            R
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVert />
-          </IconButton>
-        }
-        title="John Doe"
-        subheader="September 14, 2022"
-      />
-      <CardMedia
-        component="img"
-        height="20%"
-        image="https://images.pexels.com/photos/4534200/pexels-photo-4534200.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-        alt="Paella dish"
-      />
-      <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <Checkbox
-            icon={<FavoriteBorder />}
-            checkedIcon={<Favorite sx={{ color: "red" }} />}
-          />
-        </IconButton>
-        <IconButton aria-label="share">
-          <Share />
-        </IconButton>
-      </CardActions>
-    </Card>
-  );
-};
-
 export default Post;
+
+
+
+
