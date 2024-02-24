@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "../../components/NavBar/NavBar";
 
-import Footer from "../../components/Footer/footer";
+import Footer from "../../components/Footer/Footer";
 import SideBar from "../../components/SideBar/SideBar";
 import RightBar from "../../components/RightBar/RightBar";
 import Feed from "../../components/Feed/Feed";
@@ -13,11 +13,11 @@ import { useState } from "react";
 const Main = () => {
   const [mode, setMode] = useState("light");
 
-  const darkTheme = createTheme({
-    palette: {
-      mode: mode,
-    },
-  });
+  // const darkTheme = createTheme({
+  //   palette: {
+  //     mode: mode,
+  //   },
+  // });
   return (
     <div className="root-layout">
       
@@ -26,7 +26,7 @@ const Main = () => {
       </header> */}
       
       <main> 
-      <ThemeProvider theme={darkTheme}>
+      {/* <ThemeProvider theme={darkTheme}> */}
       <Box bgcolor={"background.default"} color={"text.primary"}>
         <NavBar />
         <Stack direction="row" spacing={2} justifyContent="space-between">
@@ -36,7 +36,7 @@ const Main = () => {
         </Stack>
         <Add />
       </Box>
-    </ThemeProvider>
+    {/* </ThemeProvider> */}
         {/* Outlet : it the subRouter of Main {children:[]} */}
         <Outlet/>
       </main>
