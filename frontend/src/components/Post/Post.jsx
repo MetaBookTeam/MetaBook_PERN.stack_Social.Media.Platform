@@ -18,10 +18,6 @@ import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import SendOutlined from "@mui/icons-material/SendOutlined";
 import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
-//
-//import CommentComponent from '../../pages/comments/Comment';
-import Comment from '../../pages/comments/comments';
-
 
 const style = {
   position: "absolute",
@@ -205,84 +201,10 @@ const Post = ({ post }) => {
           //   }
           underline="none"
           role="button"
-        ><>
-          <h3>{post.title}</h3>
-      <p>{post.body}</p>
-      {/* <button onClick={() => sharePost(post.id)}>Share</button>
-      <CommentComponent postId={post.id} addComment={addComment} />
-      {post.comments.map(comment => (
-          <Comment
-            key={comment.id}
-            comment={comment}
-            likeComment={likeComment}
-            dislikeComment={dislikeComment}
-          />
-        ))} */}
-      </>
+        >
           Post
         </Link>
       </CardContent>
-    </Card>
-  );
-};
-
-
-// export default Post;
-
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import { Favorite, FavoriteBorder, MoreVert, Share } from "@mui/icons-material";
-import {
-  Avatar,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  Checkbox,
-  IconButton,
-  Typography,
-} from "@mui/material";
-const Post = () => {
-  return (
-    <Card sx={{ margin: 5 }}>
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
-            R
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVert />
-          </IconButton>
-        }
-        title="John Doe"
-        subheader="September 14, 2022"
-      />
-      <CardMedia
-        component="img"
-        height="20%"
-        image="https://images.pexels.com/photos/4534200/pexels-photo-4534200.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-        alt="Paella dish"
-      />
-      <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <Checkbox
-            icon={<FavoriteBorder />}
-            checkedIcon={<Favorite sx={{ color: "red" }} />}
-          />
-        </IconButton>
-        <IconButton aria-label="share">
-          <Share />
-        </IconButton>
-      </CardActions>
     </Card>
   );
 };
