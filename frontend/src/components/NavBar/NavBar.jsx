@@ -15,13 +15,13 @@ import AdbIcon from "@mui/icons-material/Adb";
 import Container from "@mui/material/Container";
 import { useState } from "react";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setLogout } from "../../Service/redux/reducers/auth/authSlice";
 
 const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Logout"];
 
 const NavBar = () => {
+  const auth = useSelector((state) => state.auth);
   //* /////////////////////////////////////////////////////////////
 
   // REDUX
@@ -68,10 +68,6 @@ const NavBar = () => {
               textDecoration: "none",
             }}
           >
-            <NavLink className={"Home"} to="/">
-              Home
-            </NavLink>
-
             <NavLink className={"Home"} to="/">
               Home
             </NavLink>
@@ -171,7 +167,7 @@ const NavBar = () => {
               {" "}
               <MenuItem onClick={handleCloseUserMenu}>
                 <Typography textAlign="center">
-                  <NavLink to="/profile">Profile</NavLink>
+                  <NavLink to={`/profile/${auth.userId}`}>Profile</NavLink>
                 </Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseUserMenu}>
