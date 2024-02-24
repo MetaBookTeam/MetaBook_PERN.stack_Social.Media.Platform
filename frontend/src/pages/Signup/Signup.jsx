@@ -85,6 +85,7 @@ export default function Signup() {
   //* Cloudinary
   const [image, setImg] = useState("");
   const [url, setUrl] = useState("");
+  const [uploadMessage, setUploadMessage] = useState("");
 
   //* Upload Images to Cloudinary //////////////////////////
   const uploadImage = () => {
@@ -95,18 +96,20 @@ export default function Signup() {
     axios
       .post("https://api.cloudinary.com/v1_1/dpbh42kjy/image/upload", data)
       .then((data) => {
-        console.log("image URL ==> ", data.data.secure_url);
-        setUrl(data.data.secure_url);
-        // dispatch(setUrl(JSON.stringify(data.url)));
+        // setUrl(data.data.secure_url);
+        setUrl(data.data.url);
+        setUploadMessage("Image Uploaded Successfully");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setUploadMessage("Image Upload Error");
+      });
   };
 
   //===============================================================
   //* Phone Number state
 
   const [phoneNumber, setPhoneNumber] = useState("");
-  console.log("phoneNumber=", phoneNumber);
   const handlePhoneNumber = (newValue) => {
     setPhoneNumber(newValue);
   };
@@ -391,13 +394,14 @@ export default function Signup() {
                       id="image"
                       name="image"
                       type="file"
+                      helperText={uploadMessage && uploadMessage}
                       onChange={(e) => {
                         setImg(e.target.files[0]);
                       }}
                     />
                     <Button
                       variant="outlined"
-                      sx={{ width: "22%", height: "100%", marginLeft: "3%" }}
+                      sx={{ width: "22%", height: "4em", marginLeft: "3%" }}
                       onClick={uploadImage}
                     >
                       upload
