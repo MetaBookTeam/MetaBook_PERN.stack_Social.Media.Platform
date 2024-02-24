@@ -1,4 +1,3 @@
-// import { NavLink } from "react-router-dom";
 // import * as React from 'react';
 // import AppBar from '@mui/material/AppBar';
 // import Box from '@mui/material/Box';
@@ -30,20 +29,19 @@
 //   const handleCloseNavMenu = () => {
 //     setAnchorElNav(null);
 
-   
 //   };
 
 //   const handleCloseUserMenu = () => {
- 
+
 //     setAnchorElUser(null);
-  
+
 //   };
 
 //   return (
 //        <AppBar position="static">
 //         <Container>
 //         <Toolbar disableGutters>
-          
+
 //           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
 //           <Typography
 //             variant="h6"
@@ -61,11 +59,10 @@
 //             }}
 //           >
 
-            
 //               <NavLink className={"Home"} to="/">Home</NavLink>
-           
+
 //           </Typography>
-        
+
 //           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 //             <IconButton
 //               size="large"
@@ -120,7 +117,6 @@
 //             }}
 //           >
 
-            
 //             <NavLink className={"Home"} to="/">Home</NavLink>
 //           </Typography>
 //           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
@@ -176,8 +172,7 @@
 //         </Toolbar>
 //         </Container>
 //     </AppBar>
-      
-   
+
 //   );
 // };
 
@@ -197,12 +192,14 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-
+import { NavLink } from "react-router-dom";
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between",
 });
+import { useDispatch } from "react-redux";
 
+import { setLogout } from "../../Service/redux/reducers/auth/authSlice";
 const Search = styled("div")(({ theme }) => ({
   backgroundColor: "white",
   padding: "0 10px",
@@ -227,7 +224,9 @@ const UserBox = styled(Box)(({ theme }) => ({
     display: "none",
   },
 }));
+
 const NavBar = () => {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   return (
     <AppBar position="sticky">
@@ -240,7 +239,7 @@ const NavBar = () => {
           <InputBase placeholder="search..." />
         </Search>
         <Icons>
-          <Badge badgeContent={4} color="error" >
+          <Badge badgeContent={4} color="error">
             <Mail />
           </Badge>
           <Badge badgeContent={2} color="error">
@@ -274,9 +273,19 @@ const NavBar = () => {
           horizontal: "right",
         }}
       >
-        <MenuItem>Profile</MenuItem>
-        <MenuItem>My account</MenuItem>
-        <MenuItem>Logout</MenuItem>
+        <MenuItem>
+          <NavLink to="/profile/2">Profile</NavLink>
+        </MenuItem>
+        <MenuItem>
+          <NavLink
+            onClick={() => {
+              dispatch(setLogout());
+            }}
+            to="/login"
+          >
+            Logout
+          </NavLink>
+        </MenuItem>
       </Menu>
     </AppBar>
   );
