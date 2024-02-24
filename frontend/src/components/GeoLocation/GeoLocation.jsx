@@ -5,20 +5,9 @@ import Grid from "@mui/material/Grid";
 import FormControl from "@mui/material/FormControl";
 import Box from "@mui/material/Box";
 
-// import { CssBaseline, Container, Grid } from "@material-ui/core/";
-// import { makeStyles } from "@material-ui/core/styles";
-
 import GeoLocationHandler from "./GeoLocationHandler";
 
-// const useStyles = makeStyles((theme) => ({
-//   form: {
-//     width: "100%", // Fix IE 11 issue.
-//     marginTop: theme.spacing(3),
-//   },
-// }));
-
 const GeoLocation = () => {
-  //   const classes = useStyles();
   const [countryGeoId, setCountryGeoId] = useState("");
   const [countryName, setCountryName] = useState("");
   const [stateGeoId, setStateGeoId] = useState("");
