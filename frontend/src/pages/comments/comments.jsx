@@ -1,26 +1,49 @@
 import React, { useState } from 'react';
 
-const Comment = ({ postId, addComment }) => {
-  const [commentText, setCommentText] = useState('');
+const Comment = ({commentText }) => {
+  const [likeCount, setLikeCount] = useState(0);
+  const [dislikeCount, setDislikeCount] = useState(0);
+  const [shareCount, setShareCount] = useState(0);
+  const handleLike = () => {
+    setLikeCount(likeCount + 1);
+  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (commentText.trim() !== '') {
-      addComment(postId, commentText);
-      setCommentText('');
-    }
+  const handleDislike = () => {
+    setDislikeCount(dislikeCount + 1);
+  };
+
+  const handleShare = () => {
+    setShareCount(shareCount + 1);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <textarea
-        value={commentText}
-        onChange={(e) => setCommentText(e.target.value)}
-        placeholder="Write a comment..."
-      />
-      <button type="submit">Add Comment</button>
-    </form>
+    <div>
+      <p>{commentText}</p>
+      <button onClick={handleLike}>Like</button>
+      <button onClick={handleDislike}>Dislike</button>
+      <button onClick={handleShare}>Share</button>
+
+      <div>
+        <p>Likes: {likeCount}</p>
+        <p>Dislikes: {dislikeCount}</p>
+        <p>Shares: {shareCount}</p>
+      </div>
+    </div>
   );
 };
 
 export default Comment;
+
+
+/*
+
+const CommentSection = () => {
+  return (
+    <div>
+      <Comment commentText="This is a great comment!" />
+      <Comment commentText="I disagree with this comment." />
+    </div>
+  );
+};
+
+ */

@@ -18,10 +18,6 @@ import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import SendOutlined from "@mui/icons-material/SendOutlined";
 import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
-//
-//import CommentComponent from '../../pages/comments/Comment';
-import Comment from '../../pages/comments/comments';
-
 
 const style = {
   position: "absolute",
@@ -35,8 +31,11 @@ const style = {
   p: 4,
 };
 
-const Post = ({ post,addComment,likeComment,dislikeComment,shareComment }) => {
-    console.log("post page",post);
+
+
+const Post = ({ post }) => {
+  
+
   const [open, setOpen] = useState(false);
   const likeModel = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -205,20 +204,9 @@ const Post = ({ post,addComment,likeComment,dislikeComment,shareComment }) => {
           //   }
           underline="none"
           role="button"
-        ><>
-          {/* <h3>{post.title}</h3>
-      <p>{post.body}</p>
-      <button onClick={() => sharePost(post.id)}>Share</button>
-      <CommentComponent postId={post.id} addComment={addComment} />
-      {post.comments.map(comment => (
-          <Comment
-            key={comment.id}
-            comment={comment}
-            likeComment={likeComment}
-            dislikeComment={dislikeComment}
-          />
-        ))} */}
-      </>
+
+        >
+
           Post
         </Link>
       </CardContent>
@@ -227,8 +215,5 @@ const Post = ({ post,addComment,likeComment,dislikeComment,shareComment }) => {
 };
 
 
+
 export default Post;
-
-
-
-
