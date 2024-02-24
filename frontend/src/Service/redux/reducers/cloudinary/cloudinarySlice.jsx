@@ -9,10 +9,11 @@ export const cloudinary = createSlice({
 
   reducers: {
     setImage: (state, action) => {
-      state.token = action.payload;
+      state.image = action.payload;
+      // state.image = JSON.parse(action.payload);
     },
     setUrl: (state, action) => {
-      state.userId = action.payload;
+      state.url = action.payload;
     },
   },
 });
