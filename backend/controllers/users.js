@@ -18,8 +18,8 @@ POST http://localhost:5000/users/register
     "gender": "male",
     "phone_number": "0790000004",
     "school": "school",
-    "address": "home",
     "city": "Amman",
+    "state": "Amman",
     "country": "Jordan"
 }
 */
@@ -36,8 +36,8 @@ POST http://localhost:5000/users/register
     "gender": "male",
     "phone_number": "0789894881",
     "school": "school",
-    "address": "home",
     "city": "zarqa",
+    "state": "zarqa",
     "country": "Jordan"
 } */
 
@@ -52,8 +52,8 @@ POST http://localhost:5000/users/register
     gender,
     phone_number,
     school,
-    address,
     city,
+    state,
     country,
   } = req.body;
 
@@ -80,7 +80,7 @@ POST http://localhost:5000/users/register
 
       const query = `
       INSERT INTO user_profile 
-      (user_id, first_name, last_name, birthday, gender, phone_number, school, address, city, country) 
+      (user_id, first_name, last_name, birthday, gender, phone_number, school, city, state, country) 
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10);`;
 
       const data = [
@@ -91,8 +91,8 @@ POST http://localhost:5000/users/register
         gender,
         phone_number,
         school,
-        address,
         city,
+        state,
         country,
       ];
 
@@ -297,8 +297,8 @@ PUT http://localhost:5000/users/2
     "gender": "female",
     "phone_number": "0790000014",
     "school": "school Edited",
-    "address": "home Edited",
     "city": "Amman Edited",
+    "state": "Amman Edited",
     "country": "Jordan Edited"
     "cover_photo": "cover photo URL",
     "bio": "Updated BIO"
@@ -326,8 +326,8 @@ PUT http://localhost:5000/users/2
     gender,
     phone_number,
     school,
-    address,
     city,
+    state,
     country,
     cover_photo,
     bio,
@@ -345,8 +345,8 @@ WITH updated_user AS (
 )
 
 UPDATE user_profile
-  SET ( first_name, last_name, birthday, gender, phone_number, school, address, city, country, cover_photo, bio ) 
-  = ( COALESCE($5, first_name), COALESCE($6, last_name), COALESCE($7, birthday), COALESCE($8, gender), COALESCE($9, phone_number), COALESCE($10, school), COALESCE($11, address), COALESCE($12, city), COALESCE($13, country), COALESCE($14, cover_photo), COALESCE($15, bio) ) 
+  SET ( first_name, last_name, birthday, gender, phone_number, school, city, state, country, cover_photo, bio ) 
+  = ( COALESCE($5, first_name), COALESCE($6, last_name), COALESCE($7, birthday), COALESCE($8, gender), COALESCE($9, phone_number), COALESCE($10, school), COALESCE($11, city), COALESCE($12, state), COALESCE($13, country), COALESCE($14, cover_photo), COALESCE($15, bio) ) 
   WHERE id=$1 RETURNING *;
 `;
   //! this combined query will retune update data from user_profile table only.
@@ -362,8 +362,8 @@ UPDATE user_profile
     gender,
     phone_number,
     school,
-    address,
     city,
+    state,
     country,
     cover_photo,
     bio,
