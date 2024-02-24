@@ -9,14 +9,11 @@ import {
   addPost,
 } from "../../Service/redux/reducers/Posts/postsSlice";
 
-
 import Post from "../../components/Post/Post";
 
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 
-
-import Post from "../../components/Post/Post";
 import { Container } from "@mui/material";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -48,35 +45,6 @@ export default function Posts() {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(false);
 
-
-  //===============================================================
-  const getAllPosts = () => {
-    axios
-      .get("http://localhost:5000/posts", {
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
-        },
-      })
-      .then((results) => {
-        if (results.data.success) {
-          setStatus(true);
-          // setMessage(results.data.message);
-          dispatch(setPosts(results.data.result));
-        } else throw Error;
-      })
-      .catch((error) => {
-        if (!error.response.data.success) {
-          return setMessage(error.response.data.message);
-        }
-        setMessage("Error happened while Get Data, please try again");
-      });
-  };
-
-  //===============================================================
-
-  useEffect(() => {
-    getAllPosts();
-  }, []);
 
 
   //===============================================================
