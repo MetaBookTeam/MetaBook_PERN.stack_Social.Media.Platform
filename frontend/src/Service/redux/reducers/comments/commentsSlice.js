@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 
 const commentsSlice = createSlice({
   name: "comments",
@@ -9,14 +8,7 @@ const commentsSlice = createSlice({
   },
 
   reducers: {
-     setLoading: (state) => {
-    state.loading = true;
-    state.error = null;
-  },
-  setError: (state, action) => {
-    state.loading = false;
-    state.error = action.payload;
-  },
+    
     setcomments: (state, action) => {
       state.comments = action.payload;
     },
@@ -40,7 +32,7 @@ const commentsSlice = createSlice({
     },
   },
 });
-export const {setLoading, setError,
+export const {
   setcomments,
   getCommentsByPostId,
   deletecomments,

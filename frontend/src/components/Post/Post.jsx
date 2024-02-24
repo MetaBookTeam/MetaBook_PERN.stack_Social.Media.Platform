@@ -18,6 +18,9 @@ import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import SendOutlined from "@mui/icons-material/SendOutlined";
 import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
+//
+//import CommentComponent from '../../pages/comments/Comment';
+import Comment from '../../pages/comments/comments';
 
 const style = {
   position: "absolute",
@@ -31,7 +34,7 @@ const style = {
   p: 4,
 };
 
-const Post = ({ post }) => {
+const Post = ({ post,addComment,likeComment,dislikeComment,shareComment }) => {
   
   const [open, setOpen] = useState(false);
   const likeModel = () => setOpen(true);
@@ -201,7 +204,20 @@ const Post = ({ post }) => {
           //   }
           underline="none"
           role="button"
-        >
+        ><>
+          <h3>{post.title}</h3>
+      <p>{post.body}</p>
+      <button onClick={() => sharePost(post.id)}>Share</button>
+      <CommentComponent postId={post.id} addComment={addComment} />
+      {post.comments.map(comment => (
+          <Comment
+            key={comment.id}
+            comment={comment}
+            likeComment={likeComment}
+            dislikeComment={dislikeComment}
+          />
+        ))}
+      </>
           Post
         </Link>
       </CardContent>

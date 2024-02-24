@@ -25,6 +25,8 @@ export const postsSlice = createSlice({
     setPostsLikesById :(state,action)=>{
       console.log(state);
     },
+    ///
+    
   },
 });
 
