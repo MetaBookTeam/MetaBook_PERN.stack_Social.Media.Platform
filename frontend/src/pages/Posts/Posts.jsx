@@ -10,6 +10,7 @@ import {
   setPostsLikesById,
 } from "../../Service/redux/reducers/Posts/postsSlice";
 
+
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Modal from "@mui/material/Modal";
@@ -19,6 +20,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 import Post from "../../components/Post/Post";
+
 import { Container } from "@mui/material";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -34,6 +36,7 @@ export default function Posts() {
   const posts = useSelector((state) => state.posts.posts);
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(false);
+
 
   // Start Modal new post
   const style = {
@@ -80,6 +83,7 @@ export default function Posts() {
   const getAllPostsLikes = async () => {
     try {
       const res = await axios.get(`http://localhost:5000/posts/like/1`, {
+
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },

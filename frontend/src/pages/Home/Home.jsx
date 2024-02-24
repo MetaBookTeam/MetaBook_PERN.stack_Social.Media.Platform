@@ -17,6 +17,7 @@ const Home = () => {
         nobis quia dicta soluta officiis est voluptates impedit magnam aliquid!
       </span>
     </div>
+    
   );
 };
 
