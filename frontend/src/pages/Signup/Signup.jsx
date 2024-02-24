@@ -35,7 +35,7 @@ const defaultTheme = createTheme();
 import { useDispatch, useSelector } from "react-redux";
 import { setSignup } from "../../Service/redux/reducers/auth/authSlice";
 import PhoneNumber from "../../components/PhoneNumber/PhoneNumber";
-import CloudinaryImage from "../../components/CloudinaryImage/CloudinaryImage";
+// import CloudinaryImage from "../../components/CloudinaryImage/CloudinaryImage";
 
 const genders = [
   {
@@ -81,6 +81,27 @@ export default function Signup() {
   const [status, setStatus] = useState(false);
 
   //===============================================================
+  //* Cloudinary
+  const [image, setImg] = useState("");
+  const [url, setUrl] = useState("");
+
+  //* Upload Images to Cloudinary //////////////////////////
+  const uploadImage = () => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "cloudUploadP5");
+    data.append("cloud_name", "dpbh42kjy");
+    axios
+      .post("https://api.cloudinary.com/v1_1/dpbh42kjy/image/upload", data)
+      .then((data) => {
+        console.log("image URL ==> ", data.data.secure_url);
+        setUrl(data.data.secure_url);
+        // dispatch(setUrl(JSON.stringify(data.url)));
+      })
+      .catch((err) => console.log(err));
+  };
+
+  //===============================================================
 
   const signup = async (event) => {
     event.preventDefault();
@@ -95,10 +116,10 @@ export default function Signup() {
     console.log({
       first_name: data.get("first_name"),
       last_name: data.get("last_name"),
-      user_name: data.get("user_name"),
+      user_name: data.get("user_name").toLowerCase(),
       email: data.get("email").toLowerCase(),
       password: data.get("password"),
-      // image: data.get("image"),
+      image: url,
       school: data.get("school"),
       gender: data.get("gender"),
       birthday: data.get("birthday"),
@@ -113,6 +134,7 @@ export default function Signup() {
     if (data.get("password") !== data.get("re_password"))
       throw new Error("password not matched");
 
+    //! SIGNUP AXIOS
     // try {
     //   const result = await axios.post("http://localhost:5000/users/register", {
     //     first_name: data.get("first_name"),
@@ -365,6 +387,27 @@ export default function Signup() {
                   </Grid> */}
 
                   {/* <CloudinaryImage /> */}
+                  <Grid item xs={12}>
+                    <TextField
+                      sx={{ width: "75%" }}
+                      id="image"
+                      name="image"
+                      type="file"
+                      onChange={(e) => {
+                        // console.log(e.target.files[0]);
+                        setImg(e.target.files[0]);
+                        // dispatch(setImage(e.target.files[0].name,e.target.files[0].type,e.target.files[0].lastModified,e.target.files[0].size));
+                        // dispatch(setImage(JSON.stringify(e.target.files[0])));
+                      }}
+                    />
+                    <Button
+                      variant="outlined"
+                      sx={{ width: "22%", height: "100%", marginLeft: "3%" }}
+                      onClick={uploadImage}
+                    >
+                      upload
+                    </Button>
+                  </Grid>
                 </Grid>
 
                 <Grid item xs={12}>
