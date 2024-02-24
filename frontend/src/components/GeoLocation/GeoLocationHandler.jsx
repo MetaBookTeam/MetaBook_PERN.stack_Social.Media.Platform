@@ -4,7 +4,6 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import Grid from "@mui/material/Grid";
 
 // import { makeStyles } from "@material-ui/core/styles";
 
@@ -42,7 +41,6 @@ export default function GeoLocationHandler(props) {
       const data = async () => {
         (await isCountry)
           ? geonames.countryInfo({}).then((res) => {
-              // console.log(res);
               setOptions(res.geonames);
             })
           : geonames.children({ geonameId: geoId }).then((res) => {
@@ -57,11 +55,6 @@ export default function GeoLocationHandler(props) {
 
   const inputLabel = useRef(null);
 
-  // const handleChange = (e) => {
-  //   setCurrentItem(e.target.value);
-  //   onChange(e.target.value);
-  // };
-
   return (
     // <FormControl variant="outlined" className={classes.formControl}>
 
@@ -74,7 +67,6 @@ export default function GeoLocationHandler(props) {
         labelId="outlined-label"
         id="select-outlined"
         value={currentItem}
-        // onChange={handleChange}
         onChange={(e) => {
           setCurrentItem(e.target.value);
           options.find((v) => {

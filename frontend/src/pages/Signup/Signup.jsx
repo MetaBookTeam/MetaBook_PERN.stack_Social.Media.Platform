@@ -33,12 +33,9 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 const defaultTheme = createTheme();
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setLogin,
-  setUserId,
-} from "../../Service/redux/reducers/auth/authSlice";
+import { setSignup } from "../../Service/redux/reducers/auth/authSlice";
 import PhoneNumber from "../../components/PhoneNumber/PhoneNumber";
-import CloudinaryImage from "../../components/CloudinaryImage/CloudinaryImage";
+// import CloudinaryImage from "../../components/CloudinaryImage/CloudinaryImage";
 
 const genders = [
   {
@@ -78,43 +75,95 @@ export default function Signup() {
   //* Redux
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
-  // const state = useSelector((state) => {
-  //   return { auth: state.auth.auth };
-  // });
-  // console.log(auth);
   // auth.isLoggedIn, auth.token, auth.userId;
 
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(false);
 
   //===============================================================
+  //* Cloudinary
+  const [image, setImg] = useState("");
+  const [url, setUrl] = useState("");
+
+  //* Upload Images to Cloudinary //////////////////////////
+  const uploadImage = () => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "cloudUploadP5");
+    data.append("cloud_name", "dpbh42kjy");
+    axios
+      .post("https://api.cloudinary.com/v1_1/dpbh42kjy/image/upload", data)
+      .then((data) => {
+        console.log("image URL ==> ", data.data.secure_url);
+        setUrl(data.data.secure_url);
+        // dispatch(setUrl(JSON.stringify(data.url)));
+      })
+      .catch((err) => console.log(err));
+  };
+
+  //===============================================================
 
   const signup = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+
+    // //! check password match re_password
+    // console.log(
+    //   "check password match re_password",
+    //   data.get("password") === data.get("re_password")
+    // );
+
     console.log({
-      email: data.get("email"),
+      first_name: data.get("first_name"),
+      last_name: data.get("last_name"),
+      user_name: data.get("user_name").toLowerCase(),
+      email: data.get("email").toLowerCase(),
       password: data.get("password"),
+      image: url,
+      school: data.get("school"),
+      gender: data.get("gender"),
+      birthday: data.get("birthday"),
+      // phone_number: data.get("phone_number"),
+      // city: data.get("city"),
+      // state: data.get("state"),
+      // country: data.get("country"),
+      // cover_photo: data.get("cover_photo"),
+      // bio: data.get("bio"),
     });
 
-    try {
-      const result = await axios.post("http://localhost:5000/users/register", {
-        email: data.get("email"),
-        password: data.get("password"),
-      });
-      if (result.data) {
-        setStatus(true);
-        setMessage(result.data.message);
-        dispatch(setLogin(result.data.token));
-        dispatch(setUserId(result.data.userId));
-      } else throw Error;
-    } catch (error) {
-      if (error.response && error.response.data) {
-        setStatus(true);
-        return setMessage(error.response.data.message);
-      }
-      setMessage("Error happened while Signup, please try again");
-    }
+    if (data.get("password") !== data.get("re_password"))
+      throw new Error("password not matched");
+
+    //! SIGNUP AXIOS
+    // try {
+    //   const result = await axios.post("http://localhost:5000/users/register", {
+    //     first_name: data.get("first_name"),
+    //     last_name: data.get("last_name"),
+    //     user_name: data.get("user_name").toLowerCase(),
+    //     email: data.get("email").toLowerCase(),
+    //     password: data.get("password"),
+    //     // image: data.get("image"),
+    //     // school: data.get("school"),
+    //     gender: data.get("gender"),
+    //     birthday: data.get("birthday"),
+    //     // phone_number: data.get("phone_number"),
+    //     // city: data.get("city"),
+    //     // state: data.get("state"),
+    //     // country: data.get("country"),
+    //   });
+    //   if (result.data) {
+    //     console.log("result.data.result", result.data.result);
+    //     setStatus(true);
+    //     setMessage(result.data.message);
+    //     dispatch(setSignup(result.data.result));
+    //   } else throw Error;
+    // } catch (error) {
+    //   if (error.response && error.response.data) {
+    //     setStatus(true);
+    //     return setMessage(error.response.data.message);
+    //   }
+    //   setMessage("Error happened while Signup, please try again");
+    // }
   };
 
   //===============================================================
@@ -307,20 +356,20 @@ export default function Signup() {
                     />
                   </Grid>
 
-                  <Grid item xs={12} marginBottom={3}>
-                    <PhoneNumber />
+                  <Grid item xs={12}>
+                    <PhoneNumber id="phone_number" />
                   </Grid>
 
-                  {/* <Grid item xs={12}>
+                  <Grid item xs={12} marginBottom={2}>
                     <TextField
                       fullWidth
                       id="school"
                       label="School Name"
                       name="school"
                     />
-                  </Grid> */}
+                  </Grid>
 
-                  <GeoLocation />
+                  <GeoLocation id="geo_location" />
 
                   {/* <Grid item xs={12}>
                     <TextField
@@ -337,7 +386,28 @@ export default function Signup() {
                     </Button>
                   </Grid> */}
 
-                  <CloudinaryImage />
+                  {/* <CloudinaryImage /> */}
+                  <Grid item xs={12}>
+                    <TextField
+                      sx={{ width: "75%" }}
+                      id="image"
+                      name="image"
+                      type="file"
+                      onChange={(e) => {
+                        // console.log(e.target.files[0]);
+                        setImg(e.target.files[0]);
+                        // dispatch(setImage(e.target.files[0].name,e.target.files[0].type,e.target.files[0].lastModified,e.target.files[0].size));
+                        // dispatch(setImage(JSON.stringify(e.target.files[0])));
+                      }}
+                    />
+                    <Button
+                      variant="outlined"
+                      sx={{ width: "22%", height: "100%", marginLeft: "3%" }}
+                      onClick={uploadImage}
+                    >
+                      upload
+                    </Button>
+                  </Grid>
                 </Grid>
 
                 <Grid item xs={12}>

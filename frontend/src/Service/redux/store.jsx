@@ -31,54 +31,54 @@
 
 import postsReducer from "./reducers/Posts/postsSlice";
 import authReducer from "./reducers/auth/authSlice";
-import cloudinaryReducer from "./reducers/cloudinary/cloudinarySlice";
+// import cloudinaryReducer from "./reducers/cloudinary/cloudinarySlice";
 
 import { configureStore } from "@reduxjs/toolkit";
-import { combineReducers } from "redux";
-import {
-  persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from "redux-persist";
-import storage from "redux-persist/lib/storage";
+// import { combineReducers } from "redux";
+// import {
+//   persistReducer,
+//   FLUSH,
+//   REHYDRATE,
+//   PAUSE,
+//   PERSIST,
+//   PURGE,
+//   REGISTER,
+// } from "redux-persist";
+// import storage from "redux-persist/lib/storage";
 
 // import rootReducer from "./reducers";
-const rootReducer = combineReducers({
-  auth: authReducer,
-  posts: postsReducer,
-  cloudinary: cloudinaryReducer,
-});
+// const rootReducer = combineReducers({
+//   auth: authReducer,
+//   posts: postsReducer,
+//   cloudinary: cloudinaryReducer,
+// });
 
-const persistConfig = {
-  key: "root",
-  version: 1,
-  storage,
-};
+// const persistConfig = {
+//   key: "root",
+//   version: 1,
+//   storage,
+// };
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+// const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
-  // reducer: {
-  //   auth: authReducer,
-  //   posts: postsReducer,
-  //   cloudinary: cloudinaryReducer,
-  // },
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
-  extraReducers: (builder) => {
-    builder.addCase(PURGE, (state) => {
-      customEntityAdapter.removeAll(state);
-    });
+  reducer: {
+    auth: authReducer,
+    posts: postsReducer,
+    // cloudinary: cloudinaryReducer,
   },
+  // reducer: persistedReducer,
+  // middleware: (getDefaultMiddleware) =>
+  //   getDefaultMiddleware({
+  //     serializableCheck: {
+  //       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+  //     },
+  //   }),
+  // extraReducers: (builder) => {
+  //   builder.addCase(PURGE, (state) => {
+  //     customEntityAdapter.removeAll(state);
+  //   });
+  // },
 });
 
 export default store;
