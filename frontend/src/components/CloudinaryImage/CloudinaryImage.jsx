@@ -39,19 +39,12 @@ const CloudinaryImage = () => {
         console.log("data", data);
         dispatch(setUrl(data.url));
         // dispatch(setUrl(JSON.stringify(data.url)));
-        // dispatch(setUrl(data.secure_url));
       })
       .catch((err) => console.log(err));
   };
 
   return (
     <>
-      {/*<div>
-         <div>
-        <h1>Uploaded image will be displayed here</h1>
-        <img src={cloudinary.url} />
-      </div> 
-      </div>*/}
       <Grid item xs={12}>
         <TextField
           sx={{ width: "75%" }}
@@ -59,9 +52,6 @@ const CloudinaryImage = () => {
           name="image"
           type="file"
           onChange={(e) => {
-            // console.log("e.target.value", e.target.value);
-            // console.log("e.target.files", e.target.files);
-            // console.log(e.target.files[0]);
             dispatch(setImage(e.target.files[0]));
             // dispatch(setImage(JSON.stringify(e.target.files[0])));
           }}

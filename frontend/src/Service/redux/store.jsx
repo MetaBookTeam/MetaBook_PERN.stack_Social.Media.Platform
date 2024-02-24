@@ -74,6 +74,11 @@ const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, (state) => {
+      customEntityAdapter.removeAll(state);
+    });
+  },
 });
 
 export default store;

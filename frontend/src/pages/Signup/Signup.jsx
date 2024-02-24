@@ -337,7 +337,7 @@ export default function Signup() {
                     </Button>
                   </Grid> */}
 
-                  <CloudinaryImage/>
+                  <CloudinaryImage />
                 </Grid>
 
                 <Grid item xs={12}>
