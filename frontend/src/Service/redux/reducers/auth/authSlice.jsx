@@ -24,7 +24,7 @@ export const auth = createSlice({
       state.isLoggedIn = false;
       localStorage.clear();
     },
-        setSignup: (state, action) => {
+    setSignup: (state, action) => {
       state.token = action.payload;
     },
   },
