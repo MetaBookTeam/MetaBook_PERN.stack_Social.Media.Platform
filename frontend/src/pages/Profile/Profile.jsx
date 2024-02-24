@@ -95,7 +95,7 @@ const Profile = () => {
         }
       );
       setPostProfile(...post.data.result);
-      console.log(post.data.result);
+      // console.log(post.data.result);
     } catch (error) {
       console.log(error);
     }

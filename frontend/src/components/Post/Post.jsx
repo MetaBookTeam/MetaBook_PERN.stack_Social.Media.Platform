@@ -31,8 +31,11 @@ const style = {
   p: 4,
 };
 
+
+
 const Post = ({ post }) => {
   
+
   const [open, setOpen] = useState(false);
   const likeModel = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -69,11 +72,11 @@ const Post = ({ post }) => {
         >
           <Avatar
             size="sm"
-            src={post.image}
+            // src={post.image}
             // sx={{ p: 0.5, border: '2px solid', borderColor: 'background.body' }}
           />
         </Box>
-        <Typography fontWeight="lg">{post.user_name}</Typography>
+        {/* <Typography fontWeight="lg">{post.user_name}</Typography> */}
 
         {/* <IconButton variant="plain" color="neutral" size="sm" sx={{ ml: 'auto' }}>
               <MoreHoriz />
@@ -81,7 +84,7 @@ const Post = ({ post }) => {
       </CardContent>
       <CardOverflow>
         <AspectRatio>
-          <img src={post.photo_url} alt="" loading="lazy" />
+          {/* <img src={post.photo_url} alt="" loading="lazy" /> */}
         </AspectRatio>
       </CardOverflow>
       <CardContent
@@ -120,8 +123,8 @@ const Post = ({ post }) => {
                   fontSize="16px"
                   sx={{ color: "black", my: 0.5 }}
                 >
-                  <Avatar sx={{ mr: 3 }} size="sm" src={post.image} />
-                  {post.user_name}
+                  {/* <Avatar sx={{ mr: 3 }} size="sm" src={post.image} />
+                  {post.user_name} */}
                
                 </Link>
                 </Typography>
@@ -163,7 +166,7 @@ const Post = ({ post }) => {
           fontWeight="lg"
           textColor="text.primary"
         >
-          {post.likes} Likes
+          {/* {post.likes} Likes */}
         </Link>
         <Typography fontSize="sm">
           <Link
@@ -172,7 +175,7 @@ const Post = ({ post }) => {
             fontWeight="lg"
             textColor="text.primary"
           ></Link>{" "}
-          {post.content}
+          {/* {post.content} */}
         </Typography>
 
         <Link
@@ -201,12 +204,16 @@ const Post = ({ post }) => {
           //   }
           underline="none"
           role="button"
+
         >
+
           Post
         </Link>
       </CardContent>
     </Card>
   );
 };
+
+
 
 export default Post;
