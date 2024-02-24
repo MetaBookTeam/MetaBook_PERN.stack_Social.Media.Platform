@@ -22,7 +22,9 @@ import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
 import {addPost} from "../../Service/redux/reducers/Posts/postsSlice"
+import Add from "../../components/Add/Add";
 // extra information
+
 function generate(element) {
   return [0, 1, 2].map((value) =>
     React.cloneElement(element, {
@@ -252,6 +254,7 @@ const Profile = () => {
             </Grid>
           </Grid>
         </Grid>
+        <Add/>
       </Container>
     </>
   );

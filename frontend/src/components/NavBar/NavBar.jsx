@@ -232,7 +232,7 @@ const NavBar = () => {
     <AppBar position="sticky">
       <StyledToolbar>
         <Typography variant="h6" sx={{ display: { xs: "none", sm: "block" } }}>
-          MetaBook
+         <NavLink to={'/home'}>MetaBook</NavLink> 
         </Typography>
         <Pets sx={{ display: { xs: "block", sm: "none" } }} />
         <Search>

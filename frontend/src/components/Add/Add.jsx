@@ -10,7 +10,7 @@ import {
     Tooltip,
     Typography,
   } from "@mui/material";
-  import React, { useState } from "react";
+  import React, { useState ,useEffect } from "react";
   import {
     Add as AddIcon,
     DateRange,
@@ -20,7 +20,9 @@ import {
     VideoCameraBack,
   } from "@mui/icons-material";
   import { Box } from "@mui/system";
-  
+  import {  useSelector } from "react-redux";
+  import axios from "axios";
+
   const SytledModal = styled(Modal)({
     display: "flex",
     alignItems: "center",
@@ -35,12 +37,34 @@ import {
   });
   
   const Add = () => {
+    const auth = useSelector((state) => state.auth);
+    const [userProfile, setUserProfile] = useState([]);
+
+    const getUserById = async () => {
+      try {
+        const user = await axios.get(
+          `http://localhost:5000/users/${auth.userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          }
+        );
+        console.log(user);
+        setUserProfile(...user.data.result);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    useEffect(() => {
+      getUserById();
+    }, []);
     const [open, setOpen] = useState(false);
     return (
       <>
         <Tooltip
           onClick={(e) => setOpen(true)}
-          title="Delete"
+          title="Add post"
           sx={{
             position: "fixed",
             bottom: 20,
@@ -60,7 +84,7 @@ import {
           <Box
             width={400}
             height={310}
-            bgcolor={"background.default"}
+            bgcolor={"white"}
             color={"text.primary"}
             p={3}
             borderRadius={5}
@@ -70,11 +94,11 @@ import {
             </Typography>
             <UserBox>
               <Avatar
-                src="https://images.pexels.com/photos/846741/pexels-photo-846741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                src={userProfile.image}
                 sx={{ width: 30, height: 30 }}
               />
               <Typography fontWeight={500} variant="span">
-                John Doe
+                {userProfile.user_name}
               </Typography>
             </UserBox>
             <TextField
