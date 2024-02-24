@@ -1,4 +1,4 @@
-import React from 'react';
+/* import React from 'react';
 
 const Comment = ({ singleComment, likeComment, dislikeComment }) => {
   return (
@@ -12,4 +12,4 @@ const Comment = ({ singleComment, likeComment, dislikeComment }) => {
   );
 };
 
-export default Comment;
+export default Comment; */
