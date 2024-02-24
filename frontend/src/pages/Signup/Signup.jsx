@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
+import GeoLocation from "../../components/GeoLocation/GeoLocation";
+
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -36,6 +38,7 @@ import {
   setUserId,
 } from "../../Service/redux/reducers/auth/authSlice";
 import PhoneNumber from "../../components/PhoneNumber/PhoneNumber";
+import CloudinaryImage from "../../components/CloudinaryImage/CloudinaryImage";
 
 const genders = [
   {
@@ -179,6 +182,7 @@ export default function Signup() {
                       id="first_name"
                       label="First Name"
                       autoFocus
+                      autoComplete="first_name"
                     />
                   </Grid>
 
@@ -188,6 +192,7 @@ export default function Signup() {
                       fullWidth
                       id="last_name"
                       label="Last Name"
+                      autoComplete=""
                     />
                   </Grid>
 
@@ -198,7 +203,6 @@ export default function Signup() {
                       fullWidth
                       id="user_name"
                       label="User Name"
-                      type="text"
                     />
                   </Grid>
 
@@ -209,8 +213,8 @@ export default function Signup() {
                       id="email"
                       label="Email Address"
                       name="email"
-                      autoComplete="email"
                       type="email"
+                      autoComplete=""
                     />
                   </Grid>
 
@@ -303,11 +307,37 @@ export default function Signup() {
                     />
                   </Grid>
 
-                  <Grid item xs={12}>
-                    <PhoneNumber  />
+                  <Grid item xs={12} marginBottom={3}>
+                    <PhoneNumber />
                   </Grid>
 
+                  {/* <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      id="school"
+                      label="School Name"
+                      name="school"
+                    />
+                  </Grid> */}
 
+                  <GeoLocation />
+
+                  {/* <Grid item xs={12}>
+                    <TextField
+                      sx={{ width: "75%" }}
+                      id="image"
+                      label="Choose your image ..."
+                      name="image"
+                    />
+                    <Button
+                      variant="outlined"
+                      sx={{ width: "22%", height: "100%", marginLeft: "3%" }}
+                    >
+                      upload
+                    </Button>
+                  </Grid> */}
+
+                  <CloudinaryImage />
                 </Grid>
 
                 <Grid item xs={12}>
