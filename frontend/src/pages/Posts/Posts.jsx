@@ -10,7 +10,6 @@ import {
   setPostsLikesById,
 } from "../../Service/redux/reducers/Posts/postsSlice";
 
-
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Modal from "@mui/material/Modal";
@@ -22,6 +21,9 @@ import Typography from "@mui/material/Typography";
 import Post from "../../components/Post/Post";
 
 import { Container } from "@mui/material";
+import SideBar from "../../components/SideBar/SideBar";
+import RightBar from "../../components/RightBar/RightBar";
+import Add from "../../components/Add/Add";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -36,7 +38,6 @@ export default function Posts() {
   const posts = useSelector((state) => state.posts.posts);
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(false);
-
 
   // Start Modal new post
   const style = {
@@ -53,7 +54,7 @@ export default function Posts() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-// End Modal new post
+  // End Modal new post
   const getAllPosts = () => {
     axios
       .get("http://localhost:5000/posts", {
@@ -66,7 +67,7 @@ export default function Posts() {
           setStatus(true);
           // setMessage(results.data.message);
           dispatch(setPosts(results.data.result));
-          console.log("Hello ",results);
+          console.log("Hello ", results.data.result);
         } else throw Error;
       })
       .catch((error) => {
@@ -84,7 +85,6 @@ export default function Posts() {
   const getAllPostsLikes = async () => {
     try {
       const res = await axios.get(`http://localhost:5000/posts/like/1`, {
-
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },
@@ -94,7 +94,6 @@ export default function Posts() {
         dispatch(setPostsLikesById(res.data.result));
       } else throw Error;
     } catch (error) {
-    
       setMessage("Error happened while Get Data, please try again");
     }
   };
@@ -104,46 +103,41 @@ export default function Posts() {
   }, []);
   return (
     <div className="posts">
-      <h2>POSTS</h2>
       {status
         ? message && <div className="SuccessMessage">{message}</div>
         : message && <div className="ErrorMessage">{message}</div>}
- <Button onClick={handleOpen}>What's on your mind</Button>
-              <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                open={open}
-                onClose={handleClose}
-                closeAfterTransition
-                slots={{ backdrop: Backdrop }}
-                slotProps={{
-                  backdrop: {
-                    timeout: 500,
-                  },
-                }}
-              >
-                <Fade in={open}>
-                  <Box sx={style}>
-                    <Typography
-                      id="transition-modal-title"
-                      variant="h6"
-                      component="h2"
-                    >
-                      Text in a modal
-                    </Typography>
-                    <Typography
-                      id="transition-modal-description"
-                      sx={{ mt: 2 }}
-                    >
-                     
-                    </Typography>
-                  </Box>
-                </Fade>
-              </Modal>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={open}>
+          <Box sx={style}>
+            <Typography id="transition-modal-title" variant="h6" component="h2">
+              Text in a modal
+            </Typography>
+            <Typography
+              id="transition-modal-description"
+              sx={{ mt: 2 }}
+            ></Typography>
+          </Box>
+        </Fade>
+      </Modal>
 
       <Grid container spacing={2} direction="row" justifyContent="center">
         <Grid item xs={3}>
-          <Item>xs=3</Item>
+          <Item>
+            <SideBar/>
+            <Add/>
+          </Item>
         </Grid>
 
         <Grid item xs={5}>
@@ -158,7 +152,9 @@ export default function Posts() {
         </Grid>
 
         <Grid item xs={3}>
-          <Item>xs=3</Item>
+          <Item>
+            <RightBar/>
+          </Item>
         </Grid>
       </Grid>
     </div>
