@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
-import GeoLocation from "../../components/GeoLocation/GeoLocation";
+// import GeoLocation from "../../components/GeoLocation/GeoLocation";
+import GeoLocationHandler from "../../components/GeoLocation/GeoLocationHandler";
 
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
+import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import FilledInput from "@mui/material/FilledInput";
 import FormControl from "@mui/material/FormControl";
@@ -34,8 +36,9 @@ const defaultTheme = createTheme();
 
 import { useDispatch, useSelector } from "react-redux";
 import { setSignup } from "../../Service/redux/reducers/auth/authSlice";
-import PhoneNumber from "../../components/PhoneNumber/PhoneNumber";
-// import CloudinaryImage from "../../components/CloudinaryImage/CloudinaryImage";
+
+// import PhoneNumber from "../../components/PhoneNumber/PhoneNumber";
+import { MuiTelInput } from "mui-tel-input";
 
 const genders = [
   {
@@ -83,7 +86,8 @@ export default function Signup() {
   //===============================================================
   //* Cloudinary
   const [image, setImg] = useState("");
-  const [url, setUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [uploadMessage, setUploadMessage] = useState("");
 
   //* Upload Images to Cloudinary //////////////////////////
   const uploadImage = () => {
@@ -94,76 +98,91 @@ export default function Signup() {
     axios
       .post("https://api.cloudinary.com/v1_1/dpbh42kjy/image/upload", data)
       .then((data) => {
-        console.log("image URL ==> ", data.data.secure_url);
-        setUrl(data.data.secure_url);
-        // dispatch(setUrl(JSON.stringify(data.url)));
+        // setUrl(data.data.secure_url);
+        setImageUrl(data.data.url);
+        setUploadMessage("Image Uploaded Successfully");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setUploadMessage("Image Upload Error");
+      });
   };
 
   //===============================================================
+  //* Phone Number state
 
-  const signup = async (event) => {
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const handlePhoneNumber = (newValue) => {
+    setPhoneNumber(newValue);
+  };
+
+  //===============================================================
+  //* GeoLocation states
+  const [countryGeoId, setCountryGeoId] = useState("");
+  const [countryName, setCountryName] = useState("");
+  const [stateGeoId, setStateGeoId] = useState("");
+  const [stateName, setStateName] = useState("");
+  const [cityGeoId, setCityGeoId] = useState("");
+  const [cityName, setCityName] = useState("");
+
+  //===============================================================
+
+  //* signupHandler
+  const [userNameMessage, setUserNameMessage] = useState("ddd");
+  const [emailMessage, setEmailMessage] = useState("ddd");
+  const [passwordMessage, setPasswordMessage] = useState("ddd");
+
+  const signupHandler = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    // //! check password match re_password
-    // console.log(
-    //   "check password match re_password",
-    //   data.get("password") === data.get("re_password")
-    // );
+    //* passwordValidation
+    // if (data.get("password") !== data.get("re_password"))
+    //   throw new Error("password not matched");
+    if (data.get("password") !== data.get("re_password")) {
+      setPasswordMessage("password not matched");
+    }
 
-    console.log({
-      first_name: data.get("first_name"),
-      last_name: data.get("last_name"),
-      user_name: data.get("user_name").toLowerCase(),
-      email: data.get("email").toLowerCase(),
-      password: data.get("password"),
-      image: url,
-      school: data.get("school"),
-      gender: data.get("gender"),
-      birthday: data.get("birthday"),
-      // phone_number: data.get("phone_number"),
-      // city: data.get("city"),
-      // state: data.get("state"),
-      // country: data.get("country"),
-      // cover_photo: data.get("cover_photo"),
-      // bio: data.get("bio"),
-    });
+    //* emailValidation
 
-    if (data.get("password") !== data.get("re_password"))
-      throw new Error("password not matched");
+    //* usernameValidation
+    const usernameValidation = (str) =>
+      /^(?=[\w]{4,25}$)[^0-9_].*[^_]$/.test(str);
 
-    //! SIGNUP AXIOS
-    // try {
-    //   const result = await axios.post("http://localhost:5000/users/register", {
-    //     first_name: data.get("first_name"),
-    //     last_name: data.get("last_name"),
-    //     user_name: data.get("user_name").toLowerCase(),
-    //     email: data.get("email").toLowerCase(),
-    //     password: data.get("password"),
-    //     // image: data.get("image"),
-    //     // school: data.get("school"),
-    //     gender: data.get("gender"),
-    //     birthday: data.get("birthday"),
-    //     // phone_number: data.get("phone_number"),
-    //     // city: data.get("city"),
-    //     // state: data.get("state"),
-    //     // country: data.get("country"),
-    //   });
-    //   if (result.data) {
-    //     console.log("result.data.result", result.data.result);
-    //     setStatus(true);
-    //     setMessage(result.data.message);
-    //     dispatch(setSignup(result.data.result));
-    //   } else throw Error;
-    // } catch (error) {
-    //   if (error.response && error.response.data) {
-    //     setStatus(true);
-    //     return setMessage(error.response.data.message);
-    //   }
-    //   setMessage("Error happened while Signup, please try again");
-    // }
+    if (!usernameValidation(data.get("user_name").toLowerCase())) {
+      setUserNameMessage("User Name not valid !");
+    }
+
+    try {
+      const result = await axios.post("http://localhost:5000/users/register", {
+        first_name: data.get("first_name"),
+        last_name: data.get("last_name"),
+        user_name: data.get("user_name").toLowerCase(),
+        email: data.get("email").toLowerCase(),
+        password: data.get("password"),
+        image: imageUrl,
+        school: data.get("school"),
+        gender: data.get("gender"),
+        birthday: data.get("birthday"),
+        phone_number: phoneNumber,
+        city: cityName,
+        state: stateName,
+        country: countryName,
+      });
+      if (result.data) {
+        console.log("result.data.result", result.data.result);
+        setStatus(true);
+        setMessage(result.data.message);
+        dispatch(setSignup(result.data.result));
+      } else throw Error;
+    } catch (error) {
+      console.log(error);
+      if (error.response && error.response.data) {
+        setStatus(true);
+        return setMessage(error.response.data.message);
+      }
+      setMessage("Error happened while Signup, please try again");
+    }
   };
 
   //===============================================================
@@ -222,7 +241,12 @@ export default function Signup() {
               <Typography component="h1" variant="h5">
                 Signup
               </Typography>
-              <Box component="form" noValidate onSubmit={signup} sx={{ mt: 1 }}>
+              <Box
+                component="form"
+                noValidate
+                onSubmit={signupHandler}
+                sx={{ mt: 1 }}
+              >
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
                     <TextField
@@ -246,25 +270,33 @@ export default function Signup() {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <TextField
-                      required
-                      name="user_name"
-                      fullWidth
-                      id="user_name"
-                      label="User Name"
-                    />
+                    <FormControl fullWidth>
+                      <TextField
+                        required
+                        name="user_name"
+                        id="user_name"
+                        label="User Name"
+                      />
+                      <FormHelperText sx={{ color: "red" }}>
+                        {userNameMessage && userNameMessage}
+                      </FormHelperText>
+                    </FormControl>
                   </Grid>
 
                   <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="email"
-                      label="Email Address"
-                      name="email"
-                      type="email"
-                      autoComplete=""
-                    />
+                    <FormControl fullWidth>
+                      <TextField
+                        required
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        type="email"
+                        autoComplete=""
+                      />
+                      <FormHelperText sx={{ color: "red" }}>
+                        {emailMessage && emailMessage}
+                      </FormHelperText>
+                    </FormControl>
                   </Grid>
 
                   <Grid item xs={12}>
@@ -324,6 +356,9 @@ export default function Signup() {
                         // error
                         // helperText="Incorrect entry."
                       />
+                      <FormHelperText sx={{ color: "red" }}>
+                        {passwordMessage && passwordMessage}
+                      </FormHelperText>
                     </FormControl>
                   </Grid>
 
@@ -357,7 +392,11 @@ export default function Signup() {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <PhoneNumber id="phone_number" />
+                    {/* <PhoneNumber id="phone_number" /> */}
+                    <MuiTelInput
+                      value={phoneNumber}
+                      onChange={handlePhoneNumber}
+                    />
                   </Grid>
 
                   <Grid item xs={12} marginBottom={2}>
@@ -369,40 +408,75 @@ export default function Signup() {
                     />
                   </Grid>
 
-                  <GeoLocation id="geo_location" />
+                  {/* //* /////////////////////////////////// */}
 
-                  {/* <Grid item xs={12}>
-                    <TextField
-                      sx={{ width: "75%" }}
-                      id="image"
-                      label="Choose your image ..."
-                      name="image"
-                    />
-                    <Button
-                      variant="outlined"
-                      sx={{ width: "22%", height: "100%", marginLeft: "3%" }}
-                    >
-                      upload
-                    </Button>
-                  </Grid> */}
+                  {/* <GeoLocation id="geo_location" /> */}
+                  <Grid item xs={12}>
+                    <Container component="main" maxWidth="lg">
+                      <Box>
+                        <FormControl>
+                          <Grid container spacing={4}>
+                            <Grid item xs={4}>
+                              <GeoLocationHandler
+                                locationTitle="Country"
+                                id="Country"
+                                name="Country"
+                                isCountry
+                                onChange={(e, name) => {
+                                  setCountryGeoId(e);
+                                  setCountryName(name);
+                                }}
+                              />
+                            </Grid>
+                            <Grid item xs={4}>
+                              <GeoLocationHandler
+                                locationTitle="State"
+                                onChange={(e, name) => {
+                                  setStateGeoId(e);
+                                  setStateName(name);
+                                }}
+                                geoId={countryGeoId}
+                                id="State"
+                                name="State"
+                                isState
+                              />
+                            </Grid>
 
-                  {/* <CloudinaryImage /> */}
+                            <Grid item xs={4}>
+                              <GeoLocationHandler
+                                locationTitle="City"
+                                onChange={(e, name) => {
+                                  setCityGeoId(e);
+                                  setCityName(name);
+                                }}
+                                geoId={stateGeoId}
+                                id="City"
+                                name="City"
+                                isCity
+                              />
+                            </Grid>
+                          </Grid>
+                        </FormControl>
+                      </Box>
+                    </Container>
+                  </Grid>
+
+                  {/* //* /////////////////////////////////// */}
+
                   <Grid item xs={12}>
                     <TextField
                       sx={{ width: "75%" }}
                       id="image"
                       name="image"
                       type="file"
+                      helperText={uploadMessage && uploadMessage}
                       onChange={(e) => {
-                        // console.log(e.target.files[0]);
                         setImg(e.target.files[0]);
-                        // dispatch(setImage(e.target.files[0].name,e.target.files[0].type,e.target.files[0].lastModified,e.target.files[0].size));
-                        // dispatch(setImage(JSON.stringify(e.target.files[0])));
                       }}
                     />
                     <Button
                       variant="outlined"
-                      sx={{ width: "22%", height: "100%", marginLeft: "3%" }}
+                      sx={{ width: "22%", height: "4em", marginLeft: "3%" }}
                       onClick={uploadImage}
                     >
                       upload

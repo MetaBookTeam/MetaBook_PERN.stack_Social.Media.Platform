@@ -5,8 +5,6 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 
-// import { makeStyles } from "@material-ui/core/styles";
-
 import Geonames from "geonames.js";
 import PropTypes from "prop-types";
 
@@ -16,25 +14,10 @@ const geonames = new Geonames({
   encoding: "JSON",
 });
 
-// const useStyles = makeStyles((theme) => ({
-//   formControl: {
-//     minWidth: "100%",
-//   },
-//   selectEmpty: {
-//     marginTop: theme.spacing(2),
-//   },
-// }));
-
 export default function GeoLocationHandler(props) {
-  //   const classes = useStyles();
   const { locationTitle, geoId, onChange, isCountry, isState, isCity } = props;
   const [options, setOptions] = useState([]);
   const [currentItem, setCurrentItem] = useState("");
-  // const [labelWidth, setLabelWidth] = useState(0);
-
-  // useEffect(() => {
-  //   setLabelWidth(inputLabel.current.offsetWidth);
-  // }, []);
 
   useEffect(() => {
     try {
@@ -56,8 +39,6 @@ export default function GeoLocationHandler(props) {
   const inputLabel = useRef(null);
 
   return (
-    // <FormControl variant="outlined" className={classes.formControl}>
-
     <FormControl variant="outlined">
       <InputLabel ref={inputLabel} id="outlined-label">
         {locationTitle}
@@ -85,20 +66,16 @@ export default function GeoLocationHandler(props) {
             }
           });
         }}
-        // labelWidth={labelWidth}
-        // sx={{ width: "15vw", maxWidth: "120px" }}
         sx={{ width: "120px" }}
       >
-
-            <MenuItem value="">
-              <em>-</em>
-            </MenuItem>
-            {options.map((v, index) => (
-              <MenuItem key={index} value={v.geonameId}>
-                {isCountry ? v.countryName : v.name}
-              </MenuItem>
-            ))}
-
+        <MenuItem value="">
+          <em>-</em>
+        </MenuItem>
+        {options.map((v, index) => (
+          <MenuItem key={index} value={v.geonameId}>
+            {isCountry ? v.countryName : v.name}
+          </MenuItem>
+        ))}
       </Select>
     </FormControl>
   );
