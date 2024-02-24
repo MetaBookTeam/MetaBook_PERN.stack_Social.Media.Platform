@@ -1,86 +1,40 @@
-import { ADD_COMMENT, LIKE_COMMENT, DISLIKE_COMMENT, SHARE_POST } from './actions';
 
-const initialState = {
-  posts: []
+ 
+ /* const LikeDislikeShare = () => {
+  // ... useState declarations and count handlers ...
+
+  return (
+    <div>
+      <button onClick={handleLike}>Like</button>
+      <button onClick={handleDislike}>Dislike</button>
+      <button onClick={handleShare}>Share</button>
+
+      <div>
+        <p>Likes: {likeCount}</p>
+        <p>Dislikes: {dislikeCount}</p>
+        <p>Shares: {shareCount}</p>
+      </div>
+    </div>
+  );
+}; */
+  /* import React, { useState } from 'react';
+
+const LikeDislikeShare = () => {
+  const [likeCount, setLikeCount] = useState(0);
+  const [dislikeCount, setDislikeCount] = useState(0);
+  const [shareCount, setShareCount] = useState(0);
+
+  // ...rest of the component
+}
+ const handleLike = () => {
+  setLikeCount(likeCount + 1);
+}; 
+
+const handleDislike = () => {
+  setDislikeCount(dislikeCount + 1);
 };
 
-const postReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case ADD_COMMENT:
-      return {
-        ...state,
-        posts: state.posts.map(post => {
-          if (post.id === action.payload.postId) {
-            return {
-              ...post,
-              comments: [...post.comments, action.payload.comment]
-            };
-          }
-          return post;
-        })
-      };
-
-    case LIKE_COMMENT:
-      return {
-        ...state,
-        posts: state.posts.map(post => {
-          if (post.id === action.payload.postId) {
-            return {
-              ...post,
-              comments: post.comments.map(comment => {
-                if (comment.id === action.payload.commentId) {
-                  return {
-                    ...comment,
-                    likes: comment.likes + 1
-                  };
-                }
-                return comment;
-              })
-            };
-          }
-          return post;
-        })
-      };
-
-    case DISLIKE_COMMENT:
-      return {
-        ...state,
-        posts: state.posts.map(post => {
-          if (post.id === action.payload.postId) {
-            return {
-              ...post,
-              comments: post.comments.map(comment => {
-                if (comment.id === action.payload.commentId) {
-                  return {
-                    ...comment,
-                    dislikes: comment.dislikes + 1
-                  };
-                }
-                return comment;
-              })
-            };
-          }
-          return post;
-        })
-      };
-
-    case SHARE_POST:
-      return {
-        ...state,
-        posts: state.posts.map(post => {
-          if (post.id === action.payload.postId) {
-            return {
-              ...post,
-              shares: post.shares + 1
-            };
-          }
-          return post;
-        })
-      };
-
-    default:
-      return state;
-  }
+const handleShare = () => {
+  setShareCount(shareCount + 1);
 };
-
-export default postReducer;
+ export default  */

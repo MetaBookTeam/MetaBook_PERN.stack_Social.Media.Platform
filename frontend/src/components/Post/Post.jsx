@@ -34,7 +34,7 @@ const style = {
   p: 4,
 };
 
-const Post = ({ post,addComment,likeComment,dislikeComment,shareComment }) => {
+const Post = ({ post }) => {
   
   const [open, setOpen] = useState(false);
   const likeModel = () => setOpen(true);
@@ -207,7 +207,7 @@ const Post = ({ post,addComment,likeComment,dislikeComment,shareComment }) => {
         ><>
           <h3>{post.title}</h3>
       <p>{post.body}</p>
-      <button onClick={() => sharePost(post.id)}>Share</button>
+      {/* <button onClick={() => sharePost(post.id)}>Share</button>
       <CommentComponent postId={post.id} addComment={addComment} />
       {post.comments.map(comment => (
           <Comment
@@ -216,7 +216,7 @@ const Post = ({ post,addComment,likeComment,dislikeComment,shareComment }) => {
             likeComment={likeComment}
             dislikeComment={dislikeComment}
           />
-        ))}
+        ))} */}
       </>
           Post
         </Link>

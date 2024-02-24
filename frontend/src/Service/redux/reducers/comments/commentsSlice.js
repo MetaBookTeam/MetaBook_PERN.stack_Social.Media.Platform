@@ -3,12 +3,12 @@ import { createSlice } from "@reduxjs/toolkit";
 const commentsSlice = createSlice({
   name: "comments",
   initialState: {
-    comments: [],commentLike:[],shares:[], loading: false,
-    error: null
+    comments: [],
+    commentLike: [],
+    shares: [],
   },
 
   reducers: {
-    
     setcomments: (state, action) => {
       state.comments = action.payload;
     },
@@ -16,11 +16,13 @@ const commentsSlice = createSlice({
       state.comments = action.payload;
     },
     deletecomments: (state, action) => {
-      state.comments = state.comments.filter(comment => comment.id !== action.payload);
+      state.comments = state.comments.filter(
+        (comment) => comment.id !== action.payload
+      );
     },
     updateComment: (state, action) => {
       const { id, updatedComment } = action.payload;
-      state.comments = state.comments.map(comment =>
+      state.comments = state.comments.map((comment) =>
         comment.id === id ? { ...comment, ...updatedComment } : comment
       );
     },
@@ -37,7 +39,8 @@ export const {
   getCommentsByPostId,
   deletecomments,
   updateComment,
-  getCommentById,setSingleComment
+  getCommentById,
+  setSingleComment,
 } = commentsSlice.actions;
 
 export default commentsSlice.reducer;
