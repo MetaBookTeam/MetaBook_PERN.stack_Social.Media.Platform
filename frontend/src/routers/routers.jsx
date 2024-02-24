@@ -11,8 +11,6 @@ import Signup from "../pages/Signup/Signup";
 import Post from "../components/Post/Post";
 import Posts from "../pages/Posts/Posts";
 
-import WelcomePage from "../pages/WelcomePage/WelcomePage";
-
 import Page from "../pages/Page/Page";
 
 import Profile from "../pages/Profile/Profile";
@@ -23,17 +21,25 @@ export const router = createBrowserRouter([
     path: "/",
     element: <Main />,
     children: [
+      // {
+      //   path: "/home",
+      //   element: <Home />,
+      // },
       {
-        path: "",
-        element: <Home />,
+        path: "/home",
+        element: <Posts />,
       },
       {
-        path: "about",
+        path: "/about",
         element: <About />,
       },
       {
         path: "/profile/:user_id",
         element: <Profile />,
+      },
+      {
+        path:"/pages",
+        element:<Page/>
       },
       {
         path: "help",
@@ -49,16 +55,16 @@ export const router = createBrowserRouter([
           },
         ],
       },
-      {
-        path: "posts",
-        element: <Posts />,
-        children: [
-          {
-            path: ":id",
-            element: <Post />,
-          },
-        ],
-      },
+      // {
+      //   path: "posts",
+      //   element: <Posts />,
+      //   children: [
+      //     {
+      //       path: ":id",
+      //       element: <Post />,
+      //     },
+      //   ],
+      // },
     ],
   },
   {
@@ -68,14 +74,6 @@ export const router = createBrowserRouter([
   {
     path: "/signup",
     element: <Signup />,
-  },
-  {
-    path: "/welcome",
-    element: <WelcomePage />,
-  },
-  {
-    path:"/pages",
-    element:<Page/>
   },
   {
     path: "*",

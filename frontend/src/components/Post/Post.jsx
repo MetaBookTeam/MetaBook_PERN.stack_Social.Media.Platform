@@ -115,7 +115,7 @@ const Post = ({ post }) => {
                 {/* {posts.map((elem,ind)=> {
                       
                 })} */}
-               
+              
                 <Typography id="keep-mounted-modal-description" sx={{ mt: 6 }}>
                 <Link
                   component="h1"

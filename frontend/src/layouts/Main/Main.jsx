@@ -21,21 +21,20 @@ const Main = () => {
   return (
     <div className="root-layout">
       
-      {/* <header>
+      <header>
         <NavBar/>
-      </header> */}
+      </header>
       
       <main> 
       {/* <ThemeProvider theme={darkTheme}> */}
-      <Box bgcolor={"background.default"} color={"text.primary"}>
+      {/* <Box bgcolor={"background.default"} color={"text.primary"}>
         <NavBar />
         <Stack direction="row" spacing={2} justifyContent="space-between">
-        <SideBar setMode={setMode} mode={mode}/>
           <Feed/>
-          <RightBar />
+
         </Stack>
-        <Add />
-      </Box>
+      
+      </Box> */}
     {/* </ThemeProvider> */}
         {/* Outlet : it the subRouter of Main {children:[]} */}
         <Outlet/>
