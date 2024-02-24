@@ -13,6 +13,11 @@ import Posts from "../pages/Posts/Posts";
 
 import WelcomePage from "../pages/WelcomePage/WelcomePage";
 
+import Page from "../pages/Page/Page";
+
+import Profile from "../pages/Profile/Profile";
+
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -25,6 +30,10 @@ export const router = createBrowserRouter([
       {
         path: "about",
         element: <About />,
+      },
+      {
+        path: "/profile/:user_id",
+        element: <Profile />,
       },
       {
         path: "help",
@@ -53,7 +62,6 @@ export const router = createBrowserRouter([
     ],
   },
   {
-
     path: "/login",
     element: <Login />,
   },
@@ -64,7 +72,10 @@ export const router = createBrowserRouter([
   {
     path: "/welcome",
     element: <WelcomePage />,
-
+  },
+  {
+    path:"/pages",
+    element:<Page/>
   },
   {
     path: "*",

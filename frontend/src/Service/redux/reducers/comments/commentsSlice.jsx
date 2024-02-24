@@ -1,22 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 
 const commentsSlice = createSlice({
   name: "comments",
   initialState: {
-    comments: [],commentLike:[],shares:[], loading: false,
-    error: null
+    comments: [],
+    commentLike: [],
+    shares: [],
   },
 
   reducers: {
-     setLoading: (state) => {
-    state.loading = true;
-    state.error = null;
-  },
-  setError: (state, action) => {
-    state.loading = false;
-    state.error = action.payload;
-  },
     setcomments: (state, action) => {
       state.comments = action.payload;
     },
@@ -24,11 +16,13 @@ const commentsSlice = createSlice({
       state.comments = action.payload;
     },
     deletecomments: (state, action) => {
-      state.comments = state.comments.filter(comment => comment.id !== action.payload);
+      state.comments = state.comments.filter(
+        (comment) => comment.id !== action.payload
+      );
     },
     updateComment: (state, action) => {
       const { id, updatedComment } = action.payload;
-      state.comments = state.comments.map(comment =>
+      state.comments = state.comments.map((comment) =>
         comment.id === id ? { ...comment, ...updatedComment } : comment
       );
     },
@@ -40,12 +34,13 @@ const commentsSlice = createSlice({
     },
   },
 });
-export const {setLoading, setError,
+export const {
   setcomments,
   getCommentsByPostId,
   deletecomments,
   updateComment,
-  getCommentById,setSingleComment
+  getCommentById,
+  setSingleComment,
 } = commentsSlice.actions;
 
 export default commentsSlice.reducer;
