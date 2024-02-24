@@ -98,8 +98,8 @@ CREATE TABLE
     gender VARCHAR(6) CHECK (gender IN ('male', 'female')),
     phone_number INT UNIQUE,
     school VARCHAR(255),
-    address VARCHAR(255),
     city VARCHAR(255),
+    state VARCHAR(255),
     country VARCHAR(255),
     cover_photo TEXT DEFAULT 'https://colorfully.eu/wp-content/uploads/2013/07/beautiful-sea-view-facebook-cover.jpg',
     bio VARCHAR(255) DEFAULT 'add bio'
@@ -115,8 +115,8 @@ INSERT INTO
     gender,
     phone_number,
     school,
-    address,
     city,
+    state,
     country
   )
 VALUES
@@ -128,7 +128,7 @@ VALUES
     'male',
     0790000001,
     'school',
-    'address',
+    'Amman',
     'Amman',
     'Jordan'
   ),
@@ -140,7 +140,7 @@ VALUES
     'female',
     0790000002,
     'school',
-    'address',
+    'Irbid',
     'Irbid',
     'Jordan'
   ),
@@ -152,7 +152,7 @@ VALUES
     'male',
     0790000003,
     'school',
-    'address',
+    'Zarqa',
     'Zarqa',
     'Jordan'
   ) RETURNING *;
