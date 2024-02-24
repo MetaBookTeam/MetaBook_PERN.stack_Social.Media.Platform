@@ -93,7 +93,7 @@ function WelcomePage() {
         <h1>Welcome to My Social Media App</h1>
       </div>
       <Button variant="contained" size="large" style={{ marginTop: '20px' }}>
-        <NavLink to="/users/login" style={{ textDecoration: 'none', color: 'inherit' }}>Start</NavLink>
+        <NavLink to="/login" style={{ textDecoration: 'none', color: 'inherit' }}>Start</NavLink>
       </Button>
       <Grid container spacing={3} style={textStyle}>
         <Grid item xs={3}>

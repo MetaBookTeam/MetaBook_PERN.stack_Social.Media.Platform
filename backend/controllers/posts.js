@@ -66,12 +66,13 @@ GET http://localhost:5000/posts
           from shares
           group by post_id
           )
-      select p.id, 
+      select p.id,p.created_at,users.image,users.user_name,
       p.content,
       coalesce(l.total_likes, 0) as likes, 
       coalesce(c.total_comments, 0) as comments,
       coalesce(s.total_shares, 0) as shares
       from posts p
+      full outer join users on users.id=p.user_id
       left join cte_likes l
         on p.id = l.post_id
       left join cte_comments c
@@ -187,7 +188,7 @@ GET http://localhost:5000/posts/:user_id
       left join cte_comments c
         on p.id = c.post_id
         left join cte_shares s
-        on p.id = s.post_id WHERE p.user_id = 2 AND is_deleted = 0`,
+        on p.id = s.post_id WHERE p.user_id = $1 AND is_deleted = 0`,
       placeholder
     );
     res.status(200).json({
