@@ -43,6 +43,27 @@ const FriendPage = () => {
         boxShadow: 24,
         p: 4,
       };
+      const [userProfile, setUserProfile] = useState();
+      
+      const getUserById = async () => {
+        try {
+          const user = await axios.get(
+            `http://localhost:5000/users/${auth.userId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${auth.token}`,
+              },
+            }
+          );
+          setUserProfile(...user.data.result);
+          console.log(user.data.result);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      useEffect(() => {
+        getUserById();
+      }, []);
   return (
     <>
        <Container>

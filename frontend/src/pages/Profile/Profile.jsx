@@ -21,7 +21,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
-import {addPost} from "../../Service/redux/reducers/Posts/postsSlice"
+import { addPost } from "../../Service/redux/reducers/Posts/postsSlice";
 import Add from "../../components/Add/Add";
 // extra information
 
@@ -39,7 +39,7 @@ const Profile = () => {
     backgroundColor: theme.palette.background.paper,
   }));
   const [content, setContent] = useState();
-  
+
   const [secondary, setSecondary] = React.useState(false);
   // End extra information
 
@@ -78,6 +78,7 @@ const Profile = () => {
         }
       );
       setUserProfile(...user.data.result);
+      console.log(user.data.result);
     } catch (error) {
       console.log(error);
     }
@@ -88,14 +89,11 @@ const Profile = () => {
 
   const getPostProfile = async () => {
     try {
-      const post = await axios.get(
-        `http://localhost:5000/posts/profile`,
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
+      const post = await axios.get(`http://localhost:5000/posts/profile`, {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
       setPostProfile(post.data.result);
       console.log(post.data.result);
     } catch (error) {
@@ -128,6 +126,19 @@ const Profile = () => {
               </Box>
               {userProfile.bio}
             </Item>
+            <Grid container>
+              <Grid item xs={4}>
+                <Item>Followers
+                <h1>4</h1>
+                </Item>
+              </Grid>
+              <Grid item xs={4}>
+                <Item>Following</Item>
+              </Grid>
+              <Grid item xs={4}>
+                <Item>Edit profile</Item>
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item xs={4}>
             <Item>
@@ -183,15 +194,15 @@ const Profile = () => {
           </Grid>
           <Grid item xs={8}>
             {postProfile ? (
-                postProfile.map((elem) => {
-                  return <Item>{elem.content} </Item>;
-                })
-              ) : (
-                <Item>You do not have any post </Item>
-              )}
+              postProfile.map((elem) => {
+                return <Item>{elem.content} </Item>;
+              })
+            ) : (
+              <Item>You do not have any post </Item>
+            )}
           </Grid>
         </Grid>
-        <Add/>
+        <Add />
       </Container>
     </>
   );
