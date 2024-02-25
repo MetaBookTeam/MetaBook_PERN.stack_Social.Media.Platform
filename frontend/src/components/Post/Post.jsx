@@ -258,7 +258,12 @@ const Post = ({ post }) => {
 
       <CardContent orientation="horizontal" sx={{ gap: 1 }}>
         <IconButton size="sm" variant="plain" color="neutral" sx={{ ml: -1 }}>
-          <Face />
+          {/* <Face /> */}
+          <Avatar
+            size="sm"
+            src={post.image}
+            // sx={{ p: 0.5, border: '2px solid', borderColor: 'background.body' }}
+          />
         </IconButton>
         <Input
           variant="plain"
