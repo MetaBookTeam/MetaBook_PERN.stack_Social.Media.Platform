@@ -18,6 +18,11 @@ import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import SendOutlined from "@mui/icons-material/SendOutlined";
 import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
+import Grid from "@mui/material/Grid";
+import { styled } from "@mui/material/styles";
+import Paper from "@mui/material/Paper";
+
+
  import {NavLink} from 'react-router-dom'
 const style = {
   position: "absolute",
@@ -38,7 +43,24 @@ const Post = ({ post }) => {
   const likeModel = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [postLike, setPostLike] = useState();
-
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+  }));
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
   return (
     <Card
       variant="outlined"
@@ -158,7 +180,10 @@ const Post = ({ post }) => {
               </IconButton>
             </Box> */}
       </CardContent>
+      
       <CardContent>
+        <Grid container>
+          <Grid item xs={3}>
         <Link
           onClick={likeModel}
           component="button"
@@ -166,9 +191,38 @@ const Post = ({ post }) => {
           fontSize="sm"
           fontWeight="lg"
           textColor="text.primary"
+        
         >
           {post.likes} Likes
         </Link>
+        </Grid>
+        <Grid item xs={4}>
+        <Link
+          onClick={likeModel}
+          component="button"
+          underline="none"
+          fontSize="sm"
+          fontWeight="lg"
+          textColor="text.primary"
+         
+        >
+          {post.comments} comments
+        </Link>
+        </Grid>
+        <Grid item xs={4}>
+        <Link
+          onClick={likeModel}
+          component="button"
+          underline="none"
+          fontSize="sm"
+          fontWeight="lg"
+          textColor="text.primary"
+         
+        >
+          {post.shares} Shares
+        </Link>
+        </Grid>
+        </Grid>
         <Typography fontSize="sm">
           <Link
             component="button"
