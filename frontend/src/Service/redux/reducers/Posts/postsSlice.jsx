@@ -14,26 +14,26 @@ export const postsSlice = createSlice({
       state.posts.push(action.payload);
     },
 
-    updatePostById :(state,action)=>{
-      state.posts=state.posts.map((elem,i)=>{
-        if(elem.id==action.payload.id){
-          elem=action.payload
+    updatePostById: (state, action) => {
+      state.posts = state.posts.map((elem, i) => {
+        if (elem.id == action.payload.id) {
+          elem = action.payload;
         }
-        return elem
-      })
+        return elem;
+      });
     },
-    setPostsLikesById :(state,action)=>{
-      console.log(state);
+    setPostsLikesById: (state, action) => {
+      // console.log(state);
     },
-      deletePost: (state, action) => {
-        state.posts = state.posts.filter((post) => {
-          // the payload in this case is the id
-          return post.id !== action.payload;
-        });
-    },  
+    deletePost: (state, action) => {
+      state.posts = state.posts.filter((post) => {
+        // the payload in this case is the id
+        return post.id !== action.payload;
+      });
+    },
   },
 });
 
-export const { setPosts, addPost,setPostsLikesById } = postsSlice.actions;
+export const { setPosts, addPost, setPostsLikesById } = postsSlice.actions;
 
 export default postsSlice.reducer;
