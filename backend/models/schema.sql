@@ -643,6 +643,69 @@ wa.me/962787875915
     2,
     'HB',
     'http://res.cloudinary.com/dpbh42kjy/image/upload/v1708867489/zawk8quomilwcdmxinnq.jpg'
+  ),
+  (
+    1,
+    null,
+    'The ICU is where you take someone that has been injured playing PeekaBoo',
+    ''
+  ),
+  (
+    2,
+    null,
+    '
+🌟 Diving into the captivating world of Hunter x Hunter today! 🎩🌍 Who else is hooked on this epic adventure? 🌟 #HunterxHunter #AnimeAddict',
+    'http://res.cloudinary.com/dpbh42kjy/image/upload/v1708890241/jb7ch7ebt3zjjwqupdob.jpg'
+  ),
+  (
+    2,
+    null,
+    '🎭 Hisoka  enigmatic presence always keeps me on the edge of my seat in Hunter x Hunter! 🃏💥 Who else can not get enough of this captivating character  unpredictability? 🎭 #Hisoka #HunterxHunter',
+    'http://res.cloudinary.com/dpbh42kjy/image/upload/v1708890228/qddgttfmen4opwwevtf3.jpg'
+  ),
+  (
+    3,
+    null,
+    '#Nostalgia: Cherishing memories from the good old days. 🌟🕰️',
+    'http://res.cloudinary.com/dpbh42kjy/image/upload/v1708890456/q3sbfj8wpr5yza0cso3k.jpg'
+  ),
+  (
+    3,
+    null,
+    '#NostalgiaFeels: Cherishing the simplicity and magic of bygone days! ✨🕰️',
+    'http://res.cloudinary.com/dpbh42kjy/image/upload/v1708890444/xawh2kkadw515v5sh7tz.webp'
+  ),
+  (
+    4,
+    null,
+    '🌸 Embracing the beauty of Sakura blossoms in full bloom! 🌸',
+    'http://res.cloudinary.com/dpbh42kjy/image/upload/v1708890690/qbxykx5b1asfuvbglnet.jpg'
+  ),
+  (
+    4,
+    null,
+    '🇯🇵 Japan: A land of tradition, innovation, and breathtaking beauty! 🏯🌸',
+    'http://res.cloudinary.com/dpbh42kjy/image/upload/v1708890706/rstgdjbhfnpplzfucvu1.jpg'
+  ),
+  (4, null, '', null),
+  (
+    5,
+    null,
+    '🌌 Marveling at the vast wonders of the Universe! ✨🌠
+',
+    null
+  ),
+  (
+    5,
+    null,
+    '🌟 Exploring the mysteries of the cosmos with Astro! 🚀✨',
+    'http://res.cloudinary.com/dpbh42kjy/image/upload/v1708890944/n7xlug7tvygdnzhoa2bb.jpg'
+  ),
+  (
+    5,
+    null,
+    '🛰️ Admiring the International Space Station orbital brilliance above! 🌍✨',
+    'http://res.cloudinary.com/dpbh42kjy/image/upload/v1708890962/yg5kj42ut5dhcpjyla3j.avif'
   ) RETURNING *;
 
 -- Create a table called **posts_likes** in the database

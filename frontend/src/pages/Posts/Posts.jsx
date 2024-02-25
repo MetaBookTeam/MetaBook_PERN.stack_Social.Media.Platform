@@ -39,22 +39,22 @@ export default function Posts() {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(false);
 
-  // Start Modal new post
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  // End Modal new post
+  // // Start Modal new post
+  // const style = {
+  //   position: "absolute",
+  //   top: "50%",
+  //   left: "50%",
+  //   transform: "translate(-50%, -50%)",
+  //   width: 400,
+  //   bgcolor: "background.paper",
+  //   border: "2px solid #000",
+  //   boxShadow: 24,
+  //   p: 4,
+  // };
+  // const [open, setOpen] = useState(false);
+  // const handleOpen = () => setOpen(true);
+  // const handleClose = () => setOpen(false);
+  // // End Modal new post
   const getAllPosts = async () => {
     try {
       const result = await axios.get("http://localhost:5000/posts", {
@@ -102,7 +102,7 @@ export default function Posts() {
       {status
         ? message && <div className="SuccessMessage">{message}</div>
         : message && <div className="ErrorMessage">{message}</div>}
-      <Modal
+      {/* <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={open}
@@ -120,31 +120,52 @@ export default function Posts() {
             <Typography id="transition-modal-title" variant="h6" component="h2">
               Text in a modal
             </Typography>
-            <Typography
-              id="transition-modal-description"
-              sx={{ mt: 2 }}
-            ></Typography>
+            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+              TEXT
+            </Typography>
           </Box>
         </Fade>
-      </Modal>
+      </Modal> */}
 
       {/* //* Add new post button */}
       <Add />
 
-      <Grid container spacing={2} direction="row" justifyContent="center">
-        <Grid item md={3} sx={{ display: { md: "block", xs: "none" } }}>
+      <Grid
+        container
+        spacing={2}
+        direction="row"
+        justifyContent="center"
+        // component="span"
+      >
+        <Grid
+          item
+          md={3}
+          sx={{ display: { md: "block", xs: "none" } }}
+          // component="span"
+        >
           <SideBar />
         </Grid>
 
-        <Grid item md={5} sm={7} xs={9}>
+        <Grid
+          item
+          md={5}
+          sm={7}
+          xs={9}
+          // component="span"
+        >
           {posts &&
             posts.map((post) => {
               return <Post key={post.id} post={post} />;
             })}
         </Grid>
 
-        <Grid item md={3} sx={{ display: { md: "block", xs: "none" } }}>
-          <RightBar posts={{ getAllPosts }} />
+        <Grid
+          item
+          md={3}
+          sx={{ display: { md: "block", xs: "none" } }}
+          // component="span"
+        >
+          <RightBar />
         </Grid>
       </Grid>
     </div>

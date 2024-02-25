@@ -8,9 +8,9 @@ const register = async (req, res) => {
 POST http://localhost:5000/users/register
 
 {
-    "email": "ss",
+    "email": "bugger@gmail.com",
     "user_name": "Bugger",
-    "password": "ss",
+    "password": "Bug_123456",
     "image": "http://res.cloudinary.com/dpbh42kjy/image/upload/v1708864871/kk9y6ycii6xwvezxbvgx.jpg",
     "first_name": "Virus",
     "last_name": "Coder",
@@ -20,7 +20,8 @@ POST http://localhost:5000/users/register
     "school": "Erroring",
     "address": "CatchError",
     "city": "Throw",
-    "country": "Else"
+    "country": "Else",
+    "cover_photo": "http://res.cloudinary.com/dpbh42kjy/image/upload/v1708868452/gbjzxlonkhr629vgmfau.webp"
 }
 */
   //http://localhost:5000/users/register

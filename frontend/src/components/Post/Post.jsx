@@ -64,6 +64,7 @@ const Post = ({ post }) => {
     <Card
       variant="outlined"
       sx={{
+        marginBlock: "10px",
         minWidth: 300,
         "--Card-radius": (theme) => theme.vars.radius.xs,
       }}
@@ -139,12 +140,17 @@ const Post = ({ post }) => {
 
                 <Typography id="keep-mounted-modal-description" sx={{ mt: 6 }}>
                   <Link
-                    component="h1"
+                    component="span"
                     underline="none"
                     fontSize="16px"
                     sx={{ color: "black", my: 0.5 }}
                   >
-                    <Avatar sx={{ mr: 3 }} size="sm" src={post.image} />
+                    <Avatar
+                      component="span"
+                      sx={{ mr: 3 }}
+                      size="sm"
+                      src={post.image}
+                    />
                     {post.user_name}
                   </Link>
                 </Typography>
@@ -158,24 +164,26 @@ const Post = ({ post }) => {
             <SendOutlined />
           </IconButton>
         </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mx: 'auto' }}>
-              {[...Array(5)].map((_, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    borderRadius: '50%',
-                    width: `max(${6 - index}px, 3px)`,
-                    height: `max(${6 - index}px, 3px)`,
-                    bgcolor: index === 0 ? 'primary.solidBg' : 'background.level3',
-                  }}
-                />
-              ))}
-            </Box>
-            <Box sx={{ width: 0, display: 'flex', flexDirection: 'row-reverse' }}>
-              <IconButton variant="plain" color="neutral" size="sm">
-                <BookmarkBorderRoundedIcon />
-              </IconButton>
-            </Box>
+        <Box
+          sx={{ display: "flex", alignItems: "center", gap: 0.5, mx: "auto" }}
+        >
+          {[...Array(5)].map((_, index) => (
+            <Box
+              key={index}
+              sx={{
+                borderRadius: "50%",
+                width: `max(${6 - index}px, 3px)`,
+                height: `max(${6 - index}px, 3px)`,
+                bgcolor: index === 0 ? "primary.solidBg" : "background.level3",
+              }}
+            />
+          ))}
+        </Box>
+        <Box sx={{ width: 0, display: "flex", flexDirection: "row-reverse" }}>
+          <IconButton variant="plain" color="neutral" size="sm">
+            <BookmarkBorderRoundedIcon />
+          </IconButton>
+        </Box>
       </CardContent>
 
       <CardContent>
