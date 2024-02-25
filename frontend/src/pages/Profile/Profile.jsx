@@ -124,21 +124,29 @@ const Profile = () => {
                   sx={{ width: 80, height: 80 }}
                 />
               </Box>
+              
               {userProfile.bio}
-            </Item>
-            <Grid container>
+              <hr/>
+              <Grid container sx={{ paddingTop: "10px" }}>
               <Grid item xs={4}>
-                <Item>Followers
-                <h1>4</h1>
-                </Item>
+                
+                  Followers
+                  <h1>4</h1>
+                
               </Grid>
               <Grid item xs={4}>
-                <Item>Following</Item>
+                Following
+                <h1>0</h1>
               </Grid>
               <Grid item xs={4}>
-                <Item>Edit profile</Item>
+              Post
+              <h1>10</h1>
+
               </Grid>
+              <Button variant="outlined">Edit</Button>
             </Grid>
+            </Item>
+          
           </Grid>
           <Grid item xs={4}>
             <Item>
