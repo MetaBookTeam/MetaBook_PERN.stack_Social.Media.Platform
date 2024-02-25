@@ -91,40 +91,46 @@ const NavBar = () => {
   const [allUsers, setAllUsers] = useState([]);
   const getAllUser = async () => {
     try {
-      const user = await axios.get(
-        `http://localhost:5000/users`,
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
+      const user = await axios.get(`http://localhost:5000/users`, {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
       setAllUsers(user.data.result);
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getAllUser();
   }, []);
+
   const [filter, setFilter] = useState(allUsers);
   const handleFilter = (event) => {
     const value = event.target.value;
-    const filtered = allUsers.filter((allUsers) => allUsers.user_name.includes(value));
+    const filtered = allUsers.filter((allUsers) =>
+      allUsers.user_name.includes(value)
+    );
     setFilter(filtered);
   };
-  console.log(filter);
+
+  // console.log(filter);
+
   return (
     <AppBar position="sticky">
       <StyledToolbar>
-        <Typography variant="h6" sx={{ display: { xs: "none", sm: "block" } }}>
-         <NavLink className={"Home"} to={'/home'}>MetaBook</NavLink> 
+        <Typography variant="h6">
+          {/* <Typography variant="h6" sx={{ display: { xs: "none", sm: "block" } }}> */}
+          <NavLink className={"Home"} to={"/home"}>
+            MetaBook
+          </NavLink>
         </Typography>
-        <Pets sx={{ display: { xs: "block", sm: "none" } }} />
+        {/* <Pets sx={{ display: { xs: "block", sm: "none" } }} /> */}
         <Search>
           <InputBase onChange={handleFilter} placeholder="search..." />
         </Search>
-        
+
         <Icons>
           <Badge badgeContent={4} color="error">
             <Mail />
@@ -139,10 +145,7 @@ const NavBar = () => {
           />
         </Icons>
         <UserBox onClick={(e) => setOpen(true)}>
-          <Avatar
-            sx={{ width: 30, height: 30 }}
-            src={userProfile.image}
-          />
+          <Avatar sx={{ width: 30, height: 30 }} src={userProfile.image} />
           <Typography variant="span">{userProfile.user_name}</Typography>
         </UserBox>
       </StyledToolbar>
@@ -161,10 +164,13 @@ const NavBar = () => {
         }}
       >
         <MenuItem>
-          <NavLink className={"userInfo"} to={`/profile`}>Profile</NavLink>
+          <NavLink className={"userInfo"} to={`/profile`}>
+            Profile
+          </NavLink>
         </MenuItem>
         <MenuItem>
-          <NavLink className={"userInfo"}
+          <NavLink
+            className={"userInfo"}
             onClick={() => {
               dispatch(setLogout());
             }}

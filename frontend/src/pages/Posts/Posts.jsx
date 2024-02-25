@@ -56,24 +56,22 @@ export default function Posts() {
   const handleClose = () => setOpen(false);
   // End Modal new post
   const getAllPosts = async () => {
-  
-      try{
-        const result = await axios
-        .get("http://localhost:5000/posts", {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        })
-        if (result.data.success) {
-              setStatus(true);
-              dispatch(setPosts(result.data.result));
-            } else throw Error;
-      } catch(error){
-        if (!error.response.data.success) {
-              return setMessage(error.response.data.message);
-            }
-            setMessage("Error happened while Get Data, please try again");
+    try {
+      const result = await axios.get("http://localhost:5000/posts", {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
+      if (result.data.success) {
+        setStatus(true);
+        dispatch(setPosts(result.data.result));
+      } else throw Error;
+    } catch (error) {
+      if (!error.response.data.success) {
+        return setMessage(error.response.data.message);
       }
+      setMessage("Error happened while Get Data, please try again");
+    }
   };
 
   useEffect(() => {
@@ -131,14 +129,14 @@ export default function Posts() {
       </Modal>
 
       <Grid container spacing={2} direction="row" justifyContent="center">
-        <Grid item xs={3}>
+        <Grid item md={3} sx={{ display: { md: "block", xs: "none" } }}>
           <Item>
             <SideBar />
             <Add />
           </Item>
         </Grid>
 
-        <Grid item xs={5}>
+        <Grid item md={5} sm={7} xs={9}>
           {posts &&
             posts.map((post) => {
               return (
@@ -149,7 +147,7 @@ export default function Posts() {
             })}
         </Grid>
 
-        <Grid item xs={3}>
+        <Grid item md={3} sx={{ display: { md: "block", xs: "none" } }}>
           <Item>
             <RightBar />
           </Item>
