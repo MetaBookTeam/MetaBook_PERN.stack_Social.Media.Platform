@@ -29,6 +29,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between",
@@ -65,6 +66,25 @@ const UserBox = styled(Box)(({ theme }) => ({
 const NavBar = () => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
+  const [userProfile, setUserProfile] = useState([]);
+  const getUserById = async () => {
+    try {
+      const user = await axios.get(
+        `http://localhost:5000/users/${auth.userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      setUserProfile(...user.data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getUserById();
+  }, []);
   const [open, setOpen] = useState(false);
   return (
     <AppBar position="sticky">
@@ -85,16 +105,16 @@ const NavBar = () => {
           </Badge>
           <Avatar
             sx={{ width: 30, height: 30 }}
-            src="https://images.pexels.com/photos/846741/pexels-photo-846741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+            src={userProfile.image}
             onClick={(e) => setOpen(true)}
           />
         </Icons>
         <UserBox onClick={(e) => setOpen(true)}>
           <Avatar
             sx={{ width: 30, height: 30 }}
-            src="https://images.pexels.com/photos/846741/pexels-photo-846741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+            src={userProfile.image}
           />
-          <Typography variant="span">John</Typography>
+          <Typography variant="span">{userProfile.user_name}</Typography>
         </UserBox>
       </StyledToolbar>
       <Menu
