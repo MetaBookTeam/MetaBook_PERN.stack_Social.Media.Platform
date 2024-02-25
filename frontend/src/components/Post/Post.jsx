@@ -1,5 +1,7 @@
-import { useState } from "react";
 import * as React from "react";
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
+
 import AspectRatio from "@mui/joy/AspectRatio";
 import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
@@ -19,10 +21,10 @@ import SendOutlined from "@mui/icons-material/SendOutlined";
 import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
 import Grid from "@mui/material/Grid";
-import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 
-import { NavLink } from "react-router-dom";
+import { styled } from "@mui/material/styles";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -99,96 +101,56 @@ const Post = ({ post }) => {
         <Typography fontWeight="lg">
           <NavLink to={`/page/${post.user_id}`}>{post.user_name}</NavLink>
         </Typography>
+        <br />
 
-        {/* <IconButton variant="plain" color="neutral" size="sm" sx={{ ml: 'auto' }}>
-              <MoreHoriz />
-            </IconButton> */}
-      </CardContent>
-      <CardOverflow>
-        <AspectRatio>
-          <img src={post.photo_url} alt="" loading="lazy" />
-        </AspectRatio>
-      </CardOverflow>
-      <CardContent
-        orientation="horizontal"
-        sx={{ alignItems: "center", mx: -1 }}
-      >
-        <Box sx={{ width: 0, display: "flex", gap: 0.5 }}>
-          <IconButton variant="plain" color="neutral" size="sm">
-            {/* <Button></Button> */}
-            <FavoriteBorder />
-            <Modal
-              keepMounted
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="keep-mounted-modal-title"
-              aria-describedby="keep-mounted-modal-description"
-            >
-              <Box sx={style}>
-                <Typography
-                  id="keep-mounted-modal-title"
-                  variant="h6"
-                  component="h2"
-                  textAlign={"center"}
-                >
-                  Likes
-                  <hr />
-                </Typography>
-                {/* {posts.map((elem,ind)=> {
-                      
-                })} */}
-
-                <Typography id="keep-mounted-modal-description" sx={{ mt: 6 }}>
-                  <Link
-                    component="span"
-                    underline="none"
-                    fontSize="16px"
-                    sx={{ color: "black", my: 0.5 }}
-                  >
-                    <Avatar
-                      component="span"
-                      sx={{ mr: 3 }}
-                      size="sm"
-                      src={post.image}
-                    />
-                    {post.user_name}
-                  </Link>
-                </Typography>
-              </Box>
-            </Modal>
-          </IconButton>
-          <IconButton variant="plain" color="neutral" size="sm">
-            <ModeCommentOutlined />
-          </IconButton>
-          <IconButton variant="plain" color="neutral" size="sm">
-            <SendOutlined />
-          </IconButton>
-        </Box>
-        <Box
-          sx={{ display: "flex", alignItems: "center", gap: 0.5, mx: "auto" }}
+        {/* <IconButton
+          variant="plain"
+          color="neutral"
+          size="sm"
+          sx={{ ml: "auto" }}
+        > */}
+        <Link
+          component="button"
+          underline="none"
+          fontSize="10px"
+          sx={{ color: "text.tertiary", my: 0.5, ml: "auto" }}
         >
-          {[...Array(5)].map((_, index) => (
-            <Box
-              key={index}
-              sx={{
-                borderRadius: "50%",
-                width: `max(${6 - index}px, 3px)`,
-                height: `max(${6 - index}px, 3px)`,
-                bgcolor: index === 0 ? "primary.solidBg" : "background.level3",
-              }}
-            />
-          ))}
-        </Box>
-        <Box sx={{ width: 0, display: "flex", flexDirection: "row-reverse" }}>
-          <IconButton variant="plain" color="neutral" size="sm">
-            <BookmarkBorderRoundedIcon />
-          </IconButton>
-        </Box>
+          {post.created_at}
+        </Link>
+        {/* </IconButton> */}
       </CardContent>
+
+      {post.photo_url && (
+        <CardOverflow>
+          <AspectRatio>
+            <img src={post.photo_url} alt="" loading="lazy" />
+          </AspectRatio>
+        </CardOverflow>
+      )}
 
       <CardContent>
-        <Grid container>
-          <Grid item xs={3}>
+        {/* <Paper sx={{ padding: "10px" }}> */}
+        <Typography fontSize="sm" marginBottom={2}>
+          <Link
+            component="button"
+            color="neutral"
+            fontWeight="lg"
+            textColor="text.primary"
+          ></Link>{" "}
+          {post.content}
+        </Typography>
+        {/* </Paper> */}
+        <hr />
+        <Grid
+          container
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Grid container item alignItems="center" xs={4}>
+            <IconButton variant="plain" color="neutral" size="sm">
+              <FavoriteBorder />
+            </IconButton>
             <Link
               onClick={likeModel}
               component="button"
@@ -200,7 +162,17 @@ const Post = ({ post }) => {
               {post.likes} Likes
             </Link>
           </Grid>
-          <Grid item xs={4}>
+
+          <Grid
+            container
+            item
+            justifyContent="center"
+            alignItems="center"
+            xs={4}
+          >
+            <IconButton variant="plain" color="neutral" size="sm">
+              <ModeCommentOutlined />
+            </IconButton>
             <Link
               onClick={commentsModel}
               component="button"
@@ -212,7 +184,17 @@ const Post = ({ post }) => {
               {post.comments} comments
             </Link>
           </Grid>
-          <Grid item xs={4}>
+
+          <Grid
+            container
+            item
+            justifyContent="right"
+            alignItems="center"
+            xs={4}
+          >
+            <IconButton variant="plain" color="neutral" size="sm">
+              <SendOutlined />
+            </IconButton>
             <Link
               onClick={sharesModel}
               component="button"
@@ -225,29 +207,35 @@ const Post = ({ post }) => {
             </Link>
           </Grid>
         </Grid>
-        <Typography fontSize="sm">
-          <Link
-            component="button"
-            color="neutral"
-            fontWeight="lg"
-            textColor="text.primary"
-          ></Link>{" "}
-          {post.content}
-        </Typography>
-
-        <Link
-          component="button"
-          underline="none"
-          fontSize="10px"
-          sx={{ color: "text.tertiary", my: 0.5 }}
-        >
-          {/* {post.created_at} */}
-          DAYS AGO
-        </Link>
       </CardContent>
+
+      {/* <CardContent
+        orientation="horizontal"
+        sx={{ alignItems: "center", mx: -1 }}
+      >
+        <Box
+          sx={{ display: "flex", gap: 0.5, justifyContent: "space_between" }}
+        >
+          <IconButton variant="plain" color="neutral" size="sm">
+            <FavoriteBorder />
+          </IconButton>
+          <IconButton variant="plain" color="neutral" size="sm">
+            <ModeCommentOutlined />
+          </IconButton>
+          <IconButton variant="plain" color="neutral" size="sm">
+            <SendOutlined />
+          </IconButton>
+        </Box>
+      </CardContent> */}
+
       <CardContent orientation="horizontal" sx={{ gap: 1 }}>
         <IconButton size="sm" variant="plain" color="neutral" sx={{ ml: -1 }}>
           <Face />
+          {/* <Avatar
+            size="sm"
+            src={post.image}
+            // sx={{ p: 0.5, border: '2px solid', borderColor: 'background.body' }}
+          /> */}
         </IconButton>
         <Input
           variant="plain"
@@ -265,6 +253,48 @@ const Post = ({ post }) => {
           Post
         </Link>
       </CardContent>
+
+      {/* //* ///////////////////////////// */}
+      {/* //* ///////////////////////////// */}
+      {/* //* Modal /////////////////////// */}
+      {/* //* ///////////////////////////// */}
+      {/* //* ///////////////////////////// */}
+
+      <Modal
+        keepMounted
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="keep-mounted-modal-title"
+        aria-describedby="keep-mounted-modal-description"
+      >
+        <Box sx={style}>
+          <Typography
+            id="keep-mounted-modal-title"
+            variant="h6"
+            component="h2"
+            textAlign={"center"}
+          >
+            Likes
+            <hr />
+          </Typography>
+          <Typography id="keep-mounted-modal-description" sx={{ mt: 6 }}>
+            <Link
+              component="span"
+              underline="none"
+              fontSize="16px"
+              sx={{ color: "black", my: 0.5 }}
+            >
+              <Avatar
+                component="span"
+                sx={{ mr: 3 }}
+                size="sm"
+                src={post.image}
+              />
+              {post.user_name}
+            </Link>
+          </Typography>
+        </Box>
+      </Modal>
     </Card>
   );
 };
