@@ -15,7 +15,6 @@ const Main = () => {
   const [mode, setMode] = useState("light");
   const Navigation = useNavigate();
   const auth = useSelector((state) => state.auth);
-  console.log(auth);
   
   useEffect(() => {
     if(auth.token) {

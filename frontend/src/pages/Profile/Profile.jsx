@@ -199,59 +199,13 @@ const Profile = () => {
             </Item>
           </Grid>
           <Grid item xs={8}>
-            <Item>
-              <h2>New Post</h2>
-
-              <Button onClick={handleOpen}>What's on your mind</Button>
-              <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                open={open}
-                onClose={handleClose}
-                closeAfterTransition
-                slots={{ backdrop: Backdrop }}
-                slotProps={{
-                  backdrop: {
-                    timeout: 500,
-                  },
-                }}
-              >
-                <Fade in={open}>
-                  <Box sx={style}>
-                    <Typography
-                      id="transition-modal-title"
-                      variant="h6"
-                      component="h2"
-                    >
-                      Create new post
-                    </Typography>
-                    <Typography
-                      id="transition-modal-description"
-                      sx={{ mt: 2 }}
-                    >
-                      <TextField
-                        id="outlined-basic"
-                        // onChange={(e) => {
-                        //   setContent(e.target.value);
-                        // }}
-                        label="Content"
-                        variant="outlined"
-                      />
-                    </Typography>
-                    <Button onClick={addNewPost}>Add</Button>
-                  </Box>
-                </Fade>
-              </Modal>
-            </Item>
-            <Grid item xs={12}>
-              {postProfile ? (
+            {postProfile ? (
                 postProfile.map((elem) => {
                   return <Item>{elem.content} </Item>;
                 })
               ) : (
-                <center>Dont have any post</center>
+                <Item>You do not have any post </Item>
               )}
-            </Grid>
           </Grid>
         </Grid>
         <Add/>
