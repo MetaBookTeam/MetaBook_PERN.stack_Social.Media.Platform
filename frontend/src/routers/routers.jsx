@@ -14,7 +14,7 @@ import Posts from "../pages/Posts/Posts";
 import Page from "../pages/Page/Page";
 
 import Profile from "../pages/Profile/Profile";
-
+import FriendPage from '../pages/FriendPage/FriendPage'
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +36,10 @@ export const router = createBrowserRouter([
       {
         path:"/pages",
         element:<Page/>
+      },
+      {
+        path: "/page/:user_id", // This for Friend profile
+        element: <FriendPage />,
       },
       {
         path: "help",
