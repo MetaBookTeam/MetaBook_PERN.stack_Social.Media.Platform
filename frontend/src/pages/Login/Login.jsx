@@ -59,7 +59,7 @@ export default function Login() {
         dispatch(setUserId(result.data.userId));
 
         setTimeout(() => {
-          navigate("/home");
+          navigate("/");
         }, 2000);
       } else throw Error;
     } catch (error) {

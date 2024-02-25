@@ -212,6 +212,21 @@ Minimum eight characters, at least one uppercase letter, one lowercase letter, o
       setUserNameMessage("User Name is not valid!");
     }
 
+    console.log({
+      first_name: data.get("first_name"),
+      last_name: data.get("last_name"),
+      user_name: data.get("user_name").toLowerCase(),
+      email: data.get("email").toLowerCase(),
+      password: data.get("password"),
+      image: imageUrl,
+      school: data.get("school"),
+      gender: data.get("gender"),
+      birthday: data.get("birthday"),
+      phone_number: phoneNumber,
+      city: cityName,
+      state: stateName,
+      country: countryName,
+    });
     if (!passwordMatched || !passwordMatched || !validEmail || !validUserName)
       throw new Error();
 

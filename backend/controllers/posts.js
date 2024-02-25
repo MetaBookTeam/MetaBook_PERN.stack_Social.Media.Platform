@@ -72,7 +72,7 @@ GET http://localhost:5000/posts
       coalesce(c.total_comments, 0) as comments,
       coalesce(s.total_shares, 0) as shares
       from posts p
-      full outer join users on users.id=p.user_id
+      inner join users on users.id=p.user_id
       left join cte_likes l
         on p.id = l.post_id
       left join cte_comments c

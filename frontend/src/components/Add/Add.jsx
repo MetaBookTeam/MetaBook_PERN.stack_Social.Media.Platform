@@ -23,7 +23,7 @@ import { Box } from "@mui/system";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { addPost } from "../../Service/redux/reducers/Posts/postsSlice";
-const SytledModal = styled(Modal)({
+const StyledModal = styled(Modal)({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -89,14 +89,15 @@ const Add = () => {
         sx={{
           position: "fixed",
           bottom: 20,
-          left: { xs: "calc(50% - 25px)", md: 30 },
+          left: 20,
+          // left: { xs: "calc(50% - 25px)", md: 30 },
         }}
       >
         <Fab color="primary" aria-label="add">
           <AddIcon />
         </Fab>
       </Tooltip>
-      <SytledModal
+      <StyledModal
         open={open}
         onClose={(e) => setOpen(false)}
         aria-labelledby="modal-modal-title"
@@ -147,7 +148,7 @@ const Add = () => {
             </Button>
           </ButtonGroup>
         </Box>
-      </SytledModal>
+      </StyledModal>
     </>
   );
 };
