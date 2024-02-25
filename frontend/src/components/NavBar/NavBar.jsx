@@ -86,6 +86,34 @@ const NavBar = () => {
     getUserById();
   }, []);
   const [open, setOpen] = useState(false);
+
+  // Search Box
+  const [allUsers, setAllUsers] = useState([]);
+  const getAllUser = async () => {
+    try {
+      const user = await axios.get(
+        `http://localhost:5000/users`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      setAllUsers(user.data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getAllUser();
+  }, []);
+  const [filter, setFilter] = useState(allUsers);
+  const handleFilter = (event) => {
+    const value = event.target.value;
+    const filtered = allUsers.filter((allUsers) => allUsers.user_name.includes(value));
+    setFilter(filtered);
+  };
+  console.log(filter);
   return (
     <AppBar position="sticky">
       <StyledToolbar>
@@ -94,8 +122,9 @@ const NavBar = () => {
         </Typography>
         <Pets sx={{ display: { xs: "block", sm: "none" } }} />
         <Search>
-          <InputBase placeholder="search..." />
+          <InputBase onChange={handleFilter} placeholder="search..." />
         </Search>
+        
         <Icons>
           <Badge badgeContent={4} color="error">
             <Mail />

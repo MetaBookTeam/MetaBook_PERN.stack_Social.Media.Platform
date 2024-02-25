@@ -67,7 +67,6 @@ export default function Posts() {
           setStatus(true);
           // setMessage(results.data.message);
           dispatch(setPosts(results.data.result));
-          console.log("Hello ", results.data.result);
         } else throw Error;
       })
       .catch((error) => {
