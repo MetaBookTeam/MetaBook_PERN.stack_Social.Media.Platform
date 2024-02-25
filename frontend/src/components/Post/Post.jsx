@@ -99,16 +99,86 @@ const Post = ({ post }) => {
         <Typography fontWeight="lg">
           <NavLink to={`/page/${post.user_id}`}>{post.user_name}</NavLink>
         </Typography>
+        <br />
 
-        {/* <IconButton variant="plain" color="neutral" size="sm" sx={{ ml: 'auto' }}>
-              <MoreHoriz />
-            </IconButton> */}
+        {/* <IconButton
+          variant="plain"
+          color="neutral"
+          size="sm"
+          sx={{ ml: "auto" }}
+        > */}
+        <Link
+          component="button"
+          underline="none"
+          fontSize="10px"
+          sx={{ color: "text.tertiary", my: 0.5, ml: "auto" }}
+        >
+          {post.created_at}
+        </Link>
+        {/* </IconButton> */}
       </CardContent>
-      <CardOverflow>
-        <AspectRatio>
-          <img src={post.photo_url} alt="" loading="lazy" />
-        </AspectRatio>
-      </CardOverflow>
+
+      {post.photo_url && (
+        <CardOverflow>
+          <AspectRatio>
+            <img src={post.photo_url} alt="" loading="lazy" />
+          </AspectRatio>
+        </CardOverflow>
+      )}
+
+      <CardContent>
+        {/* <Paper sx={{ padding: "10px" }}> */}
+        <Typography fontSize="sm">
+          <Link
+            component="button"
+            color="neutral"
+            fontWeight="lg"
+            textColor="text.primary"
+          ></Link>{" "}
+          {post.content}
+        </Typography>
+        {/* </Paper> */}
+
+        <Grid container>
+          <Grid item xs={4}>
+            <Link
+              onClick={likeModel}
+              component="button"
+              underline="none"
+              fontSize="sm"
+              fontWeight="lg"
+              textColor="text.primary"
+            >
+              {post.likes} Likes
+            </Link>
+          </Grid>
+          <Grid item xs={4}>
+            <Link
+              onClick={commentsModel}
+              component="button"
+              underline="none"
+              fontSize="sm"
+              fontWeight="lg"
+              textColor="text.primary"
+            >
+              {post.comments} comments
+            </Link>
+          </Grid>
+          <Grid item xs={4}>
+            <Link
+              onClick={sharesModel}
+              component="button"
+              underline="none"
+              fontSize="sm"
+              fontWeight="lg"
+              textColor="text.primary"
+            >
+              {post.shares} shares
+            </Link>
+          </Grid>
+        </Grid>
+      </CardContent>
+
       <CardContent
         orientation="horizontal"
         sx={{ alignItems: "center", mx: -1 }}
@@ -164,10 +234,11 @@ const Post = ({ post }) => {
             <SendOutlined />
           </IconButton>
         </Box>
+        {/*
         <Box
           sx={{ display: "flex", alignItems: "center", gap: 0.5, mx: "auto" }}
         >
-          {[...Array(5)].map((_, index) => (
+           {[...Array(5)].map((_, index) => (
             <Box
               key={index}
               sx={{
@@ -177,74 +248,14 @@ const Post = ({ post }) => {
                 bgcolor: index === 0 ? "primary.solidBg" : "background.level3",
               }}
             />
-          ))}
-        </Box>
+          ))}  </Box>
         <Box sx={{ width: 0, display: "flex", flexDirection: "row-reverse" }}>
           <IconButton variant="plain" color="neutral" size="sm">
             <BookmarkBorderRoundedIcon />
           </IconButton>
-        </Box>
+        </Box> */}
       </CardContent>
 
-      <CardContent>
-        <Grid container>
-          <Grid item xs={3}>
-            <Link
-              onClick={likeModel}
-              component="button"
-              underline="none"
-              fontSize="sm"
-              fontWeight="lg"
-              textColor="text.primary"
-            >
-              {post.likes} Likes
-            </Link>
-          </Grid>
-          <Grid item xs={4}>
-            <Link
-              onClick={commentsModel}
-              component="button"
-              underline="none"
-              fontSize="sm"
-              fontWeight="lg"
-              textColor="text.primary"
-            >
-              {post.comments} comments
-            </Link>
-          </Grid>
-          <Grid item xs={4}>
-            <Link
-              onClick={sharesModel}
-              component="button"
-              underline="none"
-              fontSize="sm"
-              fontWeight="lg"
-              textColor="text.primary"
-            >
-              {post.shares} shares
-            </Link>
-          </Grid>
-        </Grid>
-        <Typography fontSize="sm">
-          <Link
-            component="button"
-            color="neutral"
-            fontWeight="lg"
-            textColor="text.primary"
-          ></Link>{" "}
-          {post.content}
-        </Typography>
-
-        <Link
-          component="button"
-          underline="none"
-          fontSize="10px"
-          sx={{ color: "text.tertiary", my: 0.5 }}
-        >
-          {/* {post.created_at} */}
-          DAYS AGO
-        </Link>
-      </CardContent>
       <CardContent orientation="horizontal" sx={{ gap: 1 }}>
         <IconButton size="sm" variant="plain" color="neutral" sx={{ ml: -1 }}>
           <Face />
