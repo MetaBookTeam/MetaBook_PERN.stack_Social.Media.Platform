@@ -6,10 +6,12 @@ import axios from "axios";
 // import GeoLocation from "../../components/GeoLocation/GeoLocation";
 import GeoLocationHandler from "../../components/GeoLocation/GeoLocationHandler";
 
+import Alert from "@mui/material/Alert";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
+import CheckIcon from "@mui/icons-material/Check";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import FilledInput from "@mui/material/FilledInput";
@@ -24,6 +26,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Link from "@mui/material/Link";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import MenuItem from "@mui/material/MenuItem";
+import Modal from "@mui/material/Modal";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
@@ -50,6 +53,19 @@ const genders = [
     label: "Female",
   },
 ];
+
+//* modal style /////////////////////////
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "75vw",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -126,32 +142,76 @@ export default function Signup() {
   const [cityName, setCityName] = useState("");
 
   //===============================================================
+  //* Modal registration rules
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  //===============================================================
 
   //* signupHandler
-  const [userNameMessage, setUserNameMessage] = useState("ddd");
-  const [emailMessage, setEmailMessage] = useState("ddd");
-  const [passwordMessage, setPasswordMessage] = useState("ddd");
+  const [passwordMessage, setPasswordMessage] = useState("");
+  const [passwordMatchMessage, setPasswordMatchMessage] = useState("");
+  const [userNameMessage, setUserNameMessage] = useState("");
+  const [emailMessage, setEmailMessage] = useState("");
 
   const signupHandler = async (event) => {
     event.preventDefault();
+    setPasswordMessage("");
+    setPasswordMatchMessage("");
+    setEmailMessage("");
+    setUserNameMessage("");
+
     const data = new FormData(event.currentTarget);
 
     //* passwordValidation
-    // if (data.get("password") !== data.get("re_password"))
-    //   throw new Error("password not matched");
-    if (data.get("password") !== data.get("re_password")) {
-      setPasswordMessage("password not matched");
+    /* 
+Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:
+*/
+    const passwordValidation = (str) =>
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_=+-])[A-Za-z\d@$!%*?&_=+-]{8,}$/.test(
+        str
+      );
+
+    const validPassword = passwordValidation(data.get("password"));
+    if (!validPassword) {
+      setPasswordMessage("password is not valid!");
+    }
+
+    const passwordMatched = data.get("password") === data.get("re_password");
+    if (!passwordMatched) {
+      setPasswordMatchMessage("password not matched");
     }
 
     //* emailValidation
+    const emailValidation = (str) =>
+      /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/.test(str);
+
+    const validEmail = emailValidation(data.get("email").toLowerCase());
+    if (!validEmail) {
+      setEmailMessage("email is not valid!");
+    }
 
     //* usernameValidation
+    /* 
+    a valid username according to the following rules:
+1. The username is between 4 and 25 characters.
+2. It must start with a letter.
+3. It can only contain letters, numbers, and the underscore character.
+4. It cannot end with an underscore character.
+    */
     const usernameValidation = (str) =>
       /^(?=[\w]{4,25}$)[^0-9_].*[^_]$/.test(str);
 
-    if (!usernameValidation(data.get("user_name").toLowerCase())) {
-      setUserNameMessage("User Name not valid !");
+    const validUserName = usernameValidation(
+      data.get("user_name").toLowerCase()
+    );
+    if (!validUserName) {
+      setUserNameMessage("User Name is not valid!");
     }
+
+    if (!passwordMatched || !passwordMatched || !validEmail || !validUserName)
+      throw new Error();
 
     try {
       const result = await axios.post("http://localhost:5000/users/register", {
@@ -170,6 +230,11 @@ export default function Signup() {
         country: countryName,
       });
       if (result.data) {
+        setPasswordMessage("");
+        passwordMatchMessage("");
+        setEmailMessage("");
+        setUserNameMessage("");
+
         console.log("result.data.result", result.data.result);
         setStatus(true);
         setMessage(result.data.message);
@@ -178,9 +243,10 @@ export default function Signup() {
     } catch (error) {
       console.log(error);
       if (error.response && error.response.data) {
-        setStatus(true);
+        setStatus(false);
         return setMessage(error.response.data.message);
       }
+      setStatus(false);
       setMessage("Error happened while Signup, please try again");
     }
   };
@@ -324,6 +390,9 @@ export default function Signup() {
                         label="Password"
                         name="password"
                       />
+                      <FormHelperText sx={{ color: "red" }}>
+                        {passwordMessage && passwordMessage}
+                      </FormHelperText>
                     </FormControl>
                   </Grid>
 
@@ -357,7 +426,7 @@ export default function Signup() {
                         // helperText="Incorrect entry."
                       />
                       <FormHelperText sx={{ color: "red" }}>
-                        {passwordMessage && passwordMessage}
+                        {passwordMatchMessage && passwordMatchMessage}
                       </FormHelperText>
                     </FormControl>
                   </Grid>
@@ -505,21 +574,64 @@ export default function Signup() {
                   Sign up
                 </Button>
                 <Grid container>
-                  <Grid item xs></Grid>
+                  <Grid item xs>
+                    <Link href="#" variant="body2" onClick={handleOpen}>
+                      Registration rules
+                    </Link>
+                  </Grid>
                   <Grid item>
                     <Link href="/login" variant="body2">
                       {"already have an account? Login"}
                     </Link>
                   </Grid>
                 </Grid>
+
                 {status
-                  ? message && <div className="SuccessMessage">{message}</div>
-                  : message && <div className="ErrorMessage">{message}</div>}
+                  ? message && <Alert severity="success">{message}</Alert>
+                  : message && <Alert severity="error">{message}</Alert>}
               </Box>
             </Box>
           </Grid>
         </Grid>
       </ThemeProvider>
+
+      {/* //* /////////////////////////////////////////////////// */}
+      {/* //* Modal registration rules */}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Registration Rules
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            <b>User Name Validation: </b>
+            <br />
+            1. The username is between 4 and 25 characters.
+            <br />
+            2. It must start with a letter. <br />
+            3. It can only contain letters, numbers, and the underscore
+            character. <br />
+            4. It cannot end with an underscore character.
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            <b>Password Validation:</b> <br />
+            at least: <br />
+            1. Eight characters.
+            <br />
+            2. One uppercase letter.
+            <br />
+            3. One lowercase letter.
+            <br />
+            4. One number.
+            <br />
+            5. One special character:
+          </Typography>
+        </Box>
+      </Modal>
     </>
   );
 }
