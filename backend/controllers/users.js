@@ -8,19 +8,19 @@ const register = async (req, res) => {
 POST http://localhost:5000/users/register
 
 {
-    "email": "user3@gmail.com",
-    "user_name": "user3",
-    "password": "123456",
-    "image": "img_url",
-    "first_name": "fName",
-    "last_name": "lName",
+    "email": "ss",
+    "user_name": "Bugger",
+    "password": "ss",
+    "image": "http://res.cloudinary.com/dpbh42kjy/image/upload/v1708864871/kk9y6ycii6xwvezxbvgx.jpg",
+    "first_name": "Virus",
+    "last_name": "Coder",
     "birthday": "2000-01-01",
     "gender": "male",
-    "phone_number": "0790000004",
-    "school": "school",
-    "city": "Amman",
-    "state": "Amman",
-    "country": "Jordan"
+    "phone_number": "0790000006",
+    "school": "Erroring",
+    "address": "CatchError",
+    "city": "Throw",
+    "country": "Else"
 }
 */
   //http://localhost:5000/users/register

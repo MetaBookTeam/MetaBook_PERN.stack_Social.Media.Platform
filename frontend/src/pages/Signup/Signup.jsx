@@ -115,7 +115,15 @@ export default function Signup() {
       .post("https://api.cloudinary.com/v1_1/dpbh42kjy/image/upload", data)
       .then((data) => {
         // setUrl(data.data.secure_url);
+        console.log(data.data.url);
         setImageUrl(data.data.url);
+
+
+
+
+
+
+
         setUploadMessage("Image Uploaded Successfully");
       })
       .catch((err) => {
