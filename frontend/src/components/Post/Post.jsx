@@ -34,7 +34,6 @@ const style = {
 
 
 const Post = ({ post }) => {
-
   const [open, setOpen] = useState(false);
   const likeModel = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -73,7 +72,7 @@ const Post = ({ post }) => {
           <Avatar
             size="sm"
             src={post.image}
-            sx={{ p: 0.5, border: '2px solid', borderColor: 'background.body' }}
+            // sx={{ p: 0.5, border: '2px solid', borderColor: 'background.body' }}
           />
         </Box>
         <Typography fontWeight="lg"> 
