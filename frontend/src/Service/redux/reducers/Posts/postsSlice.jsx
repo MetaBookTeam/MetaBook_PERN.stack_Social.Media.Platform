@@ -25,8 +25,12 @@ export const postsSlice = createSlice({
     setPostsLikesById :(state,action)=>{
       console.log(state);
     },
-    ///
-    
+      deletePost: (state, action) => {
+        state.posts = state.posts.filter((post) => {
+          // the payload in this case is the id
+          return post.id !== action.payload;
+        });
+    },  
   },
 });
 

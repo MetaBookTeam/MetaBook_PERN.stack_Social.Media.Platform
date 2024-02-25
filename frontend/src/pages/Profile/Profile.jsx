@@ -96,24 +96,7 @@ const Profile = () => {
           },
         }
       );
-      setPostProfile(...post.data.result);
-      // console.log(post.data.result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getPostById();
-  }, []);
-  const addNewPost = async () => {
-    try {
-      const post = await axios.get(`http://localhost:5000/posts`, {
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
-        },
-      });
-      useDispatch(addPost());
-      console.log(content);
+      setPostProfile(post.data.result);
       console.log(post.data.result);
     } catch (error) {
       console.log(error);
@@ -122,6 +105,23 @@ const Profile = () => {
   useEffect(() => {
     getPostById();
   }, []);
+  // const addNewPost = async () => {
+  //   try {
+  //     const post = await axios.get(`http://localhost:5000/posts`, {
+  //       headers: {
+  //         Authorization: `Bearer ${auth.token}`,
+  //       },
+  //     });
+  //     useDispatch(addPost());
+  //     console.log(content);
+  //     console.log(post.data.result);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   getPostById();
+  // }, []);
   return (
     <>
       <Container>
