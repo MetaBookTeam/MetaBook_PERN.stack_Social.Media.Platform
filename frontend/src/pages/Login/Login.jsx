@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
+import Alert from "@mui/material/Alert";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -45,10 +46,6 @@ export default function Login() {
   const login = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
 
     try {
       const result = await axios.post("http://localhost:5000/users/login", {
@@ -61,14 +58,16 @@ export default function Login() {
         dispatch(setLogin(result.data.token));
         dispatch(setUserId(result.data.userId));
 
-        navigate("/");
-
+        setTimeout(() => {
+          navigate("/home");
+        }, 2000);
       } else throw Error;
     } catch (error) {
       if (error.response && error.response.data) {
-        setStatus(true);
+        setStatus(false);
         return setMessage(error.response.data.message);
       }
+      setStatus(false);
       setMessage("Error happened while Login, please try again");
     }
   };
@@ -77,9 +76,9 @@ export default function Login() {
 
   useEffect(() => {
     if (auth.isLoggedIn) {
-
-      // navigate("/");
-
+      setTimeout(() => {
+        navigate("/home");
+      }, 2000);
     }
   }, [auth.isLoggedIn]);
 
@@ -129,9 +128,7 @@ export default function Login() {
                 <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
-
                 Login
-
               </Typography>
               <Box
                 component="form"
@@ -185,8 +182,8 @@ export default function Login() {
                   </Grid>
                 </Grid>
                 {status
-                  ? message && <div className="SuccessMessage">{message}</div>
-                  : message && <div className="ErrorMessage">{message}</div>}
+                  ? message && <Alert severity="success">{message}</Alert>
+                  : message && <Alert severity="error">{message}</Alert>}
               </Box>
             </Box>
           </Grid>

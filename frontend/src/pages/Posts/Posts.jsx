@@ -135,8 +135,8 @@ export default function Posts() {
       <Grid container spacing={2} direction="row" justifyContent="center">
         <Grid item xs={3}>
           <Item>
-            <SideBar/>
-            <Add/>
+            <SideBar />
+            <Add />
           </Item>
         </Grid>
 
@@ -153,7 +153,7 @@ export default function Posts() {
 
         <Grid item xs={3}>
           <Item>
-            <RightBar/>
+            <RightBar />
           </Item>
         </Grid>
       </Grid>
