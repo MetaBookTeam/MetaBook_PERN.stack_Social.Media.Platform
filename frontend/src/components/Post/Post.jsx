@@ -22,8 +22,7 @@ import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 
-
- import {NavLink} from 'react-router-dom'
+import { NavLink } from "react-router-dom";
 const style = {
   position: "absolute",
   top: "50%",
@@ -36,11 +35,11 @@ const style = {
   p: 4,
 };
 
-
-
 const Post = ({ post }) => {
   const [open, setOpen] = useState(false);
   const likeModel = () => setOpen(true);
+  const commentsModel = () => setOpen(true);
+  const sharesModel = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [postLike, setPostLike] = useState();
   const Item = styled(Paper)(({ theme }) => ({
@@ -56,7 +55,7 @@ const Post = ({ post }) => {
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 400,
-    bgcolor: "background.paper",
+    bgcolor: "white",
     border: "2px solid #000",
     boxShadow: 24,
     p: 4,
@@ -69,7 +68,6 @@ const Post = ({ post }) => {
         "--Card-radius": (theme) => theme.vars.radius.xs,
       }}
     >
-      
       <CardContent
         orientation="horizontal"
         sx={{ alignItems: "center", gap: 1 }}
@@ -97,8 +95,8 @@ const Post = ({ post }) => {
             // sx={{ p: 0.5, border: '2px solid', borderColor: 'background.body' }}
           />
         </Box>
-        <Typography fontWeight="lg"> 
-        <NavLink to={`/page/${post.user_id}`}>{post.user_name}</NavLink> 
+        <Typography fontWeight="lg">
+          <NavLink to={`/page/${post.user_id}`}>{post.user_name}</NavLink>
         </Typography>
 
         {/* <IconButton variant="plain" color="neutral" size="sm" sx={{ ml: 'auto' }}>
@@ -138,18 +136,17 @@ const Post = ({ post }) => {
                 {/* {posts.map((elem,ind)=> {
                       
                 })} */}
-              
+
                 <Typography id="keep-mounted-modal-description" sx={{ mt: 6 }}>
-                <Link
-                  component="h1"
-                  underline="none"
-                  fontSize="16px"
-                  sx={{ color: "black", my: 0.5 }}
-                >
-                  <Avatar sx={{ mr: 3 }} size="sm" src={post.image} />
-                  {post.user_name}
-              
-                </Link>
+                  <Link
+                    component="h1"
+                    underline="none"
+                    fontSize="16px"
+                    sx={{ color: "black", my: 0.5 }}
+                  >
+                    <Avatar sx={{ mr: 3 }} size="sm" src={post.image} />
+                    {post.user_name}
+                  </Link>
                 </Typography>
               </Box>
             </Modal>
@@ -161,7 +158,7 @@ const Post = ({ post }) => {
             <SendOutlined />
           </IconButton>
         </Box>
-        {/* <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mx: 'auto' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mx: 'auto' }}>
               {[...Array(5)].map((_, index) => (
                 <Box
                   key={index}
@@ -178,50 +175,47 @@ const Post = ({ post }) => {
               <IconButton variant="plain" color="neutral" size="sm">
                 <BookmarkBorderRoundedIcon />
               </IconButton>
-            </Box> */}
+            </Box>
       </CardContent>
-      
+
       <CardContent>
         <Grid container>
           <Grid item xs={3}>
-        <Link
-          onClick={likeModel}
-          component="button"
-          underline="none"
-          fontSize="sm"
-          fontWeight="lg"
-          textColor="text.primary"
-        
-        >
-          {post.likes} Likes
-        </Link>
-        </Grid>
-        <Grid item xs={4}>
-        <Link
-          onClick={likeModel}
-          component="button"
-          underline="none"
-          fontSize="sm"
-          fontWeight="lg"
-          textColor="text.primary"
-         
-        >
-          {post.comments} comments
-        </Link>
-        </Grid>
-        <Grid item xs={4}>
-        <Link
-          onClick={likeModel}
-          component="button"
-          underline="none"
-          fontSize="sm"
-          fontWeight="lg"
-          textColor="text.primary"
-         
-        >
-          {post.shares} Shares
-        </Link>
-        </Grid>
+            <Link
+              onClick={likeModel}
+              component="button"
+              underline="none"
+              fontSize="sm"
+              fontWeight="lg"
+              textColor="text.primary"
+            >
+              {post.likes} Likes
+            </Link>
+          </Grid>
+          <Grid item xs={4}>
+            <Link
+              onClick={commentsModel}
+              component="button"
+              underline="none"
+              fontSize="sm"
+              fontWeight="lg"
+              textColor="text.primary"
+            >
+              {post.comments} comments
+            </Link>
+          </Grid>
+          <Grid item xs={4}>
+            <Link
+              onClick={sharesModel}
+              component="button"
+              underline="none"
+              fontSize="sm"
+              fontWeight="lg"
+              textColor="text.primary"
+            >
+              {post.shares} shares
+            </Link>
+          </Grid>
         </Grid>
         <Typography fontSize="sm">
           <Link
@@ -259,16 +253,12 @@ const Post = ({ post }) => {
           //   }
           underline="none"
           role="button"
-
         >
-
           Post
         </Link>
       </CardContent>
     </Card>
   );
 };
-
-
 
 export default Post;
