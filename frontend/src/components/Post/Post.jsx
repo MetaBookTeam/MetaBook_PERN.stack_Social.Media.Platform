@@ -18,7 +18,7 @@ import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import SendOutlined from "@mui/icons-material/SendOutlined";
 import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
-
+ import {NavLink} from 'react-router-dom'
 const style = {
   position: "absolute",
   top: "50%",
@@ -34,7 +34,6 @@ const style = {
 
 
 const Post = ({ post }) => {
-  
 
   const [open, setOpen] = useState(false);
   const likeModel = () => setOpen(true);
@@ -77,7 +76,9 @@ const Post = ({ post }) => {
             sx={{ p: 0.5, border: '2px solid', borderColor: 'background.body' }}
           />
         </Box>
-        <Typography fontWeight="lg">{post.user_name}</Typography>
+        <Typography fontWeight="lg"> 
+        <NavLink to={`/page/${post.user_id}`}>{post.user_name}</NavLink> 
+        </Typography>
 
         {/* <IconButton variant="plain" color="neutral" size="sm" sx={{ ml: 'auto' }}>
               <MoreHoriz />
@@ -126,7 +127,7 @@ const Post = ({ post }) => {
                 >
                   <Avatar sx={{ mr: 3 }} size="sm" src={post.image} />
                   {post.user_name}
-               
+              
                 </Link>
                 </Typography>
               </Box>

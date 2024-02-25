@@ -67,7 +67,7 @@ GET http://localhost:5000/posts
           group by post_id
           )
       select p.id,p.created_at,users.image,users.user_name,
-      p.content,
+      p.content,p.user_id,
       coalesce(l.total_likes, 0) as likes, 
       coalesce(c.total_comments, 0) as comments,
       coalesce(s.total_shares, 0) as shares
