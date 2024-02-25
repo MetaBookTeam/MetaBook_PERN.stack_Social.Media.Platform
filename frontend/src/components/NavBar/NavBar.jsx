@@ -27,17 +27,21 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
+
 import { NavLink } from "react-router-dom";
+
 import axios from "axios";
+
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between",
 });
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
+
+import { useDispatch, useSelector } from "react-redux";
 import { setLogout } from "../../Service/redux/reducers/auth/authSlice";
+
 const Search = styled("div")(({ theme }) => ({
   backgroundColor: "white",
   padding: "0 10px",
@@ -66,6 +70,8 @@ const UserBox = styled(Box)(({ theme }) => ({
 const NavBar = () => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
+  // auth.isLoggedIn, auth.token, auth.userId;
+
   const [userProfile, setUserProfile] = useState([]);
   const getUserById = async () => {
     try {
@@ -85,6 +91,7 @@ const NavBar = () => {
   useEffect(() => {
     getUserById();
   }, []);
+  
   const [open, setOpen] = useState(false);
 
   // Search Box

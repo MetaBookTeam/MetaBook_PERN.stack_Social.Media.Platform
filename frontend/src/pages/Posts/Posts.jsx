@@ -128,29 +128,23 @@ export default function Posts() {
         </Fade>
       </Modal>
 
+      {/* //* Add new post button */}
+      <Add />
+
       <Grid container spacing={2} direction="row" justifyContent="center">
         <Grid item md={3} sx={{ display: { md: "block", xs: "none" } }}>
-          <Item>
-            <SideBar />
-            <Add />
-          </Item>
+          <SideBar />
         </Grid>
 
         <Grid item md={5} sm={7} xs={9}>
           {posts &&
             posts.map((post) => {
-              return (
-                <Item key={post.id}>
-                  <Post post={post} />
-                </Item>
-              );
+              return <Post key={post.id} post={post} />;
             })}
         </Grid>
 
         <Grid item md={3} sx={{ display: { md: "block", xs: "none" } }}>
-          <Item>
-            <RightBar />
-          </Item>
+          <RightBar posts={{ getAllPosts }} />
         </Grid>
       </Grid>
     </div>
