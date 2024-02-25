@@ -118,12 +118,6 @@ export default function Signup() {
         console.log(data.data.url);
         setImageUrl(data.data.url);
 
-
-
-
-
-
-
         setUploadMessage("Image Uploaded Successfully");
       })
       .catch((err) => {
