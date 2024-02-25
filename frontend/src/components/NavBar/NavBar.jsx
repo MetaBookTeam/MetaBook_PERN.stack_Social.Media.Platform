@@ -132,7 +132,7 @@ const NavBar = () => {
         }}
       >
         <MenuItem>
-          <NavLink className={"userInfo"} to={`/profile/${auth.userId}`}>Profile</NavLink>
+          <NavLink className={"userInfo"} to={`/profile`}>Profile</NavLink>
         </MenuItem>
         <MenuItem>
           <NavLink className={"userInfo"}

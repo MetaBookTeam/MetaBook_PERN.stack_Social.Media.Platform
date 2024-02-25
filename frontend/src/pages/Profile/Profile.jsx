@@ -86,10 +86,10 @@ const Profile = () => {
     getUserById();
   }, []);
 
-  const getPostById = async () => {
+  const getPostProfile = async () => {
     try {
       const post = await axios.get(
-        `http://localhost:5000/posts/${auth.userId}`,
+        `http://localhost:5000/posts/profile`,
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -103,25 +103,8 @@ const Profile = () => {
     }
   };
   useEffect(() => {
-    getPostById();
+    getPostProfile();
   }, []);
-  // const addNewPost = async () => {
-  //   try {
-  //     const post = await axios.get(`http://localhost:5000/posts`, {
-  //       headers: {
-  //         Authorization: `Bearer ${auth.token}`,
-  //       },
-  //     });
-  //     useDispatch(addPost());
-  //     console.log(content);
-  //     console.log(post.data.result);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   getPostById();
-  // }, []);
   return (
     <>
       <Container>
