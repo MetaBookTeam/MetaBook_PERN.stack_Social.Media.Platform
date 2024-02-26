@@ -1,8 +1,11 @@
-import { useDispatch, useSelector } from "react-redux";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import Stack from "@mui/material/Stack";
+
+import { useDispatch, useSelector } from "react-redux";
+
 import axios from "axios";
+
+import Stack from "@mui/material/Stack";
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
@@ -21,52 +24,57 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
+
 const FriendPage = () => {
-    const Demo = styled("div")(({ theme }) => ({
-        backgroundColor: theme.palette.background.paper,
-      }));
-    const Item = styled(Paper)(({ theme }) => ({
-        backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-        ...theme.typography.body2,
-        padding: theme.spacing(1),
-        textAlign: "center",
-        color: theme.palette.text.secondary,
-      }));
-      const style = {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: 400,
-        bgcolor: "background.paper",
-        border: "2px solid #000",
-        boxShadow: 24,
-        p: 4,
-      };
-      const [userProfile, setUserProfile] = useState();
-      
-      const getUserById = async () => {
-        try {
-          const user = await axios.get(
-            `http://localhost:5000/users/${auth.userId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${auth.token}`,
-              },
-            }
-          );
-          setUserProfile(...user.data.result);
-          console.log(user.data.result);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      useEffect(() => {
-        getUserById();
-      }, []);
+  const Demo = styled("div")(({ theme }) => ({
+    backgroundColor: theme.palette.background.paper,
+  }));
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+  }));
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+
+  const { userProfile } = useSelector((state) => state.users);
+  // users.users , users.userProfile;
+
+  // const [userProfile, setUserProfile] = useState();
+
+  // const getUserById = async () => {
+  //   try {
+  //     const user = await axios.get(
+  //       `http://localhost:5000/users/${auth.userId}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${auth.token}`,
+  //         },
+  //       }
+  //     );
+  //     setUserProfile(...user.data.result);
+  //     console.log(user.data.result);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   getUserById();
+  // }, []);
   return (
     <>
-       <Container>
+      <Container>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Item>
@@ -81,7 +89,7 @@ const FriendPage = () => {
               <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
                 <Avatar
                   alt="Remy Sharp"
-                //   src={userProfile.image}
+                  //   src={userProfile.image}
                   sx={{ width: 80, height: 80 }}
                 />
               </Box>
@@ -99,41 +107,41 @@ const FriendPage = () => {
                   <ListItem>
                     <ListItemText
                       primary="Email"
-                    //   secondary={
-                    //     secondary ? "Secondary text" : userProfile.email
-                    //   }
+                      //   secondary={
+                      //     secondary ? "Secondary text" : userProfile.email
+                      //   }
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemText
                       primary="Name"
-                    //   secondary={
-                    //     secondary ? "Secondary text" : userProfile.user_name
-                    //   }
+                      //   secondary={
+                      //     secondary ? "Secondary text" : userProfile.user_name
+                      //   }
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemText
                       primary="Phone"
-                    //   secondary={
-                    //     secondary ? "Secondary text" : userProfile.phone_number
-                    //   }
+                      //   secondary={
+                      //     secondary ? "Secondary text" : userProfile.phone_number
+                      //   }
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemText
                       primary="Address"
-                    //   secondary={
-                    //     secondary ? "Secondary text" : userProfile.address
-                    //   }
+                      //   secondary={
+                      //     secondary ? "Secondary text" : userProfile.address
+                      //   }
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemText
                       primary="Gender"
-                    //   secondary={
-                    //     secondary ? "Secondary text" : userProfile.gender
-                    //   }
+                      //   secondary={
+                      //     secondary ? "Secondary text" : userProfile.gender
+                      //   }
                     />
                   </ListItem>
                 </List>
@@ -152,7 +160,6 @@ const FriendPage = () => {
         </Grid>
       </Container>
     </>
-
   );
 };
 
