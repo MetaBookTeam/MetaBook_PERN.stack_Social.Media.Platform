@@ -3,6 +3,7 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
+//import handleAddComment from"../../pages/Comments/Comments"
 
 import AspectRatio from "@mui/joy/AspectRatio";
 import Avatar from "@mui/joy/Avatar";
@@ -11,8 +12,7 @@ import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import CardOverflow from "@mui/joy/CardOverflow";
 import Link from "@mui/joy/Link";
-import IconButton from "@mui/joy/IconButton";
-import Input from "@mui/joy/Input";
+
 import Typography from "@mui/joy/Typography";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
 import Modal from "@mui/material/Modal";
@@ -24,7 +24,7 @@ import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-
+import Comments from "../../pages/Comments/Comments";
 import { styled } from "@mui/material/styles";
 
 const style = {
@@ -152,95 +152,10 @@ const Post = ({ post }) => {
         </Typography>
         {/* </Paper> */}
         <hr />
-        <Grid
-          container
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Grid container item alignItems="center" xs={4}>
-            <IconButton variant="plain" color="neutral" size="sm">
-              <FavoriteBorder />
-            </IconButton>
-            <Link
-              onClick={likeModel}
-              component="button"
-              underline="none"
-              fontSize="sm"
-              fontWeight="lg"
-              textColor="text.primary"
-            >
-              {post.likes} Likes
-            </Link>
-          </Grid>
-
-          <Grid
-            container
-            item
-            justifyContent="center"
-            alignItems="center"
-            xs={4}
-          >
-            <IconButton variant="plain" color="neutral" size="sm">
-              <ModeCommentOutlined />
-            </IconButton>
-            <Link
-              onClick={commentsModel}
-              component="button"
-              underline="none"
-              fontSize="sm"
-              fontWeight="lg"
-              textColor="text.primary"
-            >
-              {post.comments} comments
-            </Link>
-          </Grid>
-
-          <Grid
-            container
-            item
-            justifyContent="right"
-            alignItems="center"
-            xs={4}
-          >
-            <IconButton variant="plain" color="neutral" size="sm">
-              <SendOutlined />
-            </IconButton>
-            <Link
-              onClick={sharesModel}
-              component="button"
-              underline="none"
-              fontSize="sm"
-              fontWeight="lg"
-              textColor="text.primary"
-            >
-              {post.shares} shares
-            </Link>
-          </Grid>
-        </Grid>
+       <Comments post={post}/>
       </CardContent>
 
-      <CardContent orientation="horizontal" sx={{ gap: 1 }}>
-        <IconButton size="sm" variant="plain" color="neutral" sx={{ ml: -1 }}>
-          {/* <Face /> */}
-          <Avatar size="sm" src={userProfile.image} />
-        </IconButton>
-        <Input
-          variant="plain"
-          size="sm"
-          placeholder="Add a comment…"
-          sx={{ flex: 1, px: 0, "--Input-focusedThickness": "0px" }}
-        />
-        <Link
-          // onClick={
-          //   dispatch(updatePost(res.id))
-          //   }
-          underline="none"
-          role="button"
-        >
-          Post
-        </Link>
-      </CardContent>
+      
 
       {/* //* ///////////////////////////// */}
       {/* //* ///////////////////////////// */}

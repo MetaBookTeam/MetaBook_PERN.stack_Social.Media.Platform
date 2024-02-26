@@ -106,7 +106,9 @@ const NavBar = () => {
     setFilter(filtered);
   };
 
+
   // console.log(filter);
+
 
   return (
     <AppBar position="sticky">
