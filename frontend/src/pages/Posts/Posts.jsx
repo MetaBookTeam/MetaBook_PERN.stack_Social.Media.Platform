@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import handleAddComment from"../Comments/Comments"
-import handleLikeComment from"../Comments/Comments"
+
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -62,15 +61,12 @@ export default function Posts() {
       } else throw Error;
     } catch (error) {
       if (!error.response.data.success) {
-        console.log(error)
+        console.log(error);
         return setMessage(error.response.data.message);
-        
       }
       setMessage("Error happened while Get Data, please try again");
     }
   };
-
-
 
   // const getAllPostsLikes = async () => {
   //   try {
@@ -105,7 +101,7 @@ export default function Posts() {
         }
       );
       dispatch(setUserProfile(...user.data.result));
-      console.log(user.data.result);
+      // console.log(...user.data.result);
     } catch (error) {
       console.log("getUserById", error);
     }
@@ -126,13 +122,13 @@ export default function Posts() {
 
       <Grid container spacing={2} direction="row" justifyContent="center">
         <Grid item md={3} sx={{ display: { md: "block", xs: "none" } }}>
-          <SideBar  onclick={handleAddComment}/>
+          <SideBar />
         </Grid>
 
         <Grid item md={5} sm={7} xs={9}>
           {posts &&
             posts.map((post) => {
-              return <Post key={post.id} post={post}  />;
+              return <Post key={post.id} post={post} />;
             })}
         </Grid>
 

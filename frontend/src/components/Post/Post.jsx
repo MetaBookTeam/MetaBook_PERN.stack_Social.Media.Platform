@@ -1,9 +1,7 @@
-import * as React from "react";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
-//import handleAddComment from"../../pages/Comments/Comments"
 
 import AspectRatio from "@mui/joy/AspectRatio";
 import Avatar from "@mui/joy/Avatar";
@@ -12,7 +10,6 @@ import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import CardOverflow from "@mui/joy/CardOverflow";
 import Link from "@mui/joy/Link";
-
 import Typography from "@mui/joy/Typography";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
 import Modal from "@mui/material/Modal";
@@ -27,27 +24,7 @@ import Paper from "@mui/material/Paper";
 import Comments from "../../pages/Comments/Comments";
 import { styled } from "@mui/material/styles";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "white",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
 const Post = ({ post }) => {
-  const [open, setOpen] = useState(false);
-  const likeModel = () => setOpen(true);
-  const commentsModel = () => setOpen(true);
-  const sharesModel = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  const [postLike, setPostLike] = useState();
-
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
     ...theme.typography.body2,
@@ -55,18 +32,6 @@ const Post = ({ post }) => {
     textAlign: "center",
     color: theme.palette.text.secondary,
   }));
-
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "white",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
 
   const { userProfile } = useSelector((state) => state.users);
   // users.users , users.userProfile;
@@ -101,11 +66,7 @@ const Post = ({ post }) => {
             },
           }}
         >
-          <Avatar
-            size="sm"
-            src={post.image}
-            // sx={{ p: 0.5, border: '2px solid', borderColor: 'background.body' }}
-          />
+          <Avatar size="sm" src={post.image} />
         </Box>
         <Typography fontWeight="lg">
           <NavLink className={"user_name"} to={`/page/${post.user_id}`}>
@@ -114,12 +75,6 @@ const Post = ({ post }) => {
         </Typography>
         <br />
 
-        {/* <IconButton
-          variant="plain"
-          color="neutral"
-          size="sm"
-          sx={{ ml: "auto" }}
-        > */}
         <Link
           component="button"
           underline="none"
@@ -128,7 +83,6 @@ const Post = ({ post }) => {
         >
           {new Date(post.created_at).toLocaleString()}
         </Link>
-        {/* </IconButton> */}
       </CardContent>
 
       {post.photo_url && (
@@ -152,52 +106,8 @@ const Post = ({ post }) => {
         </Typography>
         {/* </Paper> */}
         <hr />
-       <Comments post={post}/>
+        <Comments post={post} />
       </CardContent>
-
-      
-
-      {/* //* ///////////////////////////// */}
-      {/* //* ///////////////////////////// */}
-      {/* //* Modal /////////////////////// */}
-      {/* //* ///////////////////////////// */}
-      {/* //* ///////////////////////////// */}
-
-      <Modal
-        keepMounted
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="keep-mounted-modal-title"
-        aria-describedby="keep-mounted-modal-description"
-      >
-        <Box sx={style}>
-          <Typography
-            id="keep-mounted-modal-title"
-            variant="h6"
-            component="h2"
-            textAlign={"center"}
-          >
-            Likes
-            <hr />
-          </Typography>
-          <Typography id="keep-mounted-modal-description" sx={{ mt: 6 }}>
-            <Link
-              component="span"
-              underline="none"
-              fontSize="16px"
-              sx={{ color: "black", my: 0.5 }}
-            >
-              <Avatar
-                component="span"
-                sx={{ mr: 3 }}
-                size="sm"
-                src={post.image}
-              />
-              {post.user_name}
-            </Link>
-          </Typography>
-        </Box>
-      </Modal>
     </Card>
   );
 };
