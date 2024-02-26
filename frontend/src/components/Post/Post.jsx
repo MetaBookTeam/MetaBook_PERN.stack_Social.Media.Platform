@@ -108,7 +108,8 @@ const Post = ({ post }) => {
           />
         </Box>
         <Typography fontWeight="lg">
-          <NavLink to={`/page/${post.user_id}`}>{post.user_name}</NavLink>
+          <NavLink className={"user_name"} to={`/page/${post.user_id}`}>{post.user_name}</NavLink>
+          
         </Typography>
         <br />
 

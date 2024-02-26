@@ -38,7 +38,9 @@ const StyledToolbar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between",
 });
-
+import TextField from "@mui/material/TextField";
+import Stack from "@mui/material/Stack";
+import Autocomplete from "@mui/material/Autocomplete";
 import { useDispatch, useSelector } from "react-redux";
 import { setLogout } from "../../Service/redux/reducers/auth/authSlice";
 
@@ -71,6 +73,7 @@ const NavBar = () => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   // auth.isLoggedIn, auth.token, auth.userId;
+
   const {userProfile} = useSelector((state) => state.users);
   // users.users , users.userProfile;
 
@@ -94,6 +97,7 @@ const NavBar = () => {
   //   getUserById();
   // }, []);
   
+
   const [open, setOpen] = useState(false);
 
   // Search Box
@@ -124,7 +128,7 @@ const NavBar = () => {
     setFilter(filtered);
   };
 
-  // console.log(filter);
+  console.log(filter);
 
   return (
     <AppBar position="sticky">
@@ -136,9 +140,25 @@ const NavBar = () => {
           </NavLink>
         </Typography>
         {/* <Pets sx={{ display: { xs: "block", sm: "none" } }} /> */}
-        <Search>
+        <Stack spacing={2} sx={{ width: 400,bgcolor:"white"}}>
+          <Autocomplete
+            disableClearable
+            options={allUsers.map((option) => option.user_name)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Search input"
+                InputProps={{
+                  ...params.InputProps,
+                  type: "search",
+                }}
+              />
+            )}
+          />
+        </Stack>
+        {/* <Search>
           <InputBase onChange={handleFilter} placeholder="search..." />
-        </Search>
+        </Search> */}
 
         <Icons>
           <Badge badgeContent={4} color="error">

@@ -24,6 +24,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
+import Tooltip from '@mui/material/Tooltip';
 
 const FriendPage = () => {
   const Demo = styled("div")(({ theme }) => ({
@@ -72,6 +73,7 @@ const FriendPage = () => {
   // useEffect(() => {
   //   getUserById();
   // }, []);
+
   return (
     <>
       <Container>
@@ -85,6 +87,14 @@ const FriendPage = () => {
                     alt="A beautiful Cover photo."
                   />
                 </AspectRatio>
+                <Grid container sx={{ paddingTop: "10px" }}>
+                  <Grid item sx={3}>
+                    <Tooltip title="Add" enterDelay={500} leaveDelay={200}>
+                      <Button>Follow</Button>
+                    </Tooltip>
+                  </Grid>
+                  <Grid item sx={3}></Grid>
+                </Grid>
               </Box>
               <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
                 <Avatar
@@ -93,7 +103,25 @@ const FriendPage = () => {
                   sx={{ width: 80, height: 80 }}
                 />
               </Box>
-              {/* {userProfile.bio} */}
+              {/* {userProfile.bio} */}Bio
+              <hr/>
+              <Grid container sx={{ paddingTop: "10px" }}>
+              <Grid item xs={4}>
+                
+                  Followers
+                  <h1>4</h1>
+                
+              </Grid>
+              <Grid item xs={4}>
+                Following
+                <h1>0</h1>
+              </Grid>
+              <Grid item xs={4}>
+              Post
+              <h1>10</h1>
+
+              </Grid>
+            </Grid>
             </Item>
           </Grid>
           <Grid item xs={4}>
