@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +9,7 @@ import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import CardOverflow from "@mui/joy/CardOverflow";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
@@ -24,12 +25,20 @@ import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
+import axios from "axios";
 
 const Comments = ({ post }) => {
+  //* Redux =========================
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  // auth.isLoggedIn, auth.token, auth.userId;
+  const { userProfile } = useSelector((state) => state.users);
+
+  // =========================================
+
   const [likeCount, setLikeCount] = useState(0);
   const [dislikeCount, setDislikeCount] = useState(0);
   const [shareCount, setShareCount] = useState(0);
-  const { userProfile } = useSelector((state) => state.users);
 
   const handleLike = () => {
     setLikeCount(likeCount + 1);
@@ -42,22 +51,16 @@ const Comments = ({ post }) => {
   const handleShare = () => {
     setShareCount(shareCount + 1);
   };
-  //
+
+  // =========================================
   const [open, setOpen] = useState(false);
 
   const commentsModel = () => setOpen(true);
   const sharesModel = () => setOpen(true);
   const likeModel = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  // =========================================
 
-  const [postLike, setPostLike] = useState();
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  }));
   const style = {
     position: "absolute",
     top: "50%",
@@ -69,6 +72,35 @@ const Comments = ({ post }) => {
     boxShadow: 24,
     p: 4,
   };
+
+  // getLikesByPostId ===================================
+
+  const [postLikes, setPostLikes] = useState([]);
+  // [{post_id: 7, user_id: 2, user_name: 'Hunter', image: "URL"}]
+
+  const getLikesByPostId = async () => {
+    try {
+      // console.log('auth.userId', auth.userId)
+
+      // postsRouter.get("/like/:post_id", authentication, getLikesByPostId);
+      const likes = await axios.get(
+        `http://localhost:5000/posts/like/${post.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      // console.log("likes.data.result", likes.data.result);
+      setPostLikes(likes.data.result);
+    } catch (error) {
+      console.log("getLikesByPostId", error);
+    }
+  };
+  useEffect(() => {
+    getLikesByPostId();
+  }, []);
+
   return (
     <Grid
       container
@@ -83,15 +115,19 @@ const Comments = ({ post }) => {
           size="sm"
           onClick={handleLike}
         >
-          <FavoriteBorder />
+          {postLikes.includes(auth.userId) ? (
+            <FavoriteIcon style={{ color: "red" }} />
+          ) : (
+            <FavoriteBorder />
+          )}
         </IconButton>
-        {/*  onClick={likeModel } */}
         <Link
           component="button"
           underline="none"
           fontSize="sm"
           fontWeight="lg"
           textColor="text.primary"
+          onClick={likeModel}
         >
           {post.likes} Likes
         </Link>
@@ -167,22 +203,24 @@ const Comments = ({ post }) => {
             Likes
             <hr />
           </Typography>
-          <Typography id="keep-mounted-modal-description" sx={{ mt: 6 }}>
-            <Link
-              component="span"
-              underline="none"
-              fontSize="16px"
-              sx={{ color: "black", my: 0.5 }}
-            >
-              <Avatar
+          {postLikes.map((like) => (
+            <Typography id="keep-mounted-modal-description">
+              <Link
                 component="span"
-                sx={{ mr: 3 }}
-                size="sm"
-                src={post.image}
-              />
-              {post.user_name}
-            </Link>
-          </Typography>
+                underline="none"
+                fontSize="16px"
+                sx={{ color: "black", my: 0.5 }}
+              >
+                <Avatar
+                  component="span"
+                  sx={{ mr: 3 }}
+                  size="sm"
+                  src={like.image}
+                />
+                {like.user_name}
+              </Link>
+            </Typography>
+          ))}
         </Box>
       </Modal>
     </Grid>
