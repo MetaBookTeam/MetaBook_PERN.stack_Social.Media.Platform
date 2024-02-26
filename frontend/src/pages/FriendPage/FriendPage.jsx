@@ -1,11 +1,8 @@
+import { useDispatch, useSelector } from "react-redux";
 import * as React from "react";
 import { useEffect, useState } from "react";
-
-import { useDispatch, useSelector } from "react-redux";
-
-import axios from "axios";
-
 import Stack from "@mui/material/Stack";
+import axios from "axios";
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
@@ -26,6 +23,8 @@ import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
 import Tooltip from '@mui/material/Tooltip';
 
+import {setUserProfile} from '../../Service/redux/reducers/users/usersSlice'
+import { useParams } from "react-router-dom";
 const FriendPage = () => {
   const Demo = styled("div")(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
@@ -48,32 +47,29 @@ const FriendPage = () => {
     boxShadow: 24,
     p: 4,
   };
-
-  const { userProfile } = useSelector((state) => state.users);
-  // users.users , users.userProfile;
-
   // const [userProfile, setUserProfile] = useState();
-
-  // const getUserById = async () => {
-  //   try {
-  //     const user = await axios.get(
-  //       `http://localhost:5000/users/${auth.userId}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${auth.token}`,
-  //         },
-  //       }
-  //     );
-  //     setUserProfile(...user.data.result);
-  //     console.log(user.data.result);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   getUserById();
-  // }, []);
-
+   const dispatch = useDispatch();
+   const auth = useSelector((state) => state.auth);
+   const {userProfile} = useSelector((state) => state.users);
+  const {user_id} = useParams()
+  const getUserById = async () => {
+    try {
+      const user = await axios.get(
+        `http://localhost:5000/users/${user_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      dispatch(setUserProfile(...user.data.result));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getUserById();
+  }, []);
   return (
     <>
       <Container>
@@ -83,7 +79,7 @@ const FriendPage = () => {
               <Box sx={{ borderRadius: "sm", p: 1 }}>
                 <AspectRatio minHeight={120} maxHeight={350}>
                   <img
-                    // src={userProfile.cover_photo}
+                    src={userProfile.cover_photo}
                     alt="A beautiful Cover photo."
                   />
                 </AspectRatio>
@@ -99,11 +95,11 @@ const FriendPage = () => {
               <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
                 <Avatar
                   alt="Remy Sharp"
-                  //   src={userProfile.image}
+                    src={userProfile.image}
                   sx={{ width: 80, height: 80 }}
                 />
               </Box>
-              {/* {userProfile.bio} */}Bio
+              {userProfile.bio}Bio
               <hr/>
               <Grid container sx={{ paddingTop: "10px" }}>
               <Grid item xs={4}>
@@ -127,7 +123,7 @@ const FriendPage = () => {
           <Grid item xs={4}>
             <Item>
               <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-                {/* {userProfile.user_name} info */}
+                {userProfile.user_name} info
               </Typography>
 
               <Demo>
@@ -135,9 +131,9 @@ const FriendPage = () => {
                   <ListItem>
                     <ListItemText
                       primary="Email"
-                      //   secondary={
-                      //     secondary ? "Secondary text" : userProfile.email
-                      //   }
+                        // secondary={
+                        //   secondary ? "Secondary text" : userProfile.email
+                        // }
                     />
                   </ListItem>
                   <ListItem>
