@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import handleAddComment from"../Comments/Comments"
+import handleLikeComment from"../Comments/Comments"
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -112,7 +113,7 @@ export default function Posts() {
   useEffect(() => {
     getUserById();
   }, []);
-
+  
   
   return (
     <div className="posts">
@@ -125,13 +126,13 @@ export default function Posts() {
 
       <Grid container spacing={2} direction="row" justifyContent="center">
         <Grid item md={3} sx={{ display: { md: "block", xs: "none" } }}>
-          <SideBar />
+          <SideBar  onclick={handleAddComment}/>
         </Grid>
 
         <Grid item md={5} sm={7} xs={9}>
           {posts &&
             posts.map((post) => {
-              return <Post key={post.id} post={post} />;
+              return <Post key={post.id} post={post}  />;
             })}
         </Grid>
 

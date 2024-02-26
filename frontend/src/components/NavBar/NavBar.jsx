@@ -128,8 +128,8 @@ const NavBar = () => {
     setFilter(filtered);
   };
 
-  console.log(filter);
-
+/*   console.log(filter);
+ */
   return (
     <AppBar position="sticky">
       <StyledToolbar>
