@@ -74,29 +74,7 @@ const NavBar = () => {
   const auth = useSelector((state) => state.auth);
   // auth.isLoggedIn, auth.token, auth.userId;
 
-  const {userProfile} = useSelector((state) => state.users);
-  // users.users , users.userProfile;
-
-  // const [userProfile, setUserProfile] = useState([]);
-  // const getUserById = async () => {
-  //   try {
-  //     const user = await axios.get(
-  //       `http://localhost:5000/users/${auth.userId}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${auth.token}`,
-  //         },
-  //       }
-  //     );
-  //     setUserProfile(...user.data.result);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   getUserById();
-  // }, []);
-  
+  const { userProfile } = useSelector((state) => state.users);
 
   const [open, setOpen] = useState(false);
 
@@ -128,7 +106,7 @@ const NavBar = () => {
     setFilter(filtered);
   };
 
-  console.log(filter);
+  // console.log(filter);
 
   return (
     <AppBar position="sticky">
@@ -140,7 +118,7 @@ const NavBar = () => {
           </NavLink>
         </Typography>
         {/* <Pets sx={{ display: { xs: "block", sm: "none" } }} /> */}
-        <Stack spacing={2} sx={{ width: 400,bgcolor:"white"}}>
+        <Stack spacing={2} sx={{ width: 400, bgcolor: "white" }}>
           <Autocomplete
             disableClearable
             options={allUsers.map((option) => option.user_name)}

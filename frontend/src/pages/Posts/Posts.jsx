@@ -43,15 +43,14 @@ export default function Posts() {
   const auth = useSelector((state) => state.auth);
   // auth.isLoggedIn, auth.token, auth.userId;
   const posts = useSelector((state) => state.posts.posts);
-  const users = useSelector((state) => state.users);
-  // users.users , users.userProfile;
+  const { userProfile } = useSelector((state) => state.users);
 
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(false);
 
   const getAllPosts = async () => {
     try {
-      const result = await axios.get("http://localhost:5000/posts", {
+      const result = await axios.get("http://localhost:5000/posts/", {
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },
@@ -62,32 +61,32 @@ export default function Posts() {
       } else throw Error;
     } catch (error) {
       if (!error.response.data.success) {
+        console.log(error)
         return setMessage(error.response.data.message);
+        
       }
       setMessage("Error happened while Get Data, please try again");
     }
   };
 
-  useEffect(() => {
-    getAllPosts();
-  }, []);
 
-  const getAllPostsLikes = async () => {
-    try {
-      //! static end point?? like/1
-      const res = await axios.get(`http://localhost:5000/posts/like/1`, {
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
-        },
-      });
-      if (res.data.success) {
-        setStatus(true);
-        dispatch(setPostsLikesById(res.data.result));
-      } else throw Error;
-    } catch (error) {
-      setMessage("Error happened while Get Data, please try again");
-    }
-  };
+
+  // const getAllPostsLikes = async () => {
+  //   try {
+  //     //! static end point?? like/1
+  //     const res = await axios.get(`http://localhost:5000/posts/like/1`, {
+  //       headers: {
+  //         Authorization: `Bearer ${auth.token}`,
+  //       },
+  //     });
+  //     if (res.data.success) {
+  //       setStatus(true);
+  //       dispatch(setPostsLikesById(res.data.result));
+  //     } else throw Error;
+  //   } catch (error) {
+  //     setMessage("Error happened while Get Data, please try again");
+  //   }
+  // };
   // useEffect(() => {
   // getAllPostsLikes();
   // }, []);
@@ -95,6 +94,7 @@ export default function Posts() {
   //* ////////////////////////////
   const getUserById = async () => {
     try {
+      console.log('auth.userId', auth.userId)
       const user = await axios.get(
         `http://localhost:5000/users/${auth.userId}`,
         {
@@ -104,16 +104,16 @@ export default function Posts() {
         }
       );
       dispatch(setUserProfile(...user.data.result));
-      // console.log(...user.data.result);
+      console.log(user.data.result);
     } catch (error) {
       console.log("getUserById", error);
     }
   };
   useEffect(() => {
     getUserById();
+    getAllPosts();
   }, []);
 
-  
   return (
     <div className="posts">
       {status

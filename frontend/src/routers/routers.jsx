@@ -38,7 +38,7 @@ export const router = createBrowserRouter([
         element:<Page/>
       },
       {
-        path: "/page/:user_id", // This for Friend profile
+        path: "/page/:friend_id", // This for Friend profile
         element: <FriendPage />,
       },
       {

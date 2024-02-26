@@ -1,6 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
 import * as React from "react";
 import { useEffect, useState } from "react";
+
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setUserProfile,
+  setFriendProfile,
+} from "../../Service/redux/reducers/users/usersSlice";
+import { useParams } from "react-router-dom";
+
 import Stack from "@mui/material/Stack";
 import axios from "axios";
 import Container from "@mui/material/Container";
@@ -21,10 +28,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip from "@mui/material/Tooltip";
 
-import {setUserProfile} from '../../Service/redux/reducers/users/usersSlice'
-import { useParams } from "react-router-dom";
 const FriendPage = () => {
   const Demo = styled("div")(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
@@ -47,29 +52,28 @@ const FriendPage = () => {
     boxShadow: 24,
     p: 4,
   };
-  // const [userProfile, setUserProfile] = useState();
-   const dispatch = useDispatch();
-   const auth = useSelector((state) => state.auth);
-   const {userProfile} = useSelector((state) => state.users);
-  const {user_id} = useParams()
+
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const { userProfile, friendProfile } = useSelector((state) => state.users);
+  const { friend_id } = useParams();
+
   const getUserById = async () => {
     try {
-      const user = await axios.get(
-        `http://localhost:5000/users/${user_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
-      dispatch(setUserProfile(...user.data.result));
+      const user = await axios.get(`http://localhost:5000/users/${friend_id}`, {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
+      dispatch(setFriendProfile(...user.data.result));
     } catch (error) {
-      console.log(error);
+      console.log("setFriendProfile", error);
     }
   };
   useEffect(() => {
     getUserById();
   }, []);
+
   return (
     <>
       <Container>
@@ -79,7 +83,7 @@ const FriendPage = () => {
               <Box sx={{ borderRadius: "sm", p: 1 }}>
                 <AspectRatio minHeight={120} maxHeight={350}>
                   <img
-                    src={userProfile.cover_photo}
+                    src={friendProfile.cover_photo}
                     alt="A beautiful Cover photo."
                   />
                 </AspectRatio>
@@ -94,36 +98,33 @@ const FriendPage = () => {
               </Box>
               <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
                 <Avatar
-                  alt="Remy Sharp"
-                    src={userProfile.image}
+                  alt={friendProfile.first_name}
+                  src={friendProfile.image}
                   sx={{ width: 80, height: 80 }}
                 />
               </Box>
-              {userProfile.bio}Bio
-              <hr/>
+              {friendProfile.bio}
+              <hr />
               <Grid container sx={{ paddingTop: "10px" }}>
-              <Grid item xs={4}>
-                
+                <Grid item xs={4}>
                   Followers
                   <h1>4</h1>
-                
+                </Grid>
+                <Grid item xs={4}>
+                  Following
+                  <h1>0</h1>
+                </Grid>
+                <Grid item xs={4}>
+                  Post
+                  <h1>10</h1>
+                </Grid>
               </Grid>
-              <Grid item xs={4}>
-                Following
-                <h1>0</h1>
-              </Grid>
-              <Grid item xs={4}>
-              Post
-              <h1>10</h1>
-
-              </Grid>
-            </Grid>
             </Item>
           </Grid>
           <Grid item xs={4}>
             <Item>
               <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-                {userProfile.user_name} info
+                {friendProfile.first_name}'s info
               </Typography>
 
               <Demo>
@@ -131,16 +132,16 @@ const FriendPage = () => {
                   <ListItem>
                     <ListItemText
                       primary="Email"
-                        // secondary={
-                        //   secondary ? "Secondary text" : userProfile.email
-                        // }
+                      // secondary={
+                      //   secondary ? "Secondary text" : friendProfile.email
+                      // }
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemText
                       primary="Name"
                       //   secondary={
-                      //     secondary ? "Secondary text" : userProfile.user_name
+                      //     secondary ? "Secondary text" : friendProfile.user_name
                       //   }
                     />
                   </ListItem>
@@ -148,7 +149,7 @@ const FriendPage = () => {
                     <ListItemText
                       primary="Phone"
                       //   secondary={
-                      //     secondary ? "Secondary text" : userProfile.phone_number
+                      //     secondary ? "Secondary text" : friendProfile.phone_number
                       //   }
                     />
                   </ListItem>
@@ -156,7 +157,7 @@ const FriendPage = () => {
                     <ListItemText
                       primary="Address"
                       //   secondary={
-                      //     secondary ? "Secondary text" : userProfile.address
+                      //     secondary ? "Secondary text" : friendProfile.address
                       //   }
                     />
                   </ListItem>
@@ -164,7 +165,7 @@ const FriendPage = () => {
                     <ListItemText
                       primary="Gender"
                       //   secondary={
-                      //     secondary ? "Secondary text" : userProfile.gender
+                      //     secondary ? "Secondary text" : friendProfile.gender
                       //   }
                     />
                   </ListItem>
