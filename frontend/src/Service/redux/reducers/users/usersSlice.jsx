@@ -27,6 +27,7 @@ export const usersSlice = createSlice({
     //   user_id: null,
     //   user_name: null,
     // },
+    friendProfile: {},
   },
 
   reducers: {
@@ -59,8 +60,12 @@ export const usersSlice = createSlice({
       //   user_name     :    action.payload.user_name    ,
       // };
     },
+    setFriendProfile: (state, action) => {
+      state.friendProfile = action.payload;
+    },
   },
 });
 
-export const { setUsers, setUserProfile } = usersSlice.actions;
+export const { setUsers, setUserProfile, setFriendProfile } =
+  usersSlice.actions;
 export default usersSlice.reducer;

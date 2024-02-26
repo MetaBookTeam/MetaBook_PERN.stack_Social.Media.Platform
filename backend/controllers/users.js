@@ -171,7 +171,6 @@ POST http://localhost:5000/users/login
             res.status(500).json({
               success: false,
               message: `The email doesn’t exist or the password you’ve entered is incorrect`,
-            
             });
           }
         });
@@ -622,67 +621,75 @@ DELETE http://localhost:5000/users/delete/3
     });
 };
 
-const getAllFriends = async (req,res) => {
-  const {userId} = req.token;
-  const placeholder = [userId]
+const getAllFriends = async (req, res) => {
+  const { userId } = req.token;
+  const placeholder = [userId];
   try {
-    const friend = await pool.query(`SELECT * FROM friends WHERE user_id=$1`,placeholder)
+    const friend = await pool.query(
+      `SELECT * FROM friends WHERE user_id=$1`,
+      placeholder
+    );
     res.status(200).json({
-      success:true,
+      success: true,
       message: "All friends",
-      result:friend.rows
-    })
+      result: friend.rows,
+    });
   } catch (error) {
     res.status(500).json({
-      success:false,
+      success: false,
       message: "Server error",
-      error
-    })
+      error,
+    });
   }
+};
 
-}
-
-const addFriend = async (req,res) => {
-  const {userId} = req.token;
-  const {friend_id} = req.params;
-  const placeholder = [userId,friend_id]
+const addFriend = async (req, res) => {
+  const { userId } = req.token;
+  const { friend_id } = req.params;
+  const placeholder = [userId, friend_id];
   console.log(placeholder);
   try {
-    const addFriend = await pool.query(`INSERT INTO friends (user_id,friend_id) VALUES ($1,$2) RETURNING *`,placeholder);
+    const addFriend = await pool.query(
+      `INSERT INTO friends (user_id,friend_id) VALUES ($1,$2) RETURNING *`,
+      placeholder
+    );
     res.status(200).json({
-      success:true,
-      message:"Friend added successfully",
-      result:addFriend.rows
-    })
+      success: true,
+      message: "Friend added successfully",
+      result: addFriend.rows,
+    });
     console.log(addFriend);
   } catch (error) {
     res.status(500).json({
-      success:false,
-      message:"Server error",
-      error
-    })
-  } 
-}
+      success: false,
+      message: "Server error",
+      error,
+    });
+  }
+};
 
-const deleteFriend = async (req,res) => {
-  const {userId} = req.token;
-  const {friend_id} = req.params;
-  const placeholder = [friend_id]
+const deleteFriend = async (req, res) => {
+  const { userId } = req.token;
+  const { friend_id } = req.params;
+  const placeholder = [friend_id];
   try {
-    const deleteFriend = await pool.query(`DELETE FROM friends WHERE friend_id=$1`,placeholder)
+    const deleteFriend = await pool.query(
+      `DELETE FROM friends WHERE friend_id=$1`,
+      placeholder
+    );
     res.status(200).json({
-      success:true,
+      success: true,
       message: "Deleted Successfully",
-      result:deleteFriend.rows
-    })
+      result: deleteFriend.rows,
+    });
   } catch (error) {
     res.status(500).json({
-      success:false,
+      success: false,
       message: "Server error",
-      error
-    })
+      error,
+    });
   }
-}
+};
 module.exports = {
   register,
   login,
@@ -693,5 +700,5 @@ module.exports = {
   hardDeleteUserById,
   getAllFriends,
   addFriend,
-  deleteFriend
+  deleteFriend,
 };

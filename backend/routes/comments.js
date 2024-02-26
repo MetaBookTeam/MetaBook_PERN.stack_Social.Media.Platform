@@ -28,7 +28,7 @@ commentsRouter.post("/likes/:comment_id", authentication, createCommentLike);
 //* endpoint for GET request
 commentsRouter.get("/:post_id/comments", authentication, getCommentsByPostId);
 commentsRouter.get("/:comment_id", authentication, getCommentById);
-commentsRouter.get('/:comment_id/likes',authentication,getLikesByCommentId)
+commentsRouter.get("/:comment_id/likes", authentication, getLikesByCommentId);
 
 //* endpoint for PUT request
 commentsRouter.put("/:comment_id", authentication, updateComment);
