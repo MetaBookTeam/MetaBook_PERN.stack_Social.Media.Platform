@@ -1,8 +1,11 @@
-import { useDispatch, useSelector } from "react-redux";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import Stack from "@mui/material/Stack";
+
+import { useDispatch, useSelector } from "react-redux";
+
 import axios from "axios";
+
+import Stack from "@mui/material/Stack";
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
@@ -22,6 +25,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
 import Tooltip from '@mui/material/Tooltip';
+
 const FriendPage = () => {
   const Demo = styled("div")(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
@@ -44,27 +48,32 @@ const FriendPage = () => {
     boxShadow: 24,
     p: 4,
   };
-  const [userProfile, setUserProfile] = useState();
 
-  const getUserById = async () => {
-    try {
-      const user = await axios.get(
-        `http://localhost:5000/users/${auth.userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
-      setUserProfile(...user.data.result);
-      console.log(user.data.result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getUserById();
-  }, []);
+  const { userProfile } = useSelector((state) => state.users);
+  // users.users , users.userProfile;
+
+  // const [userProfile, setUserProfile] = useState();
+
+  // const getUserById = async () => {
+  //   try {
+  //     const user = await axios.get(
+  //       `http://localhost:5000/users/${auth.userId}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${auth.token}`,
+  //         },
+  //       }
+  //     );
+  //     setUserProfile(...user.data.result);
+  //     console.log(user.data.result);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   getUserById();
+  // }, []);
+
   return (
     <>
       <Container>

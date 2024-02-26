@@ -74,25 +74,29 @@ const NavBar = () => {
   const auth = useSelector((state) => state.auth);
   // auth.isLoggedIn, auth.token, auth.userId;
 
-  const [userProfile, setUserProfile] = useState([]);
-  const getUserById = async () => {
-    try {
-      const user = await axios.get(
-        `http://localhost:5000/users/${auth.userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
-      setUserProfile(...user.data.result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getUserById();
-  }, []);
+  const {userProfile} = useSelector((state) => state.users);
+  // users.users , users.userProfile;
+
+  // const [userProfile, setUserProfile] = useState([]);
+  // const getUserById = async () => {
+  //   try {
+  //     const user = await axios.get(
+  //       `http://localhost:5000/users/${auth.userId}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${auth.token}`,
+  //         },
+  //       }
+  //     );
+  //     setUserProfile(...user.data.result);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   getUserById();
+  // }, []);
+  
 
   const [open, setOpen] = useState(false);
 

@@ -44,7 +44,10 @@ const Profile = () => {
   // End extra information
 
   const auth = useSelector((state) => state.auth);
-  const [userProfile, setUserProfile] = useState([]);
+  const { userProfile } = useSelector((state) => state.users);
+  // users.users , users.userProfile;
+  
+  // const [userProfile, setUserProfile] = useState([]);
   const [postProfile, setPostProfile] = useState([]);
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -67,25 +70,25 @@ const Profile = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const getUserById = async () => {
-    try {
-      const user = await axios.get(
-        `http://localhost:5000/users/${auth.userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
-      setUserProfile(...user.data.result);
-      console.log(user.data.result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getUserById();
-  }, []);
+  // const getUserById = async () => {
+  //   try {
+  //     const user = await axios.get(
+  //       `http://localhost:5000/users/${auth.userId}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${auth.token}`,
+  //         },
+  //       }
+  //     );
+  //     setUserProfile(...user.data.result);
+  //     console.log(user.data.result);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   getUserById();
+  // }, []);
 
   const getPostProfile = async () => {
     try {
@@ -129,10 +132,12 @@ const Profile = () => {
               <hr/>
               <Grid container sx={{ paddingTop: "10px" }}>
               <Grid item xs={4}>
+
                 
                   Followers
                   <h1>4</h1>
                 
+
               </Grid>
               <Grid item xs={4}>
                 Following

@@ -2,6 +2,8 @@ import * as React from "react";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
+import { useDispatch, useSelector } from "react-redux";
+
 import AspectRatio from "@mui/joy/AspectRatio";
 import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
@@ -43,7 +45,9 @@ const Post = ({ post }) => {
   const commentsModel = () => setOpen(true);
   const sharesModel = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   const [postLike, setPostLike] = useState();
+
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
     ...theme.typography.body2,
@@ -51,6 +55,7 @@ const Post = ({ post }) => {
     textAlign: "center",
     color: theme.palette.text.secondary,
   }));
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -62,6 +67,10 @@ const Post = ({ post }) => {
     boxShadow: 24,
     p: 4,
   };
+
+  const {userProfile} = useSelector((state) => state.users);
+  // users.users , users.userProfile;
+
   return (
     <Card
       variant="outlined"
@@ -210,33 +219,10 @@ const Post = ({ post }) => {
         </Grid>
       </CardContent>
 
-      {/* <CardContent
-        orientation="horizontal"
-        sx={{ alignItems: "center", mx: -1 }}
-      >
-        <Box
-          sx={{ display: "flex", gap: 0.5, justifyContent: "space_between" }}
-        >
-          <IconButton variant="plain" color="neutral" size="sm">
-            <FavoriteBorder />
-          </IconButton>
-          <IconButton variant="plain" color="neutral" size="sm">
-            <ModeCommentOutlined />
-          </IconButton>
-          <IconButton variant="plain" color="neutral" size="sm">
-            <SendOutlined />
-          </IconButton>
-        </Box>
-      </CardContent> */}
-
       <CardContent orientation="horizontal" sx={{ gap: 1 }}>
         <IconButton size="sm" variant="plain" color="neutral" sx={{ ml: -1 }}>
-          <Face />
-          {/* <Avatar
-            size="sm"
-            src={post.image}
-            // sx={{ p: 0.5, border: '2px solid', borderColor: 'background.body' }}
-          /> */}
+          {/* <Face /> */}
+          <Avatar size="sm" src={userProfile.image} />
         </IconButton>
         <Input
           variant="plain"
