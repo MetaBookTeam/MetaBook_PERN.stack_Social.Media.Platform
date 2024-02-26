@@ -19,7 +19,7 @@ import {
   PersonAdd,
   VideoCameraBack,
 } from "@mui/icons-material";
-import { Box } from "@mui/system";
+import Box from "@mui/system/Box";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { addPost } from "../../Service/redux/reducers/Posts/postsSlice";
@@ -37,29 +37,32 @@ const UserBox = styled(Box)({
 });
 
 const Add = () => {
-  const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const [userProfile, setUserProfile] = useState([]);
+  const auth = useSelector((state) => state.auth);
+  const {userProfile} = useSelector((state) => state.users);
+  // users.users , users.userProfile;
+
+  // const [userProfile, setUserProfile] = useState([]);
   const [content, setContent] = useState();
 
-  const getUserById = async () => {
-    try {
-      const user = await axios.get(
-        `http://localhost:5000/users/${auth.userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
-      setUserProfile(...user.data.result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getUserById();
-  }, []);
+  // const getUserById = async () => {
+  //   try {
+  //     const user = await axios.get(
+  //       `http://localhost:5000/users/${auth.userId}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${auth.token}`,
+  //         },
+  //       }
+  //     );
+  //     setUserProfile(...user.data.result);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   getUserById();
+  // }, []);
 
   const newPost = async () => {
     try {
@@ -80,7 +83,9 @@ const Add = () => {
       console.log(error);
     }
   };
+
   const [open, setOpen] = useState(false);
+
   return (
     <>
       <Tooltip
