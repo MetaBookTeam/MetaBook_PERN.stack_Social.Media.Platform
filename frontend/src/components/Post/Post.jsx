@@ -68,7 +68,7 @@ const Post = ({ post }) => {
     p: 4,
   };
 
-  const {userProfile} = useSelector((state) => state.users);
+  const { userProfile } = useSelector((state) => state.users);
   // users.users , users.userProfile;
 
   return (
@@ -108,8 +108,9 @@ const Post = ({ post }) => {
           />
         </Box>
         <Typography fontWeight="lg">
-          <NavLink className={"user_name"} to={`/page/${post.user_id}`}>{post.user_name}</NavLink>
-          
+          <NavLink className={"user_name"} to={`/page/${post.user_id}`}>
+            {post.user_name}
+          </NavLink>
         </Typography>
         <br />
 
@@ -125,7 +126,7 @@ const Post = ({ post }) => {
           fontSize="10px"
           sx={{ color: "text.tertiary", my: 0.5, ml: "auto" }}
         >
-          {post.created_at}
+          {new Date(post.created_at).toLocaleString()}
         </Link>
         {/* </IconButton> */}
       </CardContent>
