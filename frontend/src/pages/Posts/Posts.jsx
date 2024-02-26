@@ -94,7 +94,7 @@ export default function Posts() {
   //* ////////////////////////////
   const getUserById = async () => {
     try {
-      console.log('auth.userId', auth.userId)
+      // console.log('auth.userId', auth.userId)
       const user = await axios.get(
         `http://localhost:5000/users/${auth.userId}`,
         {
