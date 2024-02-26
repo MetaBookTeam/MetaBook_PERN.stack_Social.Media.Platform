@@ -7,7 +7,7 @@ const getShareByPostId = (req, res) => {
       `SELECT * 
 FROM shares
 INNER JOIN posts ON shares.post_id = posts.id
-WHERE shares.post_id = $1;`,
+WHERE is_deleted = 0 AND shares.post_id = $1;`,
       [post_id]
     )
     .then((result) => {
@@ -33,7 +33,7 @@ const createShareByPostId = (req, res) => {
     .query(
       ` INSERT INTO shares (post_id, user_id,content)
         VALUES ($1,$2,$3)
-        RETURNING id;`,
+        RETURNING id=$1;`,
       [post_id,user_id,content]
     )
     .then((result) => {
