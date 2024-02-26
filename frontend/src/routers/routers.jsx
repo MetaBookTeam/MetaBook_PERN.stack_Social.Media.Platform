@@ -8,11 +8,8 @@ import Contact from "../pages/Contact/Contact";
 import NotFound from "../pages/NotFound/NotFound";
 import Login from "../pages/Login/Login";
 import Signup from "../pages/Signup/Signup";
-import Post from "../components/Post/Post";
 import Posts from "../pages/Posts/Posts";
-
 import Page from "../pages/Page/Page";
-
 import Profile from "../pages/Profile/Profile";
 import FriendPage from '../pages/FriendPage/FriendPage'
 

@@ -100,26 +100,30 @@ POST http://localhost:5000/comments/likes/:comment_id
     });
   }
 };
-const getLikesByCommentId=(req,res)=>{
-  const {comment_id}=req.params
+const getLikesByCommentId = (req, res) => {
+  const { comment_id } = req.params;
   //const (user_id)=req.body;
 
-pool.query(`SELECT user_id FROM comment_likes WHERE comment_id=$1`,[comment_id]).then((result)=>{
-  return res.status(201).json({
-    success: true,
-    message: " likes of comment ",
-    result: result.rows,
-  });
-}).catch((error)=>{
-  return res.status(500).json({
-    success: false,
-    message: "Internal server error",
-    error,
-  });
-})
-}
+  pool
+    .query(`SELECT * FROM comment_likes WHERE comment_id=$1`, [comment_id])
+    .then((result) => {
+      return res.status(201).json({
+        success: true,
+        message: " likes of comment ",
+        result: result.rows,
+      });
+    })
+    .catch((error) => {
+      return res.status(500).json({
+        success: false,
+        message: "Internal server error",
+        error,
+      });
+    });
+};
 module.exports = {
   // getCommentLikeById,
   deleteCommentLikeById,
-  createCommentLike,getLikesByCommentId
+  createCommentLike,
+  getLikesByCommentId,
 };

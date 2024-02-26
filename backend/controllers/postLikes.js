@@ -37,22 +37,27 @@ const getLikesByPostId = async (req, res) => {
   /* 
 GET http://localhost:5000/posts/like/:post_id
 */
-const {userId} = req.token;
+  const { userId } = req.token;
   const { post_id } = req.params;
   const placeholder = [post_id];
- console.log(placeholder);
   try {
     const postLike = await pool.query(
-      `SELECT * FROM posts_likes WHERE post_id = $1`,
+      `SELECT 
+        posts_likes.post_id,posts_likes.user_id,users.user_name,users.image
+      FROM users 
+      LEFT JOIN posts_likes 
+        ON users.id = posts_likes.user_id 
+      LEFT JOIN posts 
+        ON posts.id = posts_likes.user_id 
+      WHERE posts_likes.post_id = $1
+        AND users.is_deleted = 0;`,
       placeholder
     );
-    console.log(postLike);
     res.status(200).json({
       success: true,
       message: "like successfully",
-      result: postLike.rows
+      result: postLike.rows,
     });
-    
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -60,7 +65,6 @@ const {userId} = req.token;
       error,
     });
   }
-
 };
 
 const deletePostLikeById = async (req, res) => {
@@ -97,5 +101,4 @@ module.exports = {
   createNewPostLike,
   getLikesByPostId,
   deletePostLikeById,
-  
 };
