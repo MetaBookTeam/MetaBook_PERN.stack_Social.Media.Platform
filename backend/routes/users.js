@@ -11,7 +11,7 @@ const {
   hardDeleteUserById,
   getAllFriends,
   addFriend,
-  deleteFriend
+  deleteFriend,
 } = require("../controllers/users");
 
 const authentication = require("../middlewares/authentication");
@@ -24,30 +24,22 @@ const usersRouter = express.Router();
 usersRouter.post("/register", register);
 usersRouter.post("/login", login);
 // friend
-usersRouter.post(
-  "/friends/:friend_id",
-  authentication,
-  addFriend
-);
+usersRouter.post("/friends/:friend_id", authentication, addFriend);
 
 //* endpoint for the GET request
 usersRouter.get(
   "/",
   authentication,
-  authorization("MANAGE_USERS"),
+  // authorization("MANAGE_USERS"),
   getAllUsers
 );
 // friend
-usersRouter.get(
-  "/friends",
-  authentication,
-  getAllFriends
-);
+usersRouter.get("/friends", authentication, getAllFriends);
 
 usersRouter.get(
   "/:user_id",
   authentication,
-  authorization("MANAGE_USERS"),
+  // authorization("MANAGE_USERS"),
   getUserById
 );
 
@@ -55,7 +47,7 @@ usersRouter.get(
 usersRouter.put(
   "/:user_id",
   authentication,
-  authorization("MANAGE_USERS"),
+  // authorization("MANAGE_USERS"),
   updateUserById
 );
 
@@ -63,20 +55,17 @@ usersRouter.put(
 usersRouter.delete(
   "/:user_id",
   authentication,
-  authorization("MANAGE_USERS"),
+  // authorization("MANAGE_USERS"),
   softDeleteUserById
 );
 
 usersRouter.delete(
   "/delete/:user_id",
   authentication,
-  authorization("MANAGE_USERS"),
+  // authorization("MANAGE_USERS"),
   hardDeleteUserById
 );
 // friend
-usersRouter.delete(
-  "/friends/:friend_id",
-  authentication,
-  deleteFriend
-);
+usersRouter.delete("/friends/:friend_id", authentication, deleteFriend);
+
 module.exports = usersRouter;
