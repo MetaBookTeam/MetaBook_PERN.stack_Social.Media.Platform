@@ -209,25 +209,6 @@ const Post = ({ post }) => {
         </Grid>
       </CardContent>
 
-      {/* <CardContent
-        orientation="horizontal"
-        sx={{ alignItems: "center", mx: -1 }}
-      >
-        <Box
-          sx={{ display: "flex", gap: 0.5, justifyContent: "space_between" }}
-        >
-          <IconButton variant="plain" color="neutral" size="sm">
-            <FavoriteBorder />
-          </IconButton>
-          <IconButton variant="plain" color="neutral" size="sm">
-            <ModeCommentOutlined />
-          </IconButton>
-          <IconButton variant="plain" color="neutral" size="sm">
-            <SendOutlined />
-          </IconButton>
-        </Box>
-      </CardContent> */}
-
       <CardContent orientation="horizontal" sx={{ gap: 1 }}>
         <IconButton size="sm" variant="plain" color="neutral" sx={{ ml: -1 }}>
           <Face />

@@ -1,29 +1,34 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
 
+// REDUX
 import { useDispatch, useSelector } from "react-redux";
 import {
   setPosts,
   addPost,
   setPostsLikesById,
 } from "../../Service/redux/reducers/Posts/postsSlice";
+import {
+  setUsers,
+  setUserProfile,
+} from "../../Service/redux/reducers/users/usersSlice";
 
 import Paper from "@mui/material/Paper";
-import { styled } from "@mui/material/styles";
 import Modal from "@mui/material/Modal";
 import Backdrop from "@mui/material/Backdrop";
 import Fade from "@mui/material/Fade";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+
+import { styled } from "@mui/material/styles";
 
 import Post from "../../components/Post/Post";
-
-import { Container } from "@mui/material";
 import SideBar from "../../components/SideBar/SideBar";
 import RightBar from "../../components/RightBar/RightBar";
 import Add from "../../components/Add/Add";
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -31,30 +36,19 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: "center",
   color: theme.palette.text.secondary,
 }));
+
 export default function Posts() {
   //* Redux
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
+  // auth.isLoggedIn, auth.token, auth.userId;
   const posts = useSelector((state) => state.posts.posts);
+  const users = useSelector((state) => state.users);
+  // users.users , users.userProfile;
+
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(false);
 
-  // // Start Modal new post
-  // const style = {
-  //   position: "absolute",
-  //   top: "50%",
-  //   left: "50%",
-  //   transform: "translate(-50%, -50%)",
-  //   width: 400,
-  //   bgcolor: "background.paper",
-  //   border: "2px solid #000",
-  //   boxShadow: 24,
-  //   p: 4,
-  // };
-  // const [open, setOpen] = useState(false);
-  // const handleOpen = () => setOpen(true);
-  // const handleClose = () => setOpen(false);
-  // // End Modal new post
   const getAllPosts = async () => {
     try {
       const result = await axios.get("http://localhost:5000/posts", {
@@ -80,6 +74,7 @@ export default function Posts() {
 
   const getAllPostsLikes = async () => {
     try {
+      //! static end point?? like/1
       const res = await axios.get(`http://localhost:5000/posts/like/1`, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
@@ -93,78 +88,54 @@ export default function Posts() {
       setMessage("Error happened while Get Data, please try again");
     }
   };
+  // useEffect(() => {
+  // getAllPostsLikes();
+  // }, []);
 
+  //* ////////////////////////////
+  const getUserById = async () => {
+    try {
+      const user = await axios.get(
+        `http://localhost:5000/users/${auth.userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      dispatch(setUserProfile(...user.data.result));
+      // console.log(...user.data.result);
+    } catch (error) {
+      console.log("getUserById", error);
+    }
+  };
   useEffect(() => {
-    getAllPostsLikes();
+    getUserById();
   }, []);
+
+  
   return (
     <div className="posts">
       {status
         ? message && <div className="SuccessMessage">{message}</div>
         : message && <div className="ErrorMessage">{message}</div>}
-      {/* <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        slots={{ backdrop: Backdrop }}
-        slotProps={{
-          backdrop: {
-            timeout: 500,
-          },
-        }}
-      >
-        <Fade in={open}>
-          <Box sx={style}>
-            <Typography id="transition-modal-title" variant="h6" component="h2">
-              Text in a modal
-            </Typography>
-            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              TEXT
-            </Typography>
-          </Box>
-        </Fade>
-      </Modal> */}
 
-      {/* //* Add new post button */}
+      {/* //* Add new post button //////////////// */}
       <Add />
 
-      <Grid
-        container
-        spacing={2}
-        direction="row"
-        justifyContent="center"
-        // component="span"
-      >
-        <Grid
-          item
-          md={3}
-          sx={{ display: { md: "block", xs: "none" } }}
-          // component="span"
-        >
+      <Grid container spacing={2} direction="row" justifyContent="center">
+        <Grid item md={3} sx={{ display: { md: "block", xs: "none" } }}>
           <SideBar />
         </Grid>
 
-        <Grid
-          item
-          md={5}
-          sm={7}
-          xs={9}
-          // component="span"
-        >
+        <Grid item md={5} sm={7} xs={9}>
           {posts &&
             posts.map((post) => {
               return <Post key={post.id} post={post} />;
             })}
         </Grid>
 
-        <Grid
-          item
-          md={3}
-          sx={{ display: { md: "block", xs: "none" } }}
-          // component="span"
-        >
+        <Grid item md={3} sx={{ display: { md: "block", xs: "none" } }}>
           <RightBar />
         </Grid>
       </Grid>
