@@ -72,16 +72,17 @@ const RightBar = () => {
           Latest Photos
         </Typography>
         <ImageList sx={{ width: 300, height: 300 }} cols={3} rowHeight={90}>
-          {posts.map((post) => {
+          {posts.toReversed().map((post) => {
             if (post.photo_url) {
               return (
                 <ImageListItem key={post.id}>
                   <img
-                    srcSet={`${post.photo_url}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                    src={`${post.photo_url}?w=164&h=164&fit=crop&auto=format`}
+                    srcSet={`${post.photo_url}?w=100&h=100&fit=crop&auto=format&dpr=2 2x`}
+                    src={`${post.photo_url}?w=100&h=100&fit=crop&auto=format`}
                     alt={post.id}
                     loading="lazy"
                   />
+                
                 </ImageListItem>
               );
             } 
