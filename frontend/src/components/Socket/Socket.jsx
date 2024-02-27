@@ -1,4 +1,3 @@
-import "./App.css";
 import { useState, useEffect } from "react";
 import socketInit from "../../socket.server";
 import Message from "../../Message";

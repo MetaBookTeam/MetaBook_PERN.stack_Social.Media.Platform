@@ -12,6 +12,7 @@ import Posts from "../pages/Posts/Posts";
 import Page from "../pages/Page/Page";
 import Profile from "../pages/Profile/Profile";
 import FriendPage from '../pages/FriendPage/FriendPage'
+import Socket from'../components/Socket/Socket'
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
       {
         path: "/page/:friend_id", // This for Friend profile
         element: <FriendPage />,
+      },
+      {
+        path: "/chatting",
+        element: <Socket />,
       },
       {
         path: "help",
