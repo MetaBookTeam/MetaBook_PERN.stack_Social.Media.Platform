@@ -18,7 +18,7 @@ const {
   getShareByPostId,
   createShareByPostId,
   softDeleteShare,
-  getAllSharesByUserId
+  getAllSharesByUserId,
 } = require("../controllers/Shares");
 
 const authentication = require("../middlewares/authentication");
@@ -26,7 +26,7 @@ const postsRouter = express.Router();
 
 // POST
 postsRouter.post("/", authentication, createNewPost); //done
-postsRouter.post("/shares", authentication, createShareByPostId);
+postsRouter.post("/shares/:post_id", authentication, createShareByPostId);
 
 // POST LIKE
 postsRouter.post("/like/:post_id", authentication, createNewPostLike); //done
@@ -34,7 +34,7 @@ postsRouter.post("/like/:post_id", authentication, createNewPostLike); //done
 // GET
 postsRouter.get("/", authentication, getAllPost); //done
 postsRouter.get("/profile", authentication, getYourPosts); //done
-postsRouter.get('/sharespost/:user_id',authentication,getAllSharesByUserId)
+postsRouter.get("/shares/:user_id", authentication, getAllSharesByUserId);
 postsRouter.get("/:user_id", authentication, getPostByUserId);
 postsRouter.get("/like/:post_id", authentication, getLikesByPostId);
 postsRouter.get("/shares/:post_id", authentication, getShareByPostId);

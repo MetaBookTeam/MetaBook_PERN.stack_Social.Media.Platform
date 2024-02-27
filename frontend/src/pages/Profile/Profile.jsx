@@ -38,7 +38,7 @@ import Add from "../../components/Add/Add";
 import { setUpdateUserInformation } from "../../Service/redux/reducers/users/usersSlice";
 import Comments from "../Comments/Comments";
 import ProfilePost from "../../components/ProfilePost/ProfilePost";
-import Shares from'../../components/Shares/Shares'
+import Shares from "../../components/Shares/Shares";
 // extra information
 
 const Profile = () => {
@@ -92,18 +92,20 @@ const Profile = () => {
   });
   // shares
 
-  const getAllshares = async () => {
+  const getAllShares = async () => {
     try {
-      const result = await axios.get(`http://localhost:5000/posts/sharespost/${auth.userId}`, {
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
-        },
-      });
+      const result = await axios.get(
+        `http://localhost:5000/posts/shares/${auth.userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
       dispatch(setShares(result.data.result));
       // console.log(result);
     } catch (error) {
-        console.log(error);
-
+      console.log(error);
     }
   };
   const updateUserInformation = async () => {
@@ -140,10 +142,10 @@ const Profile = () => {
     }
   };
   useEffect(() => {
-    getAllshares();
+    getAllShares();
     getPostProfile();
   }, []);
-  
+
   return (
     <>
       <Container>
@@ -246,7 +248,7 @@ const Profile = () => {
               })
             ) : (
               <Item>You do not have any post </Item>
-            )} 
+            )}
             {shares ? (
               shares.map((elem) => {
                 console.log(elem.content);
@@ -255,9 +257,8 @@ const Profile = () => {
               })
             ) : (
               <Item>You do not have any Shares post </Item>
-            )} 
+            )}
           </Grid>
-          
         </Grid>
         <Add />
         {/* Modal for update user information */}
