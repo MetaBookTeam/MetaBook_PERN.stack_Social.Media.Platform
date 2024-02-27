@@ -26,7 +26,7 @@ const postsRouter = express.Router();
 
 // POST
 postsRouter.post("/", authentication, createNewPost); //done
-postsRouter.post("/shares/:post_id", authentication, createShareByPostId);
+postsRouter.post("/shares", authentication, createShareByPostId);
 
 // POST LIKE
 postsRouter.post("/like/:post_id", authentication, createNewPostLike); //done

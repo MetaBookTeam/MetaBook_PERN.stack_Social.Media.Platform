@@ -27,6 +27,7 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import axios from "axios";
+import {addShare} from '../../Service/redux/reducers/shares/sharesSlice'
 
 const Comments = ({ post }) => {
   // share modal
@@ -35,16 +36,24 @@ const Comments = ({ post }) => {
   const handleCloseShare = () => setOpenShare(false);
   const [contentAdd, setContentAdd] = useState("")
   const [postId, setPostId] = useState(0)
+ 
+  //* Redux =========================
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  // const shares = useSelector((state) => state.shares.shares);
+  // auth.isLoggedIn, auth.token, auth.userId;
+  const { userProfile } = useSelector((state) => state.users);
+
+  // =========================================
+  const [open, setOpen] = useState(false);
   const createNewShare = async (e) => {
-    console.log(e.target.value);
-    e.preventDefault();
     try {
       const share = {
         contentadd :contentAdd,
         user_id:auth.userId,
         post_id:postId
       };
-      console.log(share);
+    
       const result = await axios.post(
         "http://localhost:5000/share",
         share,
@@ -54,9 +63,10 @@ const Comments = ({ post }) => {
           },
         }
       );
+      console.log(result);
+      dispatch(addShare(result.data.data))
       if (result.data.success) {
         setStatus(true);
-        dispatch(addArticle(result.data.message))
         // setMessage(result.data.message);
       }
     } catch (error) {
@@ -66,15 +76,6 @@ const Comments = ({ post }) => {
       }
     }
   };
-  //* Redux =========================
-  const dispatch = useDispatch();
-  const auth = useSelector((state) => state.auth);
-  // auth.isLoggedIn, auth.token, auth.userId;
-  const { userProfile } = useSelector((state) => state.users);
-
-  // =========================================
-  const [open, setOpen] = useState(false);
-
   const commentsModal = () => setOpen(true);
   const sharesModal = () => setOpen(true);
   const handleClose = () => setOpen(false);

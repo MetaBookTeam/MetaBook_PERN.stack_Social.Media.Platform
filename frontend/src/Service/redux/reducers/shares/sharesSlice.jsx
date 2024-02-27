@@ -15,6 +15,6 @@ export const sharesSlice = createSlice({
   },
 });
 
-export const { setShares } = sharesSlice.actions;
+export const { setShares,addShare } = sharesSlice.actions;
 
 export default sharesSlice.reducer;

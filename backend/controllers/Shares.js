@@ -27,7 +27,7 @@ WHERE is_deleted = 0 AND shares.post_id = $1;`,
 };
 const createShareByPostId = (req, res) => {
   const { post_id } = req.params;
-  const { user_id } = req.token.id;
+  const { user_id } = req.token.userId;
   const { content } = req.body;
   pool
     .query(
