@@ -52,32 +52,50 @@ GET http://localhost:5000/posts
   try {
     const post = await pool.query(
       `with cte_likes as (
-        select post_id, count(*) as total_likes
+        select  post_id, count(post_id) as total_likes
+        from posts_likes
+        group by  post_id
+        ), 
+
+      cte_users_Like as (
+        select post_id, array_agg(user_id) as liked_users
         from posts_likes
         group by post_id
         ), 
-        cte_comments as (
-          select post_id, count(*) as total_comments
-          from comments
-          group by post_id
-          ), 
-        cte_shares as (
-          select post_id, count(*) as total_shares
-          from shares
-          group by post_id
-          )
-      select p.id,p.created_at,users.image,users.user_name,
-      p.content,p.user_id,p.photo_url,
-      coalesce(l.total_likes, 0) as likes, 
-      coalesce(c.total_comments, 0) as comments,
-      coalesce(s.total_shares, 0) as shares
+
+      cte_comments as (
+        select post_id, count(*) as total_comments
+        from comments
+        group by post_id
+        ), 
+
+      cte_shares as (
+        select post_id, count(*) as total_shares
+        from shares
+        group by post_id
+        )
+
+      select p.id, p.created_at, users.image, users.user_name, p.content, p.user_id, p.photo_url,
+
+      coalesce(l.total_likes, 0)     as likes, 
+              ul.liked_users         as liked_users, 
+      coalesce(c.total_comments, 0)  as comments,
+      coalesce(s.total_shares, 0)    as shares
+
       from posts p
-      inner join users on users.id=p.user_id
+
+      inner join users on users.id = p.user_id
+
       left join cte_likes l
         on p.id = l.post_id
+
+      left join cte_users_Like ul
+        on p.id = ul.post_id
+
       left join cte_comments c
         on p.id = c.post_id
-        left join cte_shares s
+
+      left join cte_shares s
         on p.id = s.post_id`
     );
 

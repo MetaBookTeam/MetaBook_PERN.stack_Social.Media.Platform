@@ -57,6 +57,7 @@ export default function Posts() {
       });
       if (result.data.success) {
         setStatus(true);
+        // console.log(result.data.result);
         dispatch(setPosts(result.data.result));
       } else throw Error;
     } catch (error) {
@@ -67,8 +68,6 @@ export default function Posts() {
       setMessage("Error happened while Get Data, please try again");
     }
   };
-
-
 
   //* ////////////////////////////
   const getUserById = async () => {
@@ -100,7 +99,7 @@ export default function Posts() {
         : message && <div className="ErrorMessage">{message}</div>}
 
       {/* //* Add new post button //////////////// */}
-      <Add/>
+      <Add />
 
       <Grid container spacing={10} direction="row" justifyContent="center">
         <Grid
@@ -111,8 +110,7 @@ export default function Posts() {
           <SideBar />
         </Grid>
 
-        <Grid item md={5} sm={7} xs={4}>
-
+        <Grid item md={5} sm={7} xs={9}>
           {posts &&
             posts.toReversed().map((post) => {
               return <Post key={post.id} post={post} />;
