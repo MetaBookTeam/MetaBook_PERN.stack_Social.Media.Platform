@@ -28,13 +28,13 @@ WHERE is_deleted = 0 AND shares.post_id = $1;`,
 const createShareByPostId = (req, res) => {
   const { post_id } = req.params;
   const { user_id } = req.token.id;
-  const{content}=req.body
+  const { content } = req.body;
   pool
     .query(
       ` INSERT INTO shares (post_id, user_id,content)
         VALUES ($1,$2,$3)
         RETURNING id=$1;`,
-      [post_id,user_id,content]
+      [post_id, user_id, content]
     )
     .then((result) => {
       res.status(200).json({
@@ -52,7 +52,6 @@ const createShareByPostId = (req, res) => {
     });
 };
 const softDeleteShare = (req, res) => {
-
   const { share_id } = req.params;
 
   pool
@@ -77,4 +76,25 @@ const softDeleteShare = (req, res) => {
       });
     });
 };
-module.exports = { getShareByPostId, createShareByPostId, softDeleteShare };
+
+const getAllSharesByUserId = (req, res) => {
+  const { user_id } = req.token.id;
+  const placeholder = [user_id];
+  pool
+    .query(`SELECT * From shares WHARE user_id =$1`, placeholder)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        message: "create share succesfully",
+        result: result.rows,
+      });
+    })
+    .catch((error) => {
+      res.status(500).json({
+        success: false,
+        message: "Server Error",
+        error,
+      });
+    });
+};
+module.exports = { getShareByPostId, createShareByPostId, softDeleteShare ,getAllSharesByUserId};
