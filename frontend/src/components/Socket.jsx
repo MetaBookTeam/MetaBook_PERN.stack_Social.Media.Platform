@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import socketInit from "./socket.server";
-import Message from "./Message";
+import socketInit from "../components/socket.server";
+import Message from "./Socket/Message";
 
 function Socket() {
   const [user_id, setUser_id] = useState("");
   const [token, setToken] = useState("");
   const [socket, setSocket] = useState(null);
-
+ console.log("socket",socketInit);
   const [isConnected, setIsConnected] = useState(false)
 
   useEffect(() => {

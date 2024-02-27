@@ -6,7 +6,7 @@ const Message = ({ socket, user_id }) => {
   // we listen to event
   useEffect(() => {
     socket.on("message", receveMessage);
-
+   
     return () => {
       // Clear the event
       socket.off("message", receveMessage);
