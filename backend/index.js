@@ -22,7 +22,14 @@ io.on("connection", (socket) => {
     // we need to care this out
     socket.emit("error", { error: error.message });
   });
- 
+  socket.on("disconnect", () => {
+    for (const key in client) {
+      if (client[key].socket_id === socket.id) {
+        delete client[key];
+      }
+    }
+    console.log(client);
+  });
 });
 //routers
 const rolesRouter = require("./routes/roles");
