@@ -58,6 +58,7 @@ const Contact = () => {
       </form>
     </Box>
   </Box>
+  
   )
 }
 
