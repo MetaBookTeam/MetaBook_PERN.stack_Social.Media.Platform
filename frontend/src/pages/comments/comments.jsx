@@ -35,29 +35,10 @@ const Comments = ({ post }) => {
   const { userProfile } = useSelector((state) => state.users);
 
   // =========================================
-
-  const [likeCount, setLikeCount] = useState(0);
-  const [dislikeCount, setDislikeCount] = useState(0);
-  const [shareCount, setShareCount] = useState(0);
-
-  const handleLike = () => {
-    setLikeCount(likeCount + 1);
-  };
-
-  const handleDislike = () => {
-    setDislikeCount(dislikeCount + 1);
-  };
-
-  const handleShare = () => {
-    setShareCount(shareCount + 1);
-  };
-
-  // =========================================
   const [open, setOpen] = useState(false);
 
-  const commentsModel = () => setOpen(true);
-  const sharesModel = () => setOpen(true);
-  const likeModel = () => setOpen(true);
+  const commentsModal = () => setOpen(true);
+  const sharesModal = () => setOpen(true);
   const handleClose = () => setOpen(false);
   // =========================================
 
@@ -73,10 +54,8 @@ const Comments = ({ post }) => {
     p: 4,
   };
 
-  // getLikesByPostId ===================================
-
+  // openLikesModal
   const [postLikes, setPostLikes] = useState([]);
-  // [{post_id: 7, user_id: 2, user_name: 'Hunter', image: "URL"}]
 
   const getLikesByPostId = async () => {
     try {
@@ -101,6 +80,70 @@ const Comments = ({ post }) => {
     getLikesByPostId();
   }, []);
 
+  const openLikesModal = async () => {
+    // try {
+    //   const likes = await axios.get(
+    //     `http://localhost:5000/posts/like/${post.id}`,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${auth.token}`,
+    //       },
+    //     }
+    //   );
+
+    //   setPostLikes(likes.data.result);
+    setOpen(true);
+    // } catch (error) {
+    //   console.log("openLikesModal", error);
+    // }
+  };
+  // =========================================
+
+  const [likesCount, setLikeCount] = useState(post.likes * 1);
+
+  const handleLike = async () => {
+    setLikeCount(likesCount + 1);
+
+    // postsRouter.post("/like/:post_id", authentication, createNewPostLike);
+    try {
+      const addLike = await axios.post(
+        `http://localhost:5000/posts/like/${post.id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      // console.log("addLike.data.result", addLike.data.result);
+      getLikesByPostId();
+    } catch (error) {
+      console.log("handleLike", error);
+    }
+  };
+
+  // handleDislike =================
+  const handleDislike = async () => {
+    setLikeCount(likesCount - 1);
+
+    // postsRouter.delete("/like/:post_id", authentication, deletePostLikeById);
+
+    try {
+      const removeLike = await axios.delete(
+        `http://localhost:5000/posts/like/${post.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      // console.log("removeLike.data.result", removeLike.data.result);
+      getLikesByPostId();
+    } catch (error) {
+      console.log("handleDislike", error);
+    }
+  };
+
   return (
     <Grid
       container
@@ -109,27 +152,35 @@ const Comments = ({ post }) => {
       alignItems="center"
     >
       <Grid container item alignItems="center" xs={4}>
-        <IconButton
-          variant="plain"
-          color="neutral"
-          size="sm"
-          onClick={handleLike}
-        >
-          {postLikes.includes(auth.userId) ? (
+        {postLikes.some((like) => auth.userId * 1 === like.user_id * 1) ? (
+          <IconButton
+            variant="plain"
+            color="neutral"
+            size="sm"
+            onClick={handleDislike}
+          >
             <FavoriteIcon style={{ color: "red" }} />
-          ) : (
+          </IconButton>
+        ) : (
+          <IconButton
+            variant="plain"
+            color="neutral"
+            size="sm"
+            onClick={handleLike}
+          >
             <FavoriteBorder />
-          )}
-        </IconButton>
+          </IconButton>
+        )}
+
         <Link
           component="button"
           underline="none"
           fontSize="sm"
           fontWeight="lg"
           textColor="text.primary"
-          onClick={likeModel}
+          onClick={openLikesModal}
         >
-          {post.likes} Likes
+          {likesCount} Likes
         </Link>
       </Grid>
 
@@ -138,7 +189,7 @@ const Comments = ({ post }) => {
           <ModeCommentOutlined />
         </IconButton>
         <Link
-          onClick={commentsModel}
+          // onClick={commentsModal}
           component="button"
           underline="none"
           fontSize="sm"
@@ -154,7 +205,7 @@ const Comments = ({ post }) => {
           <SendOutlined />
         </IconButton>
         <Link
-          onClick={sharesModel}
+          // onClick={sharesModal}
           component="button"
           underline="none"
           fontSize="sm"
@@ -203,20 +254,38 @@ const Comments = ({ post }) => {
             Likes
             <hr />
           </Typography>
-          {postLikes.map((like) => (
-            <Typography id="keep-mounted-modal-description">
+          {postLikes.toReversed().map((like, i) => (
+            <Typography key={i} id="keep-mounted-modal-description">
               <Link
-                component="span"
-                underline="none"
-                fontSize="16px"
+                // component="span"
+                underline="hover"
                 sx={{ color: "black", my: 0.5 }}
+                href={`/page/${like.user_id}`}
+                target="_blank"
+                rel="noreferrer"
               >
-                <Avatar
+                <Box
+                  sx={{
+                    position: "relative",
+                    "&::before": {
+                      content: '""',
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      bottom: 0,
+                      right: 0,
+                      m: "-1px",
+                      borderRadius: "50%",
+                      background:
+                        "linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)",
+                    },
+                    mr: 3,
+                  }}
                   component="span"
-                  sx={{ mr: 3 }}
-                  size="sm"
-                  src={like.image}
-                />
+                >
+                  <Avatar component="span" src={like.image} />
+                </Box>
+
                 {like.user_name}
               </Link>
             </Typography>
