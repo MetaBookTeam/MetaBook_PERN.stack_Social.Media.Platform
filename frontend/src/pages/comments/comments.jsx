@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-
+import Fade from "@mui/material/Fade";
 import { useDispatch, useSelector } from "react-redux";
-
+import Backdrop from "@mui/material/Backdrop";
 import AspectRatio from "@mui/joy/AspectRatio";
 import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
@@ -22,21 +22,60 @@ import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import SendOutlined from "@mui/icons-material/SendOutlined";
 import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
+import TextField from '@mui/material/TextField';
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import axios from "axios";
+import {addShare} from '../../Service/redux/reducers/shares/sharesSlice'
 
 const Comments = ({ post }) => {
+  // share modal
+  const [openShare, setOpenShare] = useState(false);
+  const handleOpenShare = () => setOpenShare(true);
+  const handleCloseShare = () => setOpenShare(false);
+  const [contentAdd, setContentAdd] = useState("")
+  const [postId, setPostId] = useState(0)
+ 
   //* Redux =========================
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
+  // const shares = useSelector((state) => state.shares.shares);
   // auth.isLoggedIn, auth.token, auth.userId;
   const { userProfile } = useSelector((state) => state.users);
 
   // =========================================
   const [open, setOpen] = useState(false);
-
+  const createNewShare = async (e) => {
+    try {
+      const share = {
+        contentadd :contentAdd,
+        user_id:auth.userId,
+        post_id:postId
+      };
+    
+      const result = await axios.post(
+        "http://localhost:5000/share",
+        share,
+        {
+          headers: {
+            Authorization: `Bearer ${state.token}`,
+          },
+        }
+      );
+      console.log(result);
+      dispatch(addShare(result.data.data))
+      if (result.data.success) {
+        setStatus(true);
+        // setMessage(result.data.message);
+      }
+    } catch (error) {
+      if (!error.response.data.success) {
+        setStatus(false);
+        setMessage(error.response.data.message);
+      }
+    }
+  };
   const commentsModal = () => setOpen(true);
   const sharesModal = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -202,10 +241,9 @@ const Comments = ({ post }) => {
 
       <Grid container item justifyContent="right" alignItems="center" xs={4}>
         <IconButton variant="plain" color="neutral" size="sm">
-          <SendOutlined />
+          <SendOutlined onClick={handleOpenShare} />
         </IconButton>
         <Link
-          // onClick={sharesModal}
           component="button"
           underline="none"
           fontSize="sm"
@@ -291,6 +329,37 @@ const Comments = ({ post }) => {
             </Typography>
           ))}
         </Box>
+      </Modal>
+
+      {/*  share modal */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={openShare}
+        onClose={handleCloseShare}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={openShare}>
+          <Box sx={style}>
+            <Typography id="transition-modal-title" variant="h6" component="h2">
+              Share this post
+            </Typography>
+            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+            <TextField id="standard-basic" label="What to say" variant="standard" onChange={(e) => {
+              setContentAdd(e.target.value)
+              setPostId(post.id)
+            }} />
+            
+            <Button onClick={createNewShare}>Share to you profile</Button>
+            </Typography>
+          </Box>
+        </Fade>
       </Modal>
     </Grid>
   );

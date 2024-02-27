@@ -9,9 +9,12 @@ export const sharesSlice = createSlice({
     setShares: (state, action) => {
       state.shares = action.payload;
     },
+    addShare: (state, action) => {
+      state.shares.push(action.payload);
+    },
   },
 });
 
-export const { setShares } = sharesSlice.actions;
+export const { setShares,addShare } = sharesSlice.actions;
 
 export default sharesSlice.reducer;
