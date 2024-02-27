@@ -49,27 +49,29 @@ const Comments = ({ post }) => {
   const createNewShare = async (e) => {
     try {
       const share = {
-        contentadd: contentAdd,
-        user_id: auth.userId,
-        post_id: postId,
+        content: contentAdd,
       };
-
-      const result = await axios.post("http://localhost:5000/share", share, {
-        headers: {
-          Authorization: `Bearer ${state.token}`,
-        },
-      });
-      console.log(result);
-      dispatch(addShare(result.data.data));
+      const result = await axios.post(
+        `http://localhost:5000/posts/shares/${postId}`,
+        share,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      // console.log(...result.data.result);
+      dispatch(addShare(...result.data.result));
       if (result.data.success) {
-        setStatus(true);
+        // setStatus(true);
         // setMessage(result.data.message);
       }
     } catch (error) {
       if (!error.response.data.success) {
-        setStatus(false);
-        setMessage(error.response.data.message);
+        // setStatus(false);
+        // setMessage(error.response.data.message);
       }
+      console.log("createNewShare", error);
     }
   };
 

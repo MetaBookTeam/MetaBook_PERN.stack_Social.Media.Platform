@@ -13,7 +13,7 @@ WHERE is_deleted = 0 AND shares.post_id = $1;`,
     .then((result) => {
       res.status(200).json({
         success: true,
-        message: "get share succesfully",
+        message: "get share successfully",
         result: result.rows,
       });
     })
@@ -27,19 +27,20 @@ WHERE is_deleted = 0 AND shares.post_id = $1;`,
 };
 const createShareByPostId = (req, res) => {
   const { post_id } = req.params;
-  const { user_id } = req.token.userId;
+  const { userId } = req.token;
   const { content } = req.body;
+
   pool
     .query(
-      ` INSERT INTO shares (post_id, user_id,content)
-        VALUES ($1,$2,$3)
-        RETURNING id=$1;`,
-      [post_id, user_id, content]
+      ` INSERT INTO shares (post_id, user_id, content)
+        VALUES ($1, $2, $3)
+        RETURNING *;`,
+      [post_id, userId, content]
     )
     .then((result) => {
       res.status(200).json({
         success: true,
-        message: "create share succesfully",
+        message: "create share successfully",
         result: result.rows,
       });
     })
@@ -64,7 +65,7 @@ const softDeleteShare = (req, res) => {
     .then((result) => {
       res.status(200).json({
         success: true,
-        message: "delete share succesfully",
+        message: "delete share successfully",
         result: result.rows,
       });
     })
@@ -80,9 +81,9 @@ const softDeleteShare = (req, res) => {
 const getAllSharesByUserId = async (req, res) => {
   const { user_id } = req.params;
   const placeholder = [user_id];
-  console.log("hell");
+
   try {
-    const resu = await pool.query(
+    const result = await pool.query(
       `SELECT	shares.post_id,shares.user_id,posts.id,posts.content,posts.photo_url,shares.contentAdd FROM shares
       right join posts ON posts.id = shares.post_id
       WHERE shares.user_id =$1
@@ -92,14 +93,14 @@ const getAllSharesByUserId = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "all shares",
-      result: resu.rows,
+      message: "getAllSharesByUserId",
+      result: result.rows,
     });
   } catch (error) {
     console.log(error);
     res.status(500).json({
       success: false,
-      message: "Server Error",
+      message: "getAllSharesByUserId Server Error",
       error,
     });
   }

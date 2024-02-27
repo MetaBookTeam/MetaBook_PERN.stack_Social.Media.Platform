@@ -778,42 +778,42 @@ CREATE TABLE
     id SERIAL PRIMARY KEY NOT NULL,
     post_id INT NOT NULL REFERENCES posts (id) ON DELETE CASCADE,
     user_id INT REFERENCES users (id) ON DELETE CASCADE,
-    contentAdd VARCHAR(255)
+    content VARCHAR(255) DEFAULT 'I share this'
     -- OR page_id INT REFERENCES pages (id) ON DELETE CASCADE
   );
 
 --! check the role if user or page. //////////////////////
 -- insert shares
 INSERT INTO
-  shares (post_id, user_id)
+  shares (post_id, user_id, content)
 VALUES
-  (1, 1,'welcome'),
-  (1, 2),
-  (1, 3),
-  (1, 4),
-  (1, 5),
-  (2, 1),
-  (2, 2),
-  (2, 4),
-  (2, 6),
-  (2, 7),
-  (3, 2,'I share this'),
-  (3, 3),
-  (3, 4),
-  (3, 5),
-  (4, 7),
-  (6, 1),
-  (6, 2),
-  (6, 5),
-  (6, 7),
-  (7, 1),
-  (7, 2),
-  (7, 3),
-  (7, 4),
-  (7, 5),
-  (7, 6),
-  (7, 7),
-  (13, 2) RETURNING *;
+  (1, 1, 'welcome'),
+  (1, 2, 'I share this too'),
+  (1, 3, 'I share this too'),
+  (1, 4, 'I share this too'),
+  (1, 5, 'I share this too'),
+  (2, 1, 'I share this too'),
+  (2, 2, 'I share this too'),
+  (2, 4, 'I share this too'),
+  (2, 6, 'I share this too'),
+  (2, 7, 'I share this too'),
+  (3, 2, 'I share this too'),
+  (3, 3, 'I share this too'),
+  (3, 4, 'I share this too'),
+  (3, 5, 'I share this too'),
+  (4, 7, 'I share this too'),
+  (6, 1, 'I share this too'),
+  (6, 2, 'I share this too'),
+  (6, 5, 'I share this too'),
+  (6, 7, 'I share this too'),
+  (7, 1, 'I share this too'),
+  (7, 2, 'I share this too'),
+  (7, 3, 'I share this too'),
+  (7, 4, 'I share this too'),
+  (7, 5, 'I share this too'),
+  (7, 6, 'I share this too'),
+  (7, 7, 'I share this too'),
+  (13, 2, 'I share this too') RETURNING *;
 
 -- INSERT INTO
 --   shares (post_id, user_id, page_id)
@@ -822,6 +822,7 @@ VALUES
 --   (1, 1, null),
 --   (2, 1, null),
 --   (2, 2, null) RETURNING *;
+--
 -- Create a table called **comments** in the database
 DROP TABLE IF EXISTS comments CASCADE;
 
