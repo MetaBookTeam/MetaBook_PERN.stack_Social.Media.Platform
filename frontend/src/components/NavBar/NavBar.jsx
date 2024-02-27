@@ -118,9 +118,16 @@ const NavBar = () => {
           <NavLink className={"Home"} to={"/home"}>
             MetaBook
           </NavLink>
+          
         </Typography>
+        <NavLink className={"Home"} to={"/contact"}>
+            Contact Us
+          </NavLink>
+          <NavLink className={"Home"} to={"/about"}>
+            About Us
+          </NavLink>
         {/* <Pets sx={{ display: { xs: "block", sm: "none" } }} /> */}
-        <Stack spacing={2} sx={{ width: 400, bgcolor: "white" }}>
+        <Stack spacing={2} sx={{ width: 300, bgcolor: "white" }}>
           <Autocomplete
             disableClearable
             options={allUsers.map((option) => option.user_name)}
