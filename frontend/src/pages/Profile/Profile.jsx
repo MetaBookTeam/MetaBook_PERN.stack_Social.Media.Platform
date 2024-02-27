@@ -94,7 +94,7 @@ const Profile = () => {
 
   const getAllshares = async () => {
     try {
-      const result = await axios.get(`http://localhost:5000/posts/shares/3`, {
+      const result = await axios.get(`http://localhost:5000/posts/sharespost/3`, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },

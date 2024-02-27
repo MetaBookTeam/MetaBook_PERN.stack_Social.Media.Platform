@@ -83,16 +83,18 @@ const getAllSharesByUserId = async (req, res) => {
   console.log("hell");
   try {
     const resu = await pool.query(
-      `SELECT * FROM shares
-      WHERE user_id=$1`,
+      `SELECT	shares.post_id,shares.user_id,posts.id,posts.content,posts.photo_url,shares.contentAdd FROM shares
+      right join posts ON posts.id = shares.post_id
+      WHERE shares.user_id =$1
+    `,
       placeholder
     );
-  
+
     res.status(200).json({
-      success:true,
-      message:"all shares",
-      result:resu.rows
-    })
+      success: true,
+      message: "all shares",
+      result: resu.rows,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
