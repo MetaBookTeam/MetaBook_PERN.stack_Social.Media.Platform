@@ -25,7 +25,7 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import TextField from '@mui/material/TextField';
 
-import { useDispatch } from "react-redux";
+import {useSelector, useDispatch } from "react-redux";
 import {updatePostById} from '../../Service/redux/reducers/Posts/postsSlice'
 import axios from "axios";
 const style = {
@@ -41,27 +41,38 @@ const style = {
 };
 function ProfilePost({ elem }) {
   const dispatch = useDispatch()
+  const auth = useSelector((state) => state.auth);
+
   const [content, setContent] = useState("")
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const updatePostInformation = async () => {
+ const updatePostById = async (post_id) => {
+  
+
+    console.log(post_id);
+    const info = content;
     try {
       const newInfo = await axios.put(
-        `http://localhost:5000/posts/${auth.userId}`,
-        { update },
+        `http://localhost:5000/posts/${post_id}`,
+        { info },
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
           },
         }
       );
-      dispatch(updatePostInformation(newInfo.data.result));
+      dispatch(updatePostById(newInfo.data.result));
       console.log("Done");
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
     }
-  };
+   
+  
+ }
+//  useEffect(() => {
+//   updatePostById();
+// },[]);
   return (
     <Card
       variant="outlined"
@@ -151,9 +162,7 @@ function ProfilePost({ elem }) {
             <TextField id="standard-basic" label="Standard" variant="standard" />
             </Typography>
             <br/>
-            <Button onClick={() => {
-             dispatch(updatePostById(elem.id))
-            }} variant="text">Edit</Button>
+            <Button onClick={() => {updatePostById(elem.id)}} variant="text">Edit</Button>
           </Box>
         </Fade>
       </Modal>
