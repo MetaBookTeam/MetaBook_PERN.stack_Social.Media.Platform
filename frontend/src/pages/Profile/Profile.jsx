@@ -5,11 +5,11 @@ import Stack from "@mui/material/Stack";
 import axios from "axios";
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
-import Box from "@mui/material/Box";
+// import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import AspectRatio from "@mui/joy/AspectRatio";
-// import Box from '@mui/joy/Box';
+import Link from "@mui/joy/Link";
 import { styled } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Backdrop from "@mui/material/Backdrop";
@@ -21,9 +21,22 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
+import CardContent from "@mui/joy/CardContent";
+import CardOverflow from "@mui/joy/CardOverflow";
+import IconButton from "@mui/joy/IconButton";
+import MoreHoriz from "@mui/icons-material/MoreHoriz";
+import SendOutlined from "@mui/icons-material/SendOutlined";
+import Face from "@mui/icons-material/Face";
+import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import Input from "@mui/joy/Input";
+import Box from '@mui/joy/Box';
+import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
+import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
+
 import { addPost } from "../../Service/redux/reducers/Posts/postsSlice";
 import Add from "../../components/Add/Add";
 import { setUpdateUserInformation } from "../../Service/redux/reducers/users/usersSlice";
+import Comments from "../Comments/Comments";
 // extra information
 
 const Profile = () => {
@@ -40,13 +53,6 @@ const Profile = () => {
 
   // const [userProfile, setUserProfile] = useState([]);
   const [postProfile, setPostProfile] = useState([]);
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  }));
   const style = {
     position: "absolute",
     top: "50%",
@@ -58,6 +64,13 @@ const Profile = () => {
     boxShadow: 24,
     p: 4,
   };
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+  }));
   // for update user info
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -69,16 +82,16 @@ const Profile = () => {
   const [name, setUpdatedName] = useState("");
   const [phone, setUpdatedPhone] = useState("");
   const [update, setUpdated] = useState({
-    bio:"",
-    name:"",
-    phone:0
+    bio: "",
+    name: "",
+    phone: 0,
   });
 
   const updateUserInformation = async () => {
     try {
       const newInfo = await axios.put(
         `http://localhost:5000/users/${auth.userId}`,
-        {update},
+        { update },
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -209,7 +222,83 @@ const Profile = () => {
           <Grid item xs={8}>
             {postProfile ? (
               postProfile.map((elem) => {
-                return <Item>{elem.content} </Item>;
+                return (
+                  <Item>
+                    <Card
+                      variant="outlined"
+                      sx={{
+                        marginBlock: "10px",
+                        minWidth: 300,
+                        // '--Card-radius': (theme) => theme.vars.radius.xs,
+
+                      }}
+                    >
+                      <CardContent
+                        orientation="horizontal"
+                        sx={{ alignItems: "center", gap: 1 }}
+                      >
+                        <Box
+                          sx={{
+                            position: "relative",
+                            "&::before": {
+                              content: '""',
+                              position: "absolute",
+                              top: 0,
+                              left: 0,
+                              bottom: 0,
+                              right: 0,
+                              m: "-2px",
+                              borderRadius: "50%",
+                              background:
+                                "linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)",
+                            },
+                          }}
+                        >
+                          <Avatar size="sm" src={elem.image} />
+                        </Box>
+                        <Typography fontWeight="lg">
+                          {/* <NavLink className={"user_name"} to={`/page/${post.user_id}`}> */}
+                          {elem.user_name}
+                          {/* </NavLink> */}
+                        </Typography>
+                        <br />
+
+                        <Link
+                          component="button"
+                          underline="none"
+                          fontSize="10px"
+                          sx={{ color: "text.tertiary", my: 0.5, ml: "auto" }}
+                        >
+                          {new Date(elem.created_at).toLocaleString()}
+                        </Link>
+                      </CardContent>
+
+                      {elem.photo_url && (
+                        <CardOverflow>
+                          <AspectRatio>
+                            <img src={elem.photo_url} alt="" loading="lazy" />
+                          </AspectRatio>
+                        </CardOverflow>
+                      )}
+
+                      <CardContent>
+                        {/* <Paper sx={{ padding: "10px" }}> */}
+                        <Typography fontSize="sm" marginBottom={2}>
+                          <Link
+                            component="button"
+                            color="neutral"
+                            fontWeight="lg"
+                            textColor="text.primary"
+                          ></Link>{" "}
+                          {elem.content}
+                        </Typography>
+                        {/* </Paper> */}
+                        <hr />
+                        {/* <Comments /> */}
+                      </CardContent>
+                    </Card>
+                  </Item>
+                );
               })
             ) : (
               <Item>You do not have any post </Item>
@@ -270,11 +359,17 @@ const Profile = () => {
                   variant="standard"
                 />
                 <br />
-                <Button onClick={() => {
-                  setUpdated({
-                    bio,name,phone
-                  })
-                }}>Update</Button>
+                <Button
+                  onClick={() => {
+                    setUpdated({
+                      bio,
+                      name,
+                      phone,
+                    });
+                  }}
+                >
+                  Update
+                </Button>
               </Typography>
             </Box>
           </Fade>
