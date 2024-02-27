@@ -6,18 +6,17 @@ function Socket() {
   const [user_id, setUser_id] = useState("");
   const [token, setToken] = useState("");
   const [socket, setSocket] = useState(null);
- console.log("socket",socketInit);
-  const [isConnected, setIsConnected] = useState(false)
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     // mount
     // in update body start second
     socket?.on("connect", () => {
-      setIsConnected(true)
+      setIsConnected(true);
     });
     socket?.on("connect_error", (error) => {
       console.log(error.message);
-      setIsConnected(false)
+      setIsConnected(false);
     });
 
     // will start in unmount remove from DOM
@@ -27,6 +26,7 @@ function Socket() {
       socket?.removeAllListeners();
     };
   }, [socket]);
+  ///////////////////////////////////////////
   return (
     <div className="App">
       <header className="App-header">

@@ -1,19 +1,3 @@
-// import * as React from 'react';
-// import AppBar from '@mui/material/AppBar';
-// import Box from '@mui/material/Box';
-// import Toolbar from '@mui/material/Toolbar';
-// import IconButton from '@mui/material/IconButton';
-// import Typography from '@mui/material/Typography';
-// import Menu from '@mui/material/Menu';
-// import MenuIcon from '@mui/icons-material/Menu';
-// import Avatar from '@mui/material/Avatar';
-// import Button from '@mui/material/Button';
-// import Tooltip from '@mui/material/Tooltip';
-// import MenuItem from '@mui/material/MenuItem';
-// import AdbIcon from '@mui/icons-material/Adb';
-// import Container from '@mui/material/Container'
-// import { useState } from "react";
-
 import { Mail, Notifications, Pets } from "@mui/icons-material";
 import {
   AppBar,
@@ -26,6 +10,10 @@ import {
   styled,
   Toolbar,
   Typography,
+  Button ,
+  Fade ,
+  Modal ,
+  Backdrop 
 } from "@mui/material";
 
 import React, { useState, useEffect } from "react";
@@ -68,15 +56,30 @@ const UserBox = styled(Box)(({ theme }) => ({
     display: "none",
   },
 }));
-
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 const NavBar = () => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   // auth.isLoggedIn, auth.token, auth.userId;
 
   const { userProfile } = useSelector((state) => state.users);
-
   const [open, setOpen] = useState(false);
+  
+
+  // chatModal
+  const [openChat, setOpenChate] =useState(false);
+  const handleOpenChat = () => setOpenChate(true);
+  const handleCloseChat = () => setOpenChate(false);
 
   // Search Box
   const [allUsers, setAllUsers] = useState([]);
@@ -112,6 +115,30 @@ const NavBar = () => {
 
   return (
     <AppBar position="sticky">
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={openChat}
+        onClose={handleCloseChat}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={openChat}>
+          <Box sx={style}>
+            <Typography id="transition-modal-title" variant="h6" component="h2">
+              Text in a modal
+            </Typography>
+            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            </Typography>
+          </Box>
+        </Fade>
+      </Modal>
       <StyledToolbar>
         <Typography variant="h6">
           {/* <Typography variant="h6" sx={{ display: { xs: "none", sm: "block" } }}> */}
@@ -149,9 +176,9 @@ const NavBar = () => {
 
         <Icons>
           <Badge badgeContent={4} color="error">
-            <Mail />
+            <Mail onClick={handleOpenChat}/>
           </Badge>
-          <Badge badgeContent={2} color="error">
+          <Badge color="error">
             <Notifications />
           </Badge>
           <Avatar
