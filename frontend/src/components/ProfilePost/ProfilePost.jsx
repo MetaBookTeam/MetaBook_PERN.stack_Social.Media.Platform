@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState ,useEffect} from "react";
+
 import AspectRatio from "@mui/joy/AspectRatio";
 import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
@@ -8,7 +9,6 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
-import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
@@ -19,7 +19,49 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Comments from "../../pages/Comments/Comments";
 import { styled } from "@mui/material/styles";
+import IconButton from '@mui/joy/IconButton';
+import Backdrop from '@mui/material/Backdrop';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+import TextField from '@mui/material/TextField';
+
+import { useDispatch } from "react-redux";
+import {updatePostById} from '../../Service/redux/reducers/Posts/postsSlice'
+import axios from "axios";
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'white',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 function ProfilePost({ elem }) {
+  const dispatch = useDispatch()
+  const [content, setContent] = useState("")
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const updatePostInformation = async () => {
+    try {
+      const newInfo = await axios.put(
+        `http://localhost:5000/posts/${auth.userId}`,
+        { update },
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      dispatch(updatePostInformation(newInfo.data.result));
+      console.log("Done");
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   return (
     <Card
       variant="outlined"
@@ -54,15 +96,10 @@ function ProfilePost({ elem }) {
         </Box>
         <Typography fontWeight="lg">{elem.user_name}</Typography>
         <br />
-
-        <Link
-          component="button"
-          underline="none"
-          fontSize="10px"
-          sx={{ color: "text.tertiary", my: 0.5, ml: "auto" }}
-        >
-          {new Date(elem.created_at).toLocaleString()}
-        </Link>
+       
+        <IconButton onClick={handleOpen} variant="plain" color="neutral" size="sm" sx={{ ml: 'auto' }}>
+          <MoreHoriz />
+        </IconButton>
       </CardContent>
 
       {elem.photo_url && (
@@ -87,6 +124,39 @@ function ProfilePost({ elem }) {
         <hr />
         <Comments post={elem} />
       </CardContent>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={open}>
+          <Box sx={style}>
+            <Typography id="transition-modal-title" variant="h6" component="h2">
+              Edit post 
+            
+             
+            </Typography>
+            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+            <TextField onChange={(e) => {
+              setContent(e.target.value)
+            }} id="standard-basic" label="Content" variant="standard" />
+            <TextField id="standard-basic" label="Standard" variant="standard" />
+            </Typography>
+            <br/>
+            <Button onClick={() => {
+             dispatch(updatePostById(elem.id))
+            }} variant="text">Edit</Button>
+          </Box>
+        </Fade>
+      </Modal>
     </Card>
   );
 }

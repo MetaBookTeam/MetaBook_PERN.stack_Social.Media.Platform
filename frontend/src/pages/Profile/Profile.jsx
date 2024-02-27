@@ -29,7 +29,7 @@ import SendOutlined from "@mui/icons-material/SendOutlined";
 import Face from "@mui/icons-material/Face";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Input from "@mui/joy/Input";
-import Box from '@mui/joy/Box';
+import Box from "@mui/joy/Box";
 import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
 
@@ -223,11 +223,7 @@ const Profile = () => {
           <Grid item xs={8}>
             {postProfile ? (
               postProfile.map((elem) => {
-                return (
-                  
-                  <ProfilePost elem={elem}/>
-                  
-                );
+                return <ProfilePost elem={elem} />;
               })
             ) : (
               <Item>You do not have any post </Item>
