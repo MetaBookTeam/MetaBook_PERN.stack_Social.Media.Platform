@@ -27,6 +27,7 @@ import TextField from "@mui/material/TextField";
 import { useSelector, useDispatch } from "react-redux";
 import { updatePostById } from "../../Service/redux/reducers/Posts/postsSlice";
 import axios from "axios";
+import { Margin } from "@mui/icons-material";
 const style = {
   position: "absolute",
   top: "50%",
@@ -45,9 +46,9 @@ const Shares = ({ elem }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   return (
-    //    {shares ? }
-    <Paper> 
-        <Card
+    <Paper elevation={5} >
+      <center><h3>{elem.contentadd}</h3></center>
+      <Card
         variant="outlined"
         sx={{
           marginBlock: "10px",
@@ -81,7 +82,13 @@ const Shares = ({ elem }) => {
           <Typography fontWeight="lg">{elem.user_name}</Typography>
           <br />
 
-          <IconButton onClick={handleOpen} variant="plain" color="neutral" size="sm" sx={{ ml: 'auto' }}>
+          <IconButton
+            onClick={handleOpen}
+            variant="plain"
+            color="neutral"
+            size="sm"
+            sx={{ ml: "auto" }}
+          >
             <MoreHoriz />
           </IconButton>
         </CardContent>
@@ -123,23 +130,42 @@ const Shares = ({ elem }) => {
         >
           <Fade in={open}>
             <Box sx={style}>
-              <Typography id="transition-modal-title" variant="h6" component="h2">
+              <Typography
+                id="transition-modal-title"
+                variant="h6"
+                component="h2"
+              >
                 Edit post
-
               </Typography>
               <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              <TextField onChange={(e) => {
-                setContent(e.target.value)
-              }} id="standard-basic" label="Content" variant="standard" />
-              <TextField id="standard-basic" label="Standard" variant="standard" />
+                <TextField
+                  onChange={(e) => {
+                    setContent(e.target.value);
+                  }}
+                  id="standard-basic"
+                  label="Content"
+                  variant="standard"
+                />
+                <TextField
+                  id="standard-basic"
+                  label="Standard"
+                  variant="standard"
+                />
               </Typography>
-              <br/>
-              <Button onClick={() => {updatePostById(elem.id)}} variant="text">Edit</Button>
+              <br />
+              <Button
+                onClick={() => {
+                  updatePostById(elem.id);
+                }}
+                variant="text"
+              >
+                Edit
+              </Button>
             </Box>
           </Fade>
         </Modal>
       </Card>
-      </Paper>
+    </Paper>
   );
 };
 
