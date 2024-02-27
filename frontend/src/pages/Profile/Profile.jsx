@@ -68,16 +68,17 @@ const Profile = () => {
   const [bio, setUpdatedBio] = useState("");
   const [name, setUpdatedName] = useState("");
   const [phone, setUpdatedPhone] = useState("");
-  console.log(auth.userId);
+  const [update, setUpdated] = useState({
+    bio:"",
+    name:"",
+    phone:0
+  });
+
   const updateUserInformation = async () => {
     try {
       const newInfo = await axios.put(
         `http://localhost:5000/users/${auth.userId}`,
-        {
-          bio,
-          name,
-          phone,
-        },
+        {update},
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -87,16 +88,13 @@ const Profile = () => {
       dispatch(setUpdateUserInformation(newInfo.data.result));
       console.log("Done");
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
+  useEffect(() => {
+    updateUserInformation();
+  }, [update]);
 
-  const handlerUpdate = (e) => {
-    setUpdated({
-      ...updated,
-      [e.target.name]: e.target.value,
-    });
-  };
   const getPostProfile = async () => {
     try {
       const post = await axios.get(`http://localhost:5000/posts/profile`, {
@@ -272,7 +270,11 @@ const Profile = () => {
                   variant="standard"
                 />
                 <br />
-                <Button onClick={updateUserInformation()}>Update</Button>
+                <Button onClick={() => {
+                  setUpdated({
+                    bio,name,phone
+                  })
+                }}>Update</Button>
               </Typography>
             </Box>
           </Fade>
