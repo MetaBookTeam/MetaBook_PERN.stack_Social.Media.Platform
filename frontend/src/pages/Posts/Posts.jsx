@@ -68,25 +68,7 @@ export default function Posts() {
     }
   };
 
-  // const getAllPostsLikes = async () => {
-  //   try {
-  //     //! static end point?? like/1
-  //     const res = await axios.get(`http://localhost:5000/posts/like/1`, {
-  //       headers: {
-  //         Authorization: `Bearer ${auth.token}`,
-  //       },
-  //     });
-  //     if (res.data.success) {
-  //       setStatus(true);
-  //       dispatch(setPostsLikesById(res.data.result));
-  //     } else throw Error;
-  //   } catch (error) {
-  //     setMessage("Error happened while Get Data, please try again");
-  //   }
-  // };
-  // useEffect(() => {
-  // getAllPostsLikes();
-  // }, []);
+
 
   //* ////////////////////////////
   const getUserById = async () => {

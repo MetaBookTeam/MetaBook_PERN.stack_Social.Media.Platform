@@ -23,30 +23,21 @@ import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
 import { addPost } from "../../Service/redux/reducers/Posts/postsSlice";
 import Add from "../../components/Add/Add";
+import { setUpdateUserInformation } from "../../Service/redux/reducers/users/usersSlice";
 // extra information
-
-function generate(element) {
-  return [0, 1, 2].map((value) =>
-    React.cloneElement(element, {
-      key: value,
-    })
-  );
-}
 
 const Profile = () => {
   // Start extra information
   const Demo = styled("div")(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
   }));
-  const [content, setContent] = useState();
-
   const [secondary, setSecondary] = React.useState(false);
   // End extra information
 
   const auth = useSelector((state) => state.auth);
   const { userProfile } = useSelector((state) => state.users);
   // users.users , users.userProfile;
-  
+
   // const [userProfile, setUserProfile] = useState([]);
   const [postProfile, setPostProfile] = useState([]);
   const Item = styled(Paper)(({ theme }) => ({
@@ -67,29 +58,45 @@ const Profile = () => {
     boxShadow: 24,
     p: 4,
   };
+  // for update user info
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  // const getUserById = async () => {
-  //   try {
-  //     const user = await axios.get(
-  //       `http://localhost:5000/users/${auth.userId}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${auth.token}`,
-  //         },
-  //       }
-  //     );
-  //     setUserProfile(...user.data.result);
-  //     console.log(user.data.result);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   getUserById();
-  // }, []);
 
+  const dispatch = useDispatch();
+
+  const [bio, setUpdatedBio] = useState("");
+  const [name, setUpdatedName] = useState("");
+  const [phone, setUpdatedPhone] = useState("");
+  console.log(auth.userId);
+  const updateUserInformation = async () => {
+    try {
+      const newInfo = await axios.put(
+        `http://localhost:5000/users/${auth.userId}`,
+        {
+          bio,
+          name,
+          phone,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      dispatch(setUpdateUserInformation(newInfo.data.result));
+      console.log("Done");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handlerUpdate = (e) => {
+    setUpdated({
+      ...updated,
+      [e.target.name]: e.target.value,
+    });
+  };
   const getPostProfile = async () => {
     try {
       const post = await axios.get(`http://localhost:5000/posts/profile`, {
@@ -127,31 +134,27 @@ const Profile = () => {
                   sx={{ width: 80, height: 80 }}
                 />
               </Box>
-              
-              {userProfile.bio}
-              <hr/>
-              <Grid container sx={{ paddingTop: "10px" }}>
-              <Grid item xs={4}>
 
-                
+              {userProfile.bio}
+              <hr />
+              <Grid container sx={{ paddingTop: "10px" }}>
+                <Grid item xs={4}>
                   Followers
                   <h1>4</h1>
-                
-
+                </Grid>
+                <Grid item xs={4}>
+                  Following
+                  <h1>0</h1>
+                </Grid>
+                <Grid item xs={4}>
+                  Post
+                  <h1>10</h1>
+                </Grid>
+                <Button onClick={handleOpen} variant="outlined">
+                  Edit
+                </Button>
               </Grid>
-              <Grid item xs={4}>
-                Following
-                <h1>0</h1>
-              </Grid>
-              <Grid item xs={4}>
-              Post
-              <h1>10</h1>
-
-              </Grid>
-              <Button variant="outlined">Edit</Button>
-            </Grid>
             </Item>
-          
           </Grid>
           <Grid item xs={4}>
             <Item>
@@ -216,6 +219,64 @@ const Profile = () => {
           </Grid>
         </Grid>
         <Add />
+        {/* Modal for update user information */}
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          open={open}
+          onClose={handleClose}
+          closeAfterTransition
+          slots={{ backdrop: Backdrop }}
+          slotProps={{
+            backdrop: {
+              timeout: 500,
+            },
+          }}
+        >
+          <Fade in={open}>
+            <Box sx={style}>
+              <Typography
+                id="transition-modal-title"
+                variant="h6"
+                component="h2"
+              >
+                Edit your information
+                <hr />
+              </Typography>
+              <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+                <TextField
+                  name="name"
+                  onChange={(e) => {
+                    setUpdatedName(e.target.value);
+                  }}
+                  id="standard-basic"
+                  label="Name"
+                  variant="standard"
+                />
+                <TextField
+                  name="phone"
+                  onChange={(e) => {
+                    setUpdatedPhone(e.target.value);
+                  }}
+                  id="standard-basic"
+                  label="Phone"
+                  variant="standard"
+                />
+                <TextField
+                  name="bio"
+                  onChange={(e) => {
+                    setUpdatedBio(e.target.value);
+                  }}
+                  id="standard-basic"
+                  label="Bio"
+                  variant="standard"
+                />
+                <br />
+                <Button onClick={updateUserInformation()}>Update</Button>
+              </Typography>
+            </Box>
+          </Fade>
+        </Modal>
       </Container>
     </>
   );
