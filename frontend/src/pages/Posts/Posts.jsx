@@ -57,6 +57,7 @@ export default function Posts() {
       });
       if (result.data.success) {
         setStatus(true);
+        // console.log(result.data.result);
         dispatch(setPosts(result.data.result));
       } else throw Error;
     } catch (error) {

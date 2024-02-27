@@ -50,6 +50,18 @@ const Comments = ({ post }) => {
 
   // openLikesModal
   const [postLikes, setPostLikes] = useState([]);
+  const [likeIcon, setLikeIcon] = useState(
+    post.liked_users?.some((user) => auth.userId * 1 === user * 1) ||
+      postLikes.some((like) => auth.userId * 1 === like.user_id * 1)
+  );
+
+  // console.log(
+  //   "post",
+  //   post.id,
+  //   "=>",
+  //   post.liked_users?.some((user) => auth.userId * 1 === user * 1),
+  //   postLikes.some((like) => auth.userId * 1 === like.user_id * 1)
+  // );
 
   const getLikesByPostId = async () => {
     try {
@@ -70,14 +82,31 @@ const Comments = ({ post }) => {
       console.log("getLikesByPostId", error);
     }
   };
-  useEffect(() => {
-    getLikesByPostId();
-  }, []);
+
+  // useEffect(() => {
+  //   getLikesByPostId();
+  // }, []);
 
   // Likes Modal Toggle ======================
   const [open, setOpen] = useState(false);
 
-  const openLikesModal = () => setOpen(true);
+  const openLikesModal = async () => {
+    try {
+      const likes = await axios.get(
+        `http://localhost:5000/posts/like/${post.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      setPostLikes(likes.data.result);
+      setOpen(true);
+    } catch (error) {
+      console.log("openLikesModal", error);
+    }
+  };
+
   const closeLikesModal = () => setOpen(false);
   // =========================================
 
@@ -85,6 +114,7 @@ const Comments = ({ post }) => {
 
   const handleLike = async () => {
     setLikeCount(likesCount + 1);
+    setLikeIcon(true);
 
     // postsRouter.post("/like/:post_id", authentication, createNewPostLike);
     try {
@@ -98,7 +128,7 @@ const Comments = ({ post }) => {
         }
       );
       // console.log("addLike.data.result", addLike.data.result);
-      getLikesByPostId();
+      // getLikesByPostId();
     } catch (error) {
       console.log("handleLike", error);
     }
@@ -107,9 +137,9 @@ const Comments = ({ post }) => {
   // handleDislike =================
   const handleDislike = async () => {
     setLikeCount(likesCount - 1);
+    setLikeIcon(false);
 
     // postsRouter.delete("/like/:post_id", authentication, deletePostLikeById);
-
     try {
       const removeLike = await axios.delete(
         `http://localhost:5000/posts/like/${post.id}`,
@@ -120,7 +150,7 @@ const Comments = ({ post }) => {
         }
       );
       // console.log("removeLike.data.result", removeLike.data.result);
-      getLikesByPostId();
+      // getLikesByPostId();
     } catch (error) {
       console.log("handleDislike", error);
     }
@@ -134,7 +164,7 @@ const Comments = ({ post }) => {
       alignItems="center"
     >
       <Grid container item alignItems="center" xs={4}>
-        {postLikes.some((like) => auth.userId * 1 === like.user_id * 1) ? (
+        {likeIcon ? (
           <IconButton
             variant="plain"
             color="neutral"
