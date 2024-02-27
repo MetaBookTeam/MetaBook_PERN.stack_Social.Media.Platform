@@ -85,7 +85,7 @@ const getAllSharesByUserId = (req, res) => {
     .then((result) => {
       res.status(200).json({
         success: true,
-        message: "create share succesfully",
+        message: "get all share succesfully",
         result: result.rows,
       });
     })

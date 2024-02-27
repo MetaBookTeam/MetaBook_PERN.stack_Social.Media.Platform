@@ -68,27 +68,7 @@ export default function Posts() {
     }
   };
 
-// shares 
 
-const getAllshares = async () => {
-  try {
-    const result = await axios.get("http://localhost:5000/posts/", {
-      headers: {
-        Authorization: `Bearer ${auth.token}`,
-      },
-    });
-    if (result.data.success) {
-      setStatus(true);
-      dispatch(setPosts(result.data.result));
-    } else throw Error;
-  } catch (error) {
-    if (!error.response.data.success) {
-      console.log(error);
-      return setMessage(error.response.data.message);
-    }
-    setMessage("Error happened while Get Data, please try again");
-  }
-};
 
   //* ////////////////////////////
   const getUserById = async () => {
