@@ -22,21 +22,21 @@ import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import SendOutlined from "@mui/icons-material/SendOutlined";
 import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
-import TextField from '@mui/material/TextField';
+import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import axios from "axios";
-import {addShare} from '../../Service/redux/reducers/shares/sharesSlice'
+import { addShare } from "../../Service/redux/reducers/shares/sharesSlice";
 
 const Comments = ({ post }) => {
   // share modal
   const [openShare, setOpenShare] = useState(false);
   const handleOpenShare = () => setOpenShare(true);
   const handleCloseShare = () => setOpenShare(false);
-  const [contentAdd, setContentAdd] = useState("")
-  const [postId, setPostId] = useState(0)
- 
+  const [contentAdd, setContentAdd] = useState("");
+  const [postId, setPostId] = useState(0);
+
   //* Redux =========================
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
@@ -46,26 +46,21 @@ const Comments = ({ post }) => {
 
   // =========================================
 
-  const [open, setOpen] = useState(false);
   const createNewShare = async (e) => {
     try {
       const share = {
-        contentadd :contentAdd,
-        user_id:auth.userId,
-        post_id:postId
+        contentadd: contentAdd,
+        user_id: auth.userId,
+        post_id: postId,
       };
-    
-      const result = await axios.post(
-        "http://localhost:5000/share",
-        share,
-        {
-          headers: {
-            Authorization: `Bearer ${state.token}`,
-          },
-        }
-      );
+
+      const result = await axios.post("http://localhost:5000/share", share, {
+        headers: {
+          Authorization: `Bearer ${state.token}`,
+        },
+      });
       console.log(result);
-      dispatch(addShare(result.data.data))
+      dispatch(addShare(result.data.data));
       if (result.data.success) {
         setStatus(true);
         // setMessage(result.data.message);
@@ -77,11 +72,8 @@ const Comments = ({ post }) => {
       }
     }
   };
-  const commentsModal = () => setOpen(true);
-  const sharesModal = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  // =========================================
 
+  // =========================================
 
   const style = {
     position: "absolute",
@@ -135,7 +127,7 @@ const Comments = ({ post }) => {
   // }, []);
 
   // Likes Modal Toggle ======================
-  const [open, setOpen] = useState(false);
+  const [openLike, setOpenLike] = useState(false);
 
   const openLikesModal = async () => {
     try {
@@ -148,13 +140,13 @@ const Comments = ({ post }) => {
         }
       );
       setPostLikes(likes.data.result);
-      setOpen(true);
+      setOpenLike(true);
     } catch (error) {
       console.log("openLikesModal", error);
     }
   };
 
-  const closeLikesModal = () => setOpen(false);
+  const closeLikesModal = () => setOpenLike(false);
   // =========================================
 
   const [likesCount, setLikeCount] = useState(post.likes * 1);
@@ -260,8 +252,13 @@ const Comments = ({ post }) => {
       </Grid>
 
       <Grid container item justifyContent="right" alignItems="center" xs={4}>
-        <IconButton variant="plain" color="neutral" size="sm">
-          <SendOutlined onClick={handleOpenShare} />
+        <IconButton
+          variant="plain"
+          color="neutral"
+          size="sm"
+          onClick={handleOpenShare}
+        >
+          <SendOutlined />
         </IconButton>
         <Link
           component="button"
@@ -297,7 +294,7 @@ const Comments = ({ post }) => {
 
       <Modal
         keepMounted
-        open={open}
+        open={openLike}
         onClose={closeLikesModal}
         aria-labelledby="keep-mounted-modal-title"
         aria-describedby="keep-mounted-modal-description"
@@ -366,19 +363,29 @@ const Comments = ({ post }) => {
         }}
       >
         <Fade in={openShare}>
-          <Box sx={style}>
+          <Grid container sx={style} spacing={2} justifyContent="center">
             <Typography id="transition-modal-title" variant="h6" component="h2">
               Share this post
             </Typography>
-            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-            <TextField id="standard-basic" label="What to say" variant="standard" onChange={(e) => {
-              setContentAdd(e.target.value)
-              setPostId(post.id)
-            }} />
-            
-            <Button onClick={createNewShare}>Share to you profile</Button>
-            </Typography>
-          </Box>
+
+            <TextField
+              fullWidth
+              sx={{
+                mb: 3,
+              }}
+              id="standard-basic"
+              label="What to say"
+              variant="standard"
+              onChange={(e) => {
+                setContentAdd(e.target.value);
+                setPostId(post.id);
+              }}
+            />
+
+            <Button onClick={createNewShare} variant="outlined">
+              Share
+            </Button>
+          </Grid>
         </Fade>
       </Modal>
     </Grid>
