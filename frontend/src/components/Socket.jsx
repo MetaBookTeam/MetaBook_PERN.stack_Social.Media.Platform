@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import socketInit from "../../socket.server";
-import Message from "../../Message";
+import socketInit from "./socket.server";
+import Message from "./Message";
 
 function Socket() {
   const [user_id, setUser_id] = useState("");
