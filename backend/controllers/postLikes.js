@@ -79,7 +79,7 @@ DELETE http://localhost:5000/posts/like/:post_id
   try {
     const deleteLike = await pool.query(
       `DELETE FROM posts_likes
-          WHERE id=$1 AND user_id=$2  RETURNING *;`,
+          WHERE post_id=$1 AND user_id=$2  RETURNING *;`,
       placeholder
     );
     res.status(200).json({
