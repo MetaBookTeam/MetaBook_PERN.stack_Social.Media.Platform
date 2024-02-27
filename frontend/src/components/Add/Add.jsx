@@ -129,7 +129,7 @@ const Add = () => {
         aria-describedby="modal-modal-description"
       >
         <Box
-          width="75%"
+          // maxWidth= "clamp(100px, calc(30% / 2rem + 10px), 900px)"
           // height={400}
           bgcolor={"white"}
           color={"text.primary"}
