@@ -1,16 +1,21 @@
-import {
-  Avatar,
-  Button,
-  ButtonGroup,
-  Fab,
-  Modal,
-  Stack,
-  styled,
-  TextField,
-  Tooltip,
-  Typography,
-} from "@mui/material";
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+import { useDispatch, useSelector } from "react-redux";
+
+import Collapse from "@mui/material/Collapse";
+import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
+import TextField from "@mui/material/TextField";
+import { styled } from "@mui/material/styles";
+import Stack from "@mui/material/Stack";
+import Modal from "@mui/material/Modal";
+import Fab from "@mui/material/Fab";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Button from "@mui/material/Button";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/system/Box";
+
 import {
   Add as AddIcon,
   DateRange,
@@ -19,10 +24,9 @@ import {
   PersonAdd,
   VideoCameraBack,
 } from "@mui/icons-material";
-import Box from "@mui/system/Box";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+
 import { addPost } from "../../Service/redux/reducers/Posts/postsSlice";
+
 const StyledModal = styled(Modal)({
   display: "flex",
   alignItems: "center",
@@ -36,40 +40,54 @@ const UserBox = styled(Box)({
   marginBottom: "20px",
 });
 
+//===============================================================
+
 const Add = () => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
-  const {userProfile} = useSelector((state) => state.users);
-  // users.users , users.userProfile;
+  const { userProfile } = useSelector((state) => state.users);
 
-  // const [userProfile, setUserProfile] = useState([]);
+  //===============================================================
+  //* Cloudinary
+
+  const [collapseImage, setCollapseImage] = useState(true);
+
+  const [image, setImg] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [uploadMessage, setUploadMessage] = useState("");
+
+  //* Upload Images to Cloudinary //////////////////////////
+  const uploadImage = () => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "cloudUploadP5");
+    data.append("cloud_name", "dpbh42kjy");
+    axios
+      .post("https://api.cloudinary.com/v1_1/dpbh42kjy/image/upload", data)
+      .then((data) => {
+        // setUrl(data.data.secure_url);
+        console.log(data.data.url);
+        setImageUrl(data.data.url);
+
+        setUploadMessage("Image Uploaded Successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+        setUploadMessage("Image Upload Error");
+      });
+  };
+
+  //===============================================================
+
   const [content, setContent] = useState();
-
-  // const getUserById = async () => {
-  //   try {
-  //     const user = await axios.get(
-  //       `http://localhost:5000/users/${auth.userId}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${auth.token}`,
-  //         },
-  //       }
-  //     );
-  //     setUserProfile(...user.data.result);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   getUserById();
-  // }, []);
 
   const newPost = async () => {
     try {
-      const NewPost = await axios.post(
+      const newPost = await axios.post(
         `http://localhost:5000/posts`,
         {
-          content: content,
+          content,
+          photo_url: imageUrl,
         },
         {
           headers: {
@@ -78,7 +96,9 @@ const Add = () => {
         }
       );
 
-      dispatch(addPost(NewPost.data.result));
+      dispatch(addPost(newPost.data.result));
+      setOpen(false);
+      getAllPosts();
     } catch (error) {
       console.log(error);
     }
@@ -109,8 +129,8 @@ const Add = () => {
         aria-describedby="modal-modal-description"
       >
         <Box
-          width={400}
-          height={310}
+          // maxWidth= "clamp(100px, calc(30% / 2rem + 10px), 900px)"
+          // height={400}
           bgcolor={"white"}
           color={"text.primary"}
           p={3}
@@ -136,21 +156,52 @@ const Add = () => {
               setContent(e.target.value);
             }}
           />
-          <Stack direction="row" gap={1} mt={2} mb={3}>
+          <Stack direction="row" gap={1} mt={2} mb={2}>
             <EmojiEmotions color="primary" />
-            <Image color="secondary" />
+            <Image
+              color="secondary"
+              onClick={() => setCollapseImage((prev) => !prev)}
+            />
             <VideoCameraBack color="success" />
             <PersonAdd color="error" />
           </Stack>
+
+          {/* //* Cloudinary /////////////////////*/}
+          <Collapse in={collapseImage}>
+            <TextField
+              sx={{ width: "75%" }}
+              id="image"
+              name="image"
+              type="file"
+              // marginBottom={3}
+              helperText={uploadMessage && uploadMessage}
+              onChange={(e) => {
+                setImg(e.target.files[0]);
+              }}
+            />
+            <Button
+              variant="outlined"
+              sx={{
+                width: "22%",
+                height: "4em",
+                marginLeft: "3%",
+                marginBlockEnd: "16px",
+              }}
+              onClick={uploadImage}
+            >
+              upload
+            </Button>
+          </Collapse>
+
           <ButtonGroup
             fullWidth
             variant="contained"
             aria-label="outlined primary button group"
           >
             <Button onClick={newPost}>Post</Button>
-            <Button sx={{ width: "100px" }}>
+            {/* <Button sx={{ width: "100px" }}>
               <DateRange />
-            </Button>
+            </Button> */}
           </ButtonGroup>
         </Box>
       </StyledModal>
