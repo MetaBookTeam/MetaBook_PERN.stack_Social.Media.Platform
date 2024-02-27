@@ -77,24 +77,34 @@ const softDeleteShare = (req, res) => {
     });
 };
 
-const getAllSharesByUserId = (req, res) => {
-  const { user_id } = req.token.id;
+const getAllSharesByUserId = async (req, res) => {
+  const { user_id } = req.params;
   const placeholder = [user_id];
-  pool
-    .query(`SELECT * From shares WHARE user_id =$1`, placeholder)
-    .then((result) => {
-      res.status(200).json({
-        success: true,
-        message: "get all share succesfully",
-        result: result.rows,
-      });
+  console.log("hell");
+  try {
+    const resu = await pool.query(
+      `SELECT * FROM shares
+      WHERE user_id=$1`,
+      placeholder
+    );
+  
+    res.status(200).json({
+      success:true,
+      message:"all shares",
+      result:resu.rows
     })
-    .catch((error) => {
-      res.status(500).json({
-        success: false,
-        message: "Server Error",
-        error,
-      });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+      error,
     });
+  }
 };
-module.exports = { getShareByPostId, createShareByPostId, softDeleteShare ,getAllSharesByUserId};
+module.exports = {
+  getShareByPostId,
+  createShareByPostId,
+  softDeleteShare,
+  getAllSharesByUserId,
+};

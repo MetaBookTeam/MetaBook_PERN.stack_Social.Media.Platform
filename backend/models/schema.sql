@@ -787,7 +787,7 @@ CREATE TABLE
 INSERT INTO
   shares (post_id, user_id)
 VALUES
-  (1, 1),
+  (1, 1,'welcome'),
   (1, 2),
   (1, 3),
   (1, 4),
@@ -797,7 +797,7 @@ VALUES
   (2, 4),
   (2, 6),
   (2, 7),
-  (3, 2),
+  (3, 2,'I share this post'),
   (3, 3),
   (3, 4),
   (3, 5),

@@ -39,13 +39,14 @@ const style = {
   p: 4,
 };
 const Shares = ({ elem }) => {
-  console.log(elem.content);
+  console.log(elem);
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   return (
     //    {shares ? }
+    <Paper> 
         <Card
         variant="outlined"
         sx={{
@@ -138,7 +139,7 @@ const Shares = ({ elem }) => {
           </Fade>
         </Modal>
       </Card>
-
+      </Paper>
   );
 };
 

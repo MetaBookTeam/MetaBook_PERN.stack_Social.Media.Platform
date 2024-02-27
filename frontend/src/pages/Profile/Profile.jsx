@@ -242,7 +242,6 @@ const Profile = () => {
           <Grid item xs={8}>
             {postProfile ? (
               postProfile.map((elem) => {
-                console.log(elem);
                 return <ProfilePost elem={elem} />;
               })
             ) : (
@@ -250,7 +249,8 @@ const Profile = () => {
             )} 
             {shares ? (
               shares.map((elem) => {
-            
+                console.log(elem.content);
+
                 return <Shares elem={elem} />;
               })
             ) : (
