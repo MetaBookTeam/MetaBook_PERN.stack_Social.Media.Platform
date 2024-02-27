@@ -778,7 +778,7 @@ CREATE TABLE
     id SERIAL PRIMARY KEY NOT NULL,
     post_id INT NOT NULL REFERENCES posts (id) ON DELETE CASCADE,
     user_id INT REFERENCES users (id) ON DELETE CASCADE,
-    content VARCHAR(255)
+    contentAdd VARCHAR(255)
     -- OR page_id INT REFERENCES pages (id) ON DELETE CASCADE
   );
 
@@ -787,7 +787,7 @@ CREATE TABLE
 INSERT INTO
   shares (post_id, user_id)
 VALUES
-  (1, 1),
+  (1, 1,'welcome'),
   (1, 2),
   (1, 3),
   (1, 4),
@@ -797,7 +797,7 @@ VALUES
   (2, 4),
   (2, 6),
   (2, 7),
-  (3, 2),
+  (3, 2,'I share this'),
   (3, 3),
   (3, 4),
   (3, 5),

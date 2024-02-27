@@ -32,12 +32,13 @@ import Input from "@mui/joy/Input";
 import Box from "@mui/joy/Box";
 import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
-
+import { setShares } from "../../Service/redux/reducers/shares/sharesSlice";
 import { addPost } from "../../Service/redux/reducers/Posts/postsSlice";
 import Add from "../../components/Add/Add";
 import { setUpdateUserInformation } from "../../Service/redux/reducers/users/usersSlice";
 import Comments from "../Comments/Comments";
 import ProfilePost from "../../components/ProfilePost/ProfilePost";
+import Shares from'../../components/Shares/Shares'
 // extra information
 
 const Profile = () => {
@@ -49,6 +50,8 @@ const Profile = () => {
   // End extra information
 
   const auth = useSelector((state) => state.auth);
+  const shares = useSelector((state) => state.shares.shares);
+
   const { userProfile } = useSelector((state) => state.users);
   // users.users , users.userProfile;
 
@@ -87,7 +90,22 @@ const Profile = () => {
     name: "",
     phone: 0,
   });
+  // shares
 
+  const getAllshares = async () => {
+    try {
+      const result = await axios.get(`http://localhost:5000/posts/sharespost/${auth.userId}`, {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
+      dispatch(setShares(result.data.result));
+      // console.log(result);
+    } catch (error) {
+        console.log(error);
+
+    }
+  };
   const updateUserInformation = async () => {
     try {
       const newInfo = await axios.put(
@@ -117,14 +135,15 @@ const Profile = () => {
         },
       });
       setPostProfile(post.data.result);
-      console.log(post.data.result);
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
+    getAllshares();
     getPostProfile();
   }, []);
+  
   return (
     <>
       <Container>
@@ -227,8 +246,18 @@ const Profile = () => {
               })
             ) : (
               <Item>You do not have any post </Item>
-            )}
+            )} 
+            {shares ? (
+              shares.map((elem) => {
+                console.log(elem.content);
+
+                return <Shares elem={elem} />;
+              })
+            ) : (
+              <Item>You do not have any Shares post </Item>
+            )} 
           </Grid>
+          
         </Grid>
         <Add />
         {/* Modal for update user information */}
