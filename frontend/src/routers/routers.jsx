@@ -35,6 +35,10 @@ export const router = createBrowserRouter([
         element:<Page/>
       },
       {
+        path:"/contact",
+        element:<Contact/>
+      },
+      {
         path: "/page/:friend_id", // This for Friend profile
         element: <FriendPage />,
       },
