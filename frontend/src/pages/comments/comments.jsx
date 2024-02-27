@@ -35,12 +35,6 @@ const Comments = ({ post }) => {
   const { userProfile } = useSelector((state) => state.users);
 
   // =========================================
-  const [open, setOpen] = useState(false);
-
-  const commentsModal = () => setOpen(true);
-  const sharesModal = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  // =========================================
 
   const style = {
     position: "absolute",
@@ -80,23 +74,11 @@ const Comments = ({ post }) => {
     getLikesByPostId();
   }, []);
 
-  const openLikesModal = async () => {
-    // try {
-    //   const likes = await axios.get(
-    //     `http://localhost:5000/posts/like/${post.id}`,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${auth.token}`,
-    //       },
-    //     }
-    //   );
+  // Likes Modal Toggle ======================
+  const [open, setOpen] = useState(false);
 
-    //   setPostLikes(likes.data.result);
-    setOpen(true);
-    // } catch (error) {
-    //   console.log("openLikesModal", error);
-    // }
-  };
+  const openLikesModal = () => setOpen(true);
+  const closeLikesModal = () => setOpen(false);
   // =========================================
 
   const [likesCount, setLikeCount] = useState(post.likes * 1);
@@ -233,14 +215,14 @@ const Comments = ({ post }) => {
 
       {/* //* ///////////////////////////// */}
       {/* //* ///////////////////////////// */}
-      {/* //* Modal /////////////////////// */}
+      {/* //* Likes Modal */}
       {/* //* ///////////////////////////// */}
       {/* //* ///////////////////////////// */}
 
       <Modal
         keepMounted
         open={open}
-        onClose={handleClose}
+        onClose={closeLikesModal}
         aria-labelledby="keep-mounted-modal-title"
         aria-describedby="keep-mounted-modal-description"
       >

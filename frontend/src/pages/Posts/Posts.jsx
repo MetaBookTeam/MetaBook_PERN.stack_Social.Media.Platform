@@ -68,8 +68,6 @@ export default function Posts() {
     }
   };
 
-
-
   //* ////////////////////////////
   const getUserById = async () => {
     try {
@@ -100,7 +98,7 @@ export default function Posts() {
         : message && <div className="ErrorMessage">{message}</div>}
 
       {/* //* Add new post button //////////////// */}
-      <Add/>
+      <Add />
 
       <Grid container spacing={10} direction="row" justifyContent="center">
         <Grid
@@ -111,8 +109,7 @@ export default function Posts() {
           <SideBar />
         </Grid>
 
-        <Grid item md={5} sm={7} xs={4}>
-
+        <Grid item md={5} sm={7} xs={9}>
           {posts &&
             posts.toReversed().map((post) => {
               return <Post key={post.id} post={post} />;
