@@ -100,21 +100,30 @@ export default function Posts() {
         : message && <div className="ErrorMessage">{message}</div>}
 
       {/* //* Add new post button //////////////// */}
-      <Add values={{getAllPosts}} />
+      <Add/>
 
-      <Grid container spacing={2} direction="row" justifyContent="center">
-        <Grid item md={3} sx={{ display: { md: "block", xs: "none" } }}>
+      <Grid container spacing={10} direction="row" justifyContent="center">
+        <Grid
+          item
+          md={2}
+          sx={{ display: { md: "block", sm: "none", xs: "none" } }}
+        >
           <SideBar />
         </Grid>
 
         <Grid item md={5} sm={7} xs={4}>
+
           {posts &&
             posts.toReversed().map((post) => {
               return <Post key={post.id} post={post} />;
             })}
         </Grid>
 
-        <Grid item md={3} sx={{ display: { md: "block", xs: "none" } }}>
+        <Grid
+          item
+          md="auto"
+          sx={{ display: { md: "block", sm: "none", xs: "none" } }}
+        >
           <RightBar />
         </Grid>
       </Grid>
