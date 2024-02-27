@@ -3,6 +3,15 @@ require("dotenv").config();
 const cors = require("cors");
 require("./models/db");
 
+// Socket.io
+const { Server } = require("socket.io");
+const io = new Server(8080, { cors: { origin: "*" } });
+
+io.on("connection", (socket) => {
+  console.log("connected");
+  
+
+});
 //routers
 const rolesRouter = require("./routes/roles");
 const usersRouter = require("./routes/users");
