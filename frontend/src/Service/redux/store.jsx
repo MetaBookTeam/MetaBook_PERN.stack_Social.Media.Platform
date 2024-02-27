@@ -3,6 +3,7 @@ import authReducer from "./reducers/auth/authSlice";
 import pagesReducer from "./reducers/pages/pagesSlice";
 import commentsReducer from "./reducers/comments/commentsSlice";
 import usersReducer from "./reducers/users/usersSlice";
+import sharesReducer from "./reducers/shares/sharesSlice";
 
 import { configureStore } from "@reduxjs/toolkit";
 
@@ -13,6 +14,7 @@ const store = configureStore({
     pages: pagesReducer,
     posts: postsReducer,
     users: usersReducer,
+    shares:sharesReducer,
   },
 });
 

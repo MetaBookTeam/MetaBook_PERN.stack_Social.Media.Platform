@@ -379,7 +379,7 @@ UPDATE user_profile
           message: `updateUserById done`,
           result: result.rows,
         });
-      } else throw Error;
+      } else {throw Error};
     })
     .catch((error) => {
       console.log("updateUserById error");

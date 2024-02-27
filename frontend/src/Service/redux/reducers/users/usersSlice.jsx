@@ -63,9 +63,17 @@ export const usersSlice = createSlice({
     setFriendProfile: (state, action) => {
       state.friendProfile = action.payload;
     },
+    setUpdateUserInformation: (state, action) => {
+      // state.users = action.payload;
+      state.users = state.users.map((user) => {
+        if (user.id == action.payload.id) {
+          return state.users == action.payload;
+        }
+      });
+    },
   },
 });
 
-export const { setUsers, setUserProfile, setFriendProfile } =
+export const { setUsers, setUserProfile, setFriendProfile ,setUpdateUserInformation} =
   usersSlice.actions;
 export default usersSlice.reducer;
