@@ -118,7 +118,7 @@ export default function Posts() {
         : message && <div className="ErrorMessage">{message}</div>}
 
       {/* //* Add new post button //////////////// */}
-      <Add />
+      <Add values={{getAllPosts}} />
 
       <Grid container spacing={2} direction="row" justifyContent="center">
         <Grid item md={3} sx={{ display: { md: "block", xs: "none" } }}>
