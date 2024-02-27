@@ -38,6 +38,7 @@ import Add from "../../components/Add/Add";
 import { setUpdateUserInformation } from "../../Service/redux/reducers/users/usersSlice";
 import Comments from "../Comments/Comments";
 import ProfilePost from "../../components/ProfilePost/ProfilePost";
+import Shares from'../../components/Shares/Shares'
 // extra information
 
 const Profile = () => {
@@ -241,16 +242,22 @@ const Profile = () => {
           <Grid item xs={8}>
             {postProfile ? (
               postProfile.map((elem) => {
+                console.log(elem);
                 return <ProfilePost elem={elem} />;
               })
             ) : (
               <Item>You do not have any post </Item>
             )} 
+            {shares ? (
+              shares.map((elem) => {
             
+                return <Shares elem={elem} />;
+              })
+            ) : (
+              <Item>You do not have any Shares post </Item>
+            )} 
           </Grid>
-          <Grid item xs={8}>
-           
-          </Grid>
+          
         </Grid>
         <Add />
         {/* Modal for update user information */}
