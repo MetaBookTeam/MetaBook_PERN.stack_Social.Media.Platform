@@ -19,7 +19,7 @@ pool
     console.log(err);
   });
   // connecting to mongodb
-  console.log(process.env.DB_URI);
+
   mongoose.connect(process.env.DB_URI).then(
     () => {
       console.log("DB Ready To Use");
