@@ -31,6 +31,7 @@ import Stack from "@mui/material/Stack";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useDispatch, useSelector } from "react-redux";
 import { setLogout } from "../../Service/redux/reducers/auth/authSlice";
+import socketInit from "../socket.server";
 
 const Search = styled("div")(({ theme }) => ({
   backgroundColor: "white",
@@ -77,8 +78,44 @@ const NavBar = () => {
   
 
   // chatModal
+  const [socket, setSocket] = useState(null);
+  const [user_id, setUser_id] = useState("");
+  const [token, setToken] = useState("");
   const [openChat, setOpenChate] =useState(false);
-  const handleOpenChat = () => setOpenChate(true);
+  const [isConnected, setIsConnected] = useState(false);
+
+  const handleOpenChat = () => {
+    setOpenChate(true)
+    setSocket(
+      socketInit({
+        user_id:auth.userId,
+        token:auth.token
+      })
+    );
+    
+  };
+  useEffect(() => {
+    // mount
+    // in update body start second
+    socket?.on("connect", () => {
+      setIsConnected(true);
+      console.log(socket);
+    });
+    socket?.on("connect_error", (error) => {
+      console.log(error.message);
+      setIsConnected(false);
+    });
+
+    // will start in unmount remove from DOM
+    // in update return start first
+    return () => {
+      socket?.close();
+      socket?.removeAllListeners();
+    };
+  }, [socket]);
+
+
+
   const handleCloseChat = () => setOpenChate(false);
 
   // Search Box
@@ -131,10 +168,14 @@ const NavBar = () => {
         <Fade in={openChat}>
           <Box sx={style}>
             <Typography id="transition-modal-title" variant="h6" component="h2">
-              Text in a modal
+              Start Chatting
             </Typography>
             <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+              {allUsers.map((users) => {
+                return <p onClick={() => {
+                  console.log(users.id);
+                }}>{users.user_name}</p>
+              })}
             </Typography>
           </Box>
         </Fade>
