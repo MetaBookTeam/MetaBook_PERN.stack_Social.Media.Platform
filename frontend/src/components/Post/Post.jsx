@@ -93,7 +93,6 @@ const Post = ({ post }) => {
           </AspectRatio>
         </CardOverflow>
       )}
-      <Message />
       <CardContent>
         {/* <Paper sx={{ padding: "10px" }}> */}
         <Typography fontSize="sm" marginBottom={2}>
