@@ -2,7 +2,8 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 const style = {
   position: "absolute",
   top: "50%",
@@ -16,13 +17,32 @@ const style = {
   px: 4,
   pb: 3,
 };
-function ChildModal({ socket,userId }) {
+function ChildModal({ socket, userId }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
+  };
+  const auth = useSelector((state) => state.auth);
+  const [allMessage, setAllMessage] = useState([]);
+  useEffect(() => {
+    socket.on("message", receveMessage);
+
+    return () => {
+      // Clear the event
+      socket.off("message", receveMessage);
+    };
+  }, [allMessage]);
+  const [to, setTo] = useState(userId);
+  const [message, setMessage] = useState("");
+  const sendMessage = () => {
+    // we send to the server
+    socket.emit("message", { to, from: auth.userId, message });
+  };
+  const receveMessage = (data) => {
+    setAllMessage([...allMessage, data]);
   };
   return (
     <div>
@@ -33,9 +53,36 @@ function ChildModal({ socket,userId }) {
         aria-labelledby="child-modal-title"
         aria-describedby="child-modal-description"
       >
-        <Box sx={{ ...style, width: 200 }}>
-          <h2 id="child-modal-title">Text in a child modal</h2>
-          <p id="child-modal-description">{userId}</p>
+        <Box sx={{ ...style, width: 500 }}>
+          <h2 id="child-modal-title">
+            <div>
+              <h3>Message</h3>
+              {allMessage.length > 0 &&
+                allMessage.map((message) => {
+                  return (
+                    <p>
+                      From: {message.from} Message: {message.message}
+                    </p>
+                  );
+                })}
+              <input
+                type="text"
+                onChange={(e) => {
+                  setMessage(e.target.value);
+                }}
+                placeholder="Message"
+              />
+            </div>
+          </h2>
+          <p id="child-modal-description">
+            <Button
+              onClick={(e) => {
+                sendMessage(e.target.value);
+              }}
+            >
+              Send
+            </Button>
+          </p>
           <Button onClick={handleClose}>Close Child Modal</Button>
         </Box>
       </Modal>
