@@ -10,10 +10,11 @@ import {
   styled,
   Toolbar,
   Typography,
-  Button ,
-  Fade ,
-  Modal ,
-  Backdrop 
+  Button,
+  Fade,
+  Modal,
+  Backdrop,
+  Paper,
 } from "@mui/material";
 
 import React, { useState, useEffect } from "react";
@@ -32,6 +33,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { useDispatch, useSelector } from "react-redux";
 import { setLogout } from "../../Service/redux/reducers/auth/authSlice";
 import socketInit from "../socket.server";
+import ChildModal from "../ChildModal/ChildModal";
 
 const Search = styled("div")(({ theme }) => ({
   backgroundColor: "white",
@@ -58,13 +60,13 @@ const UserBox = styled(Box)(({ theme }) => ({
   },
 }));
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: "background.paper",
+  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
@@ -75,24 +77,22 @@ const NavBar = () => {
 
   const { userProfile } = useSelector((state) => state.users);
   const [open, setOpen] = useState(false);
-  
 
   // chatModal
   const [socket, setSocket] = useState(null);
   const [user_id, setUser_id] = useState("");
   const [token, setToken] = useState("");
-  const [openChat, setOpenChate] =useState(false);
+  const [openChat, setOpenChate] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
 
   const handleOpenChat = () => {
-    setOpenChate(true)
+    setOpenChate(true);
     setSocket(
       socketInit({
-        user_id:auth.userId,
-        token:auth.token
+        user_id: auth.userId,
+        token: auth.token,
       })
     );
-    
   };
   useEffect(() => {
     // mount
@@ -113,8 +113,6 @@ const NavBar = () => {
       socket?.removeAllListeners();
     };
   }, [socket]);
-
-
 
   const handleCloseChat = () => setOpenChate(false);
 
@@ -146,9 +144,7 @@ const NavBar = () => {
     setFilter(filtered);
   };
 
-
   // console.log(filter);
-
 
   return (
     <AppBar position="sticky">
@@ -169,12 +165,18 @@ const NavBar = () => {
           <Box sx={style}>
             <Typography id="transition-modal-title" variant="h6" component="h2">
               Start Chatting
+              <hr/>
             </Typography>
             <Typography id="transition-modal-description" sx={{ mt: 2 }}>
               {allUsers.map((users) => {
-                return <p onClick={() => {
-                  console.log(users.id);
-                }}>{users.user_name}</p>
+                return (
+                  <>
+                    {" "}
+                    <Paper elevation={0}>{users.user_name}</Paper>
+                    <ChildModal socket={socket} userId={users.id} />
+               
+                  </>
+                );
               })}
             </Typography>
           </Box>
@@ -186,14 +188,13 @@ const NavBar = () => {
           <NavLink className={"Home"} to={"/home"}>
             MetaBook
           </NavLink>
-          
         </Typography>
         <NavLink className={"Home"} to={"/contact"}>
-            Contact Us
-          </NavLink>
-          <NavLink className={"Home"} to={"/about"}>
-            About Us
-          </NavLink>
+          Contact Us
+        </NavLink>
+        <NavLink className={"Home"} to={"/about"}>
+          About Us
+        </NavLink>
         {/* <Pets sx={{ display: { xs: "block", sm: "none" } }} /> */}
         <Stack spacing={2} sx={{ width: 300, bgcolor: "white" }}>
           <Autocomplete
@@ -217,7 +218,7 @@ const NavBar = () => {
 
         <Icons>
           <Badge badgeContent={4} color="error">
-            <Mail onClick={handleOpenChat}/>
+            <Mail onClick={handleOpenChat} />
           </Badge>
           <Badge color="error">
             <Notifications />
