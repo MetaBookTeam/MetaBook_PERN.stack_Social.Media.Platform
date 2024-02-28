@@ -120,7 +120,7 @@ const Profile = () => {
         }
       );
       dispatch(setUpdateUserInformation(newInfo.data.result));
-      console.log("Done");
+      // console.log("Done");
     } catch (error) {
       console.log(error.message);
     }
