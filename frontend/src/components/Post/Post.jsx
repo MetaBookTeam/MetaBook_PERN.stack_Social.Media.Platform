@@ -48,12 +48,6 @@ const Post = ({ post }) => {
   const { userProfile } = useSelector((state) => state.users);
   // users.users , users.userProfile;
 
-  // Post Modal Toggle ======================
-  const [openPost, setOpenPost] = useState(false);
-
-  const openPostModal = () => setOpenPost(true);
-  const closePostModal = () => setOpenPost(false);
-
   return (
     <Card
       variant="outlined"
@@ -106,7 +100,12 @@ const Post = ({ post }) => {
       {post.photo_url && (
         <CardOverflow>
           <AspectRatio>
-            <img src={post.photo_url} alt="" loading="lazy" />
+            <img
+              src={post.photo_url}
+              alt=""
+              loading="lazy"
+              onClick={() => openPostModal}
+            />
           </AspectRatio>
         </CardOverflow>
       )}
@@ -126,68 +125,6 @@ const Post = ({ post }) => {
         <hr />
         <Comments values={{ post, modalStyle }} />
       </CardContent>
-
-      {/* //* ///////////////////////////// */}
-      {/* //* ///////////////////////////// */}
-      {/* //* post Modal */}
-      {/* //* ///////////////////////////// */}
-      {/* //* ///////////////////////////// */}
-
-      <Modal
-        keepMounted
-        open={openPost}
-        onClose={closePostModal}
-        aria-labelledby="keep-mounted-modal-title"
-        aria-describedby="keep-mounted-modal-description"
-      >
-        <Box sx={modalStyle}>
-          <Typography
-            id="keep-mounted-modal-title"
-            variant="h6"
-            component="h2"
-            textAlign={"center"}
-          >
-            Post details
-            <hr />
-          </Typography>
-          {/* {postLikes.toReversed().map((like, i) => (
-            <Typography key={i} id="keep-mounted-modal-description">
-              <Link
-                // component="span"
-                underline="hover"
-                sx={{ color: "black", my: 0.5 }}
-                href={`/page/${like.user_id}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Box
-                  sx={{
-                    position: "relative",
-                    "&::before": {
-                      content: '""',
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      bottom: 0,
-                      right: 0,
-                      m: "-1px",
-                      borderRadius: "50%",
-                      background:
-                        "linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)",
-                    },
-                    mr: 3,
-                  }}
-                  component="span"
-                >
-                  <Avatar component="span" src={like.image} />
-                </Box>
-
-                {like.user_name}
-              </Link>
-            </Typography>
-          ))} */}
-        </Box>
-      </Modal>
     </Card>
   );
 };
