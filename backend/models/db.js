@@ -1,7 +1,7 @@
 const { Pool } = require("pg");
-const connectionString = process.env.DB_URL_kamal;
+// const connectionString = process.env.DB_URL_kamal;
 // const connectionString = process.env.DB_URL_nassar;
-  // const connectionString = process.env.DB_URL_osama;
+  const connectionString = process.env.DB_URL_osama;
 // const connectionString = process.env.DB_URL_saqqa;
 
 

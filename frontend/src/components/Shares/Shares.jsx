@@ -17,7 +17,7 @@ import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import Comments from "../../pages/Comments/Comments";
+import Comments from "../../pages/comments/comments";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/joy/IconButton";
 import Backdrop from "@mui/material/Backdrop";

@@ -1,18 +1,13 @@
-import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
+import React from 'react'
+import SideBar from '../../components/SideBar/SideBar'
+import RightBar from '../../components/RightBar/RightBar'
+
 const Page = () => {
-  return ( <>
-    <React.Fragment>
-      <CssBaseline />
-      <Container fixed>
-        <Box sx={{ bgcolor: '#cfe8fc', height: '200px' ,
-    width:"100%"}} />
-      </Container>
-    </React.Fragment>
-    <div>Page</div>
-    </>
+  return (
+    <div>Page
+        <SideBar/>
+        <RightBar/>
+    </div>
   )
 }
 

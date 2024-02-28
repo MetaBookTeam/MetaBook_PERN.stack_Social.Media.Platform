@@ -18,8 +18,10 @@ import {
   Switch,
 } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const SideBar = ({ mode, setMode }) => {
+  const navigator=useNavigate()
   return (
     <Box flex={1} p={2} sx={{ display: { xs: "none", sm: "block" } }}>
       <Box position="stick">
@@ -33,7 +35,9 @@ const SideBar = ({ mode, setMode }) => {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component="a" href="/Pages">
+            <ListItemButton component="a"onClick={()=>{
+              navigator("/pages")
+            }} >
               <ListItemIcon>
                 <Article />
               </ListItemIcon>

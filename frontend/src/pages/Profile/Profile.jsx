@@ -36,7 +36,7 @@ import { setShares } from "../../Service/redux/reducers/shares/sharesSlice";
 import { addPost } from "../../Service/redux/reducers/Posts/postsSlice";
 import Add from "../../components/Add/Add";
 import { setUpdateUserInformation } from "../../Service/redux/reducers/users/usersSlice";
-import Comments from "../Comments/Comments";
+import Comments from "../../pages/comments/comments";
 import ProfilePost from "../../components/ProfilePost/ProfilePost";
 import Shares from "../../components/Shares/Shares";
 // extra information
