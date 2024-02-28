@@ -42,14 +42,6 @@ import { addShare } from "../../Service/redux/reducers/shares/sharesSlice";
 const Comments = ({ values }) => {
   const navigate = useNavigate();
   const { post, modalStyle } = values;
-  
-  // share modal
-
-  const [openShare, setOpenShare] = useState(false);
-  const handleOpenShare = () => setOpenShare(true);
-  const handleCloseShare = () => setOpenShare(false);
-  const [contentAdd, setContentAdd] = useState("");
-  const [postId, setPostId] = useState(0);
 
   //* Redux =========================
   const dispatch = useDispatch();
@@ -226,6 +218,24 @@ const Comments = ({ values }) => {
       console.log("handleDislike", error);
     }
   };
+
+  // =========================================
+  // share post to your profile modal
+
+  const [openShare, setOpenShare] = useState(false);
+  const handleOpenShare = () => setOpenShare(true);
+  const handleCloseShare = () => setOpenShare(false);
+  const [contentAdd, setContentAdd] = useState("");
+  const [postId, setPostId] = useState(0);
+
+  // =========================================
+  // openSharesModal
+  //! post.shared_users //////////////
+  const [postShares, setPostShares] = useState([]);
+  const [shareIcon, setShareIcon] = useState(
+    post.liked_users?.some((user) => auth.userId * 1 === user * 1) ||
+      postLikes.some((like) => auth.userId * 1 === like.user_id * 1)
+  );
 
   return (
     <>

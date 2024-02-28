@@ -95,10 +95,11 @@ const Add = () => {
           },
         }
       );
-
-      dispatch(addPost(newPost.data.result));
+      // console.log("newPost.data.result", newPost.data.result);
+      dispatch(addPost(...newPost.data.result));
       setOpen(false);
-      getAllPosts();
+      [];
+      // getAllPosts();
     } catch (error) {
       console.log(error);
     }

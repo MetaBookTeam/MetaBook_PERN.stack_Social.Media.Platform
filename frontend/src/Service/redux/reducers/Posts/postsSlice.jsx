@@ -11,7 +11,9 @@ export const postsSlice = createSlice({
     },
 
     addPost: (state, action) => {
+      action.payload = { ...action.payload, likes: 0, comments: 0, shares: 0 };
       state.posts.push(action.payload);
+      // state.posts = [...state.posts, action.payload];
     },
 
     updatePostById: (state, action) => {
