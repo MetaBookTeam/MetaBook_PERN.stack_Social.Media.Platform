@@ -37,7 +37,7 @@ postsRouter.get("/profile", authentication, getYourPosts); //done
 postsRouter.get("/shares/:user_id", authentication, getAllSharesByUserId);
 postsRouter.get("/:user_id", authentication, getPostByUserId);
 postsRouter.get("/like/:post_id", authentication, getLikesByPostId);
-postsRouter.get("/shares/:post_id", authentication, getShareByPostId);
+postsRouter.get("/shares/by_post/:post_id", authentication, getShareByPostId);
 
 // UPDATE
 postsRouter.put("/:post_id", authentication, updatePostById); //done

@@ -37,7 +37,6 @@ const getLikesByPostId = async (req, res) => {
   /* 
 GET http://localhost:5000/posts/like/:post_id
 */
-  const { userId } = req.token;
   const { post_id } = req.params;
   const placeholder = [post_id];
   try {

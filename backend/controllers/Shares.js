@@ -12,8 +12,7 @@ const getShareByPostId = (req, res) => {
 
       // `,
       `
-
-SELECT 
+      SELECT 
         shares.post_id,shares.user_id,users.user_name,users.image
       FROM users 
       LEFT JOIN shares 
@@ -39,6 +38,7 @@ SELECT
       });
     });
 };
+
 const createShareByPostId = (req, res) => {
   const { post_id } = req.params;
   const { userId } = req.token;

@@ -91,7 +91,7 @@ const Comments = ({ values }) => {
   const handleCommentsModal = async (e) => {
     setCollapseComments((prev) => !prev);
 
-    console.log(post.id, auth.userId);
+    // console.log(post.id, auth.userId);
 
     try {
       //*  getCommentsByPostId ///////////////////
@@ -236,7 +236,7 @@ const Comments = ({ values }) => {
     try {
       // postsRouter.get("/shares/:post_id", authentication, getShareByPostId);
       const shares = await axios.get(
-        `http://localhost:5000/posts/shares/${post.id}`,
+        `http://localhost:5000/posts/shares/by_post/${post.id}`,
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -366,7 +366,7 @@ const Comments = ({ values }) => {
       <Collapse in={collapseComments}>
         {postComments.length ? (
           postComments.map((comment, i) => {
-            console.log(comment, i);
+            // console.log(comment, i);
             return (
               <div key={i}>
                 {i > 0 && (
@@ -496,7 +496,7 @@ const Comments = ({ values }) => {
 
       <Modal
         keepMounted
-        open={openAddShare}
+        open={openShare}
         onClose={closeSharesModal}
         aria-labelledby="keep-mounted-modal-title"
         aria-describedby="keep-mounted-modal-description"
