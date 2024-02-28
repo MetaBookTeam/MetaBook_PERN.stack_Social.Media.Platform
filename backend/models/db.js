@@ -1,4 +1,6 @@
-const { Pool } = require("pg");
+const { Pool } = require("pg"); 
+
+
 const connectionString = process.env.DB_URL_kamal;
 // const connectionString = process.env.DB_URL_nassar;
   // const connectionString = process.env.DB_URL_osama;
@@ -17,4 +19,5 @@ pool
     console.log(err);
   });
 
+  
 module.exports = pool;
