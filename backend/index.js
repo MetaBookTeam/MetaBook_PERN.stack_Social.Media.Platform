@@ -3,6 +3,34 @@ require("dotenv").config();
 const cors = require("cors");
 require("./models/db");
 
+// Socket.io
+const { Server } = require("socket.io");
+const messageHandler = require("../backend/controllers/message");
+const extraAuth = require("../backend/middlewares/extraAuth");
+const socket = require("../backend/middlewares/auth");
+const client = {};
+const io = new Server(8080, { cors: { origin: "*" } });
+io.use(socket); // Auth 
+io.on("connection", (socket) => {
+  console.log("connected");
+  socket.use(extraAuth);
+  const user_id = socket.handshake.headers.user_id;
+  client[user_id] = { socket_id: socket.id, user_id };
+  messageHandler(socket, io);
+  socket.on("error", (error) => {
+    // socket by def will not handel the error
+    // we need to care this out
+    socket.emit("error", { error: error.message });
+  });
+  socket.on("disconnect", () => {
+    for (const key in client) {
+      if (client[key].socket_id === socket.id) {
+        delete client[key];
+      }
+    }
+    console.log(client);
+  });
+});
 //routers
 const rolesRouter = require("./routes/roles");
 const usersRouter = require("./routes/users");

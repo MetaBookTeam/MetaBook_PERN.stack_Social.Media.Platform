@@ -23,6 +23,7 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Comments from "../../pages/Comments/Comments";
 import { styled } from "@mui/material/styles";
+import Message from "../Socket";
 
 const Post = ({ post }) => {
   const Item = styled(Paper)(({ theme }) => ({
@@ -98,7 +99,6 @@ const Post = ({ post }) => {
           </AspectRatio>
         </CardOverflow>
       )}
-
       <CardContent>
         {/* <Paper sx={{ padding: "10px" }}> */}
         <Typography fontSize="sm" marginBottom={2}>
