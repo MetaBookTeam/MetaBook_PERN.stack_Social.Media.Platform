@@ -51,6 +51,8 @@ const Comments = ({ values }) => {
   const { userProfile } = useSelector((state) => state.users);
 
   // =========================================
+  const [contentAdd, setContentAdd] = useState("");
+  // const [postId, setPostId] = useState(0);
 
   const createNewShare = async (e) => {
     try {
@@ -58,7 +60,7 @@ const Comments = ({ values }) => {
         content: contentAdd,
       };
       const result = await axios.post(
-        `http://localhost:5000/posts/shares/${postId}`,
+        `http://localhost:5000/posts/shares/${post.id}`,
         share,
         {
           headers: {
@@ -225,8 +227,6 @@ const Comments = ({ values }) => {
   const [openShare, setOpenShare] = useState(false);
   const handleOpenShare = () => setOpenShare(true);
   const handleCloseShare = () => setOpenShare(false);
-  const [contentAdd, setContentAdd] = useState("");
-  const [postId, setPostId] = useState(0);
 
   // =========================================
   // openSharesModal
@@ -504,7 +504,7 @@ const Comments = ({ values }) => {
               variant="standard"
               onChange={(e) => {
                 setContentAdd(e.target.value);
-                setPostId(post.id);
+                // setPostId(post.id);
               }}
             />
 
