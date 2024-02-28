@@ -122,14 +122,6 @@ const Comments = ({ values }) => {
       postLikes.some((like) => auth.userId * 1 === like.user_id * 1)
   );
 
-  // console.log(
-  //   "post",
-  //   post.id,
-  //   "=>",
-  //   post.liked_users?.some((user) => auth.userId * 1 === user * 1),
-  //   postLikes.some((like) => auth.userId * 1 === like.user_id * 1)
-  // );
-
   const getLikesByPostId = async () => {
     try {
       // postsRouter.get("/like/:post_id", authentication, getLikesByPostId);
@@ -154,6 +146,7 @@ const Comments = ({ values }) => {
 
   // Likes Modal Toggle ======================
   const [openLike, setOpenLike] = useState(false);
+  const closeLikesModal = () => setOpenLike(false);
 
   const openLikesModal = async () => {
     try {
@@ -172,7 +165,6 @@ const Comments = ({ values }) => {
     }
   };
 
-  const closeLikesModal = () => setOpenLike(false);
   // =========================================
 
   const [likesCount, setLikeCount] = useState(post.likes * 1);
@@ -222,20 +214,41 @@ const Comments = ({ values }) => {
   };
 
   // =========================================
-  // share post to your profile modal
+  // add share post to your profile modal
 
-  const [openShare, setOpenShare] = useState(false);
-  const handleOpenShare = () => setOpenShare(true);
-  const handleCloseShare = () => setOpenShare(false);
+  const [openAddShare, setOpenAddShare] = useState(false);
+  const handleOpenAddShare = () => setOpenAddShare(true);
+  const handleCloseAddShare = () => setOpenAddShare(false);
 
   // =========================================
   // openSharesModal
   //! post.shared_users //////////////
   const [postShares, setPostShares] = useState([]);
   const [shareIcon, setShareIcon] = useState(
-    post.liked_users?.some((user) => auth.userId * 1 === user * 1) ||
-      postLikes.some((like) => auth.userId * 1 === like.user_id * 1)
+    post.shared_users?.some((user) => auth.userId * 1 === user * 1) ||
+      postShares.some((share) => auth.userId * 1 === share.user_id * 1)
   );
+  // shares Modal Toggle ======================
+  const [openShare, setOpenShare] = useState(false);
+  const closeSharesModal = () => setOpenShare(false);
+
+  const openSharesModal = async () => {
+    try {
+      // postsRouter.get("/shares/:post_id", authentication, getShareByPostId);
+      const shares = await axios.get(
+        `http://localhost:5000/posts/shares/${post.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      setPostShares(shares.data.result);
+      setOpenShare(true);
+    } catch (error) {
+      console.log("openSharesModal", error);
+    }
+  };
 
   return (
     <>
@@ -321,7 +334,7 @@ const Comments = ({ values }) => {
             variant="plain"
             color="neutral"
             size="sm"
-            onClick={handleOpenShare}
+            onClick={handleOpenAddShare}
           >
             <SendOutlined />
           </IconButton>
@@ -331,6 +344,7 @@ const Comments = ({ values }) => {
             fontSize="sm"
             fontWeight="lg"
             textColor="text.primary"
+            onClick={openSharesModal}
           >
             {post.shares} shares
           </Link>
@@ -474,12 +488,75 @@ const Comments = ({ values }) => {
         </Box>
       </Modal>
 
+      {/* //* ///////////////////////////// */}
+      {/* //* ///////////////////////////// */}
+      {/* //* Shares Modal */}
+      {/* //* ///////////////////////////// */}
+      {/* //* ///////////////////////////// */}
+
+      <Modal
+        keepMounted
+        open={openAddShare}
+        onClose={closeSharesModal}
+        aria-labelledby="keep-mounted-modal-title"
+        aria-describedby="keep-mounted-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Typography
+            id="keep-mounted-modal-title"
+            variant="h6"
+            component="h2"
+            textAlign={"center"}
+          >
+            Shares
+            <hr />
+          </Typography>
+          {postShares.toReversed().map((share, i) => (
+            <Typography key={i} id="keep-mounted-modal-description">
+              <Link
+                underline="hover"
+                sx={{ color: "black", my: 0.5 }}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => {
+                  navigate(`/page/${share.user_id}`);
+                }}
+              >
+                <Box
+                  sx={{
+                    position: "relative",
+                    "&::before": {
+                      content: '""',
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      bottom: 0,
+                      right: 0,
+                      m: "-1px",
+                      borderRadius: "50%",
+                      background:
+                        "linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)",
+                    },
+                    mr: 3,
+                  }}
+                  component="span"
+                >
+                  <Avatar component="span" src={share.image} />
+                </Box>
+
+                {share.user_name}
+              </Link>
+            </Typography>
+          ))}
+        </Box>
+      </Modal>
+
       {/*  share modal */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={openShare}
-        onClose={handleCloseShare}
+        open={openAddShare}
+        onClose={handleCloseAddShare}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
@@ -488,7 +565,7 @@ const Comments = ({ values }) => {
           },
         }}
       >
-        <Fade in={openShare}>
+        <Fade in={openAddShare}>
           <Grid container sx={modalStyle} spacing={2} justifyContent="center">
             <Typography id="transition-modal-title" variant="h6" component="h2">
               Share this post

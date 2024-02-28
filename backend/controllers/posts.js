@@ -52,7 +52,8 @@ GET http://localhost:5000/posts
 */
   try {
     const post = await pool.query(
-      `with cte_likes as (
+      `
+      with cte_likes as (
         select  post_id, count(post_id) as total_likes
         from posts_likes
         group by  post_id
@@ -74,6 +75,12 @@ GET http://localhost:5000/posts
         select post_id, count(*) as total_shares
         from shares
         group by post_id
+        ),
+
+      cte_users_share as (
+        select post_id, array_agg(user_id) as shared_users
+        from shares
+        group by post_id
         )
 
       select p.id, p.created_at, users.image, users.user_name, p.content, p.user_id, p.photo_url,
@@ -81,7 +88,8 @@ GET http://localhost:5000/posts
       coalesce(l.total_likes, 0)     as likes, 
               ul.liked_users         as liked_users, 
       coalesce(c.total_comments, 0)  as comments,
-      coalesce(s.total_shares, 0)    as shares
+      coalesce(s.total_shares, 0)    as shares,
+              sh.shared_users        as shared_users
 
       from posts p
 
@@ -97,7 +105,11 @@ GET http://localhost:5000/posts
         on p.id = c.post_id
 
       left join cte_shares s
-        on p.id = s.post_id`
+        on p.id = s.post_id
+
+      left join cte_users_share sh
+        on p.id = sh.post_id
+      `
     );
 
     res.status(200).json({

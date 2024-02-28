@@ -4,23 +4,37 @@ const getShareByPostId = (req, res) => {
   const { post_id } = req.params;
   pool
     .query(
-      `SELECT * 
-FROM shares
-INNER JOIN posts ON shares.post_id = posts.id
-WHERE is_deleted = 0 AND shares.post_id = $1;`,
+      //       `
+      //       SELECT *
+      // FROM shares
+      // INNER JOIN posts ON shares.post_id = posts.id
+      // WHERE is_deleted = 0 AND shares.post_id = $1;
+
+      // `,
+      `
+
+SELECT 
+        shares.post_id,shares.user_id,users.user_name,users.image
+      FROM users 
+      LEFT JOIN shares 
+        ON users.id = shares.user_id 
+      LEFT JOIN posts 
+        ON posts.id = shares.user_id 
+      WHERE shares.post_id = $1
+        AND users.is_deleted = 0;`,
       [post_id]
     )
     .then((result) => {
       res.status(200).json({
         success: true,
-        message: "get share successfully",
+        message: "getShareByPostId successfully",
         result: result.rows,
       });
     })
     .catch((error) => {
       res.status(500).json({
         success: false,
-        message: "Server Error",
+        message: "getShareByPostId Server Error",
         error,
       });
     });
