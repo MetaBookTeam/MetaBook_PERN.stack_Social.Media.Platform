@@ -37,6 +37,7 @@ const modalStyle = {
   p: 4,
 };
 
+
 const Post = ({ post }) => {
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",

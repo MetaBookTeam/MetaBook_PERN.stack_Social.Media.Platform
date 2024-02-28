@@ -2,14 +2,11 @@ import React from "react";
 import { useEffect, useState } from "react";
 
 import ReactDOM from "react-dom";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 
 import axios from "axios";
-
-const imgLink =
-  "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260";
 
 import Divider from "@mui/material/Divider";
 import Collapse from "@mui/material/Collapse";
@@ -43,14 +40,8 @@ import { styled } from "@mui/material/styles";
 import { addShare } from "../../Service/redux/reducers/shares/sharesSlice";
 
 const Comments = ({ values }) => {
+  const navigate = useNavigate();
   const { post, modalStyle } = values;
-  // share modal
-
-  const [openShare, setOpenShare] = useState(false);
-  const handleOpenShare = () => setOpenShare(true);
-  const handleCloseShare = () => setOpenShare(false);
-  const [contentAdd, setContentAdd] = useState("");
-  const [postId, setPostId] = useState(0);
 
   //* Redux =========================
   const dispatch = useDispatch();
@@ -227,6 +218,24 @@ const Comments = ({ values }) => {
       console.log("handleDislike", error);
     }
   };
+
+  // =========================================
+  // share post to your profile modal
+
+  const [openShare, setOpenShare] = useState(false);
+  const handleOpenShare = () => setOpenShare(true);
+  const handleCloseShare = () => setOpenShare(false);
+  const [contentAdd, setContentAdd] = useState("");
+  const [postId, setPostId] = useState(0);
+
+  // =========================================
+  // openSharesModal
+  //! post.shared_users //////////////
+  const [postShares, setPostShares] = useState([]);
+  const [shareIcon, setShareIcon] = useState(
+    post.liked_users?.some((user) => auth.userId * 1 === user * 1) ||
+      postLikes.some((like) => auth.userId * 1 === like.user_id * 1)
+  );
 
   return (
     <>
@@ -429,9 +438,12 @@ const Comments = ({ values }) => {
                 // component="span"
                 underline="hover"
                 sx={{ color: "black", my: 0.5 }}
-                href={`/page/${like.user_id}`}
+                // href={`/page/${like.user_id}`}
                 target="_blank"
                 rel="noreferrer"
+                onClick={() => {
+                  navigate(`/page/${like.user_id}`);
+                }}
               >
                 <Box
                   sx={{
