@@ -24,6 +24,18 @@ import Paper from "@mui/material/Paper";
 import Comments from "../../pages/Comments/Comments";
 import { styled } from "@mui/material/styles";
 
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "white",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 const Post = ({ post }) => {
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -112,33 +124,33 @@ const Post = ({ post }) => {
         </Typography>
         {/* </Paper> */}
         <hr />
-        <Comments post={post} />
+        <Comments values={{ post, modalStyle }} />
       </CardContent>
 
       {/* //* ///////////////////////////// */}
       {/* //* ///////////////////////////// */}
-      {/* //* Likes Modal */}
+      {/* //* post Modal */}
       {/* //* ///////////////////////////// */}
       {/* //* ///////////////////////////// */}
 
-      {/* <Modal
+      <Modal
         keepMounted
         open={openPost}
         onClose={closePostModal}
         aria-labelledby="keep-mounted-modal-title"
         aria-describedby="keep-mounted-modal-description"
       >
-        <Box sx={style}>
+        <Box sx={modalStyle}>
           <Typography
             id="keep-mounted-modal-title"
             variant="h6"
             component="h2"
             textAlign={"center"}
           >
-            Likes
+            Post details
             <hr />
           </Typography>
-          {postLikes.toReversed().map((like, i) => (
+          {/* {postLikes.toReversed().map((like, i) => (
             <Typography key={i} id="keep-mounted-modal-description">
               <Link
                 // component="span"
@@ -173,9 +185,9 @@ const Post = ({ post }) => {
                 {like.user_name}
               </Link>
             </Typography>
-          ))}
+          ))} */}
         </Box>
-      </Modal> */}
+      </Modal>
     </Card>
   );
 };

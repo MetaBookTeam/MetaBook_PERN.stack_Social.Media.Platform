@@ -29,8 +29,10 @@ import { styled } from "@mui/material/styles";
 import axios from "axios";
 import { addShare } from "../../Service/redux/reducers/shares/sharesSlice";
 
-const Comments = ({ post }) => {
+const Comments = ({ values }) => {
+  const { post, modalStyle } = values;
   // share modal
+
   const [openShare, setOpenShare] = useState(false);
   const handleOpenShare = () => setOpenShare(true);
   const handleCloseShare = () => setOpenShare(false);
@@ -76,18 +78,6 @@ const Comments = ({ post }) => {
   };
 
   // =========================================
-
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "white",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
 
   // openLikesModal
   const [postLikes, setPostLikes] = useState([]);
@@ -301,7 +291,7 @@ const Comments = ({ post }) => {
         aria-labelledby="keep-mounted-modal-title"
         aria-describedby="keep-mounted-modal-description"
       >
-        <Box sx={style}>
+        <Box sx={modalStyle}>
           <Typography
             id="keep-mounted-modal-title"
             variant="h6"
@@ -365,7 +355,7 @@ const Comments = ({ post }) => {
         }}
       >
         <Fade in={openShare}>
-          <Grid container sx={style} spacing={2} justifyContent="center">
+          <Grid container sx={modalStyle} spacing={2} justifyContent="center">
             <Typography id="transition-modal-title" variant="h6" component="h2">
               Share this post
             </Typography>
