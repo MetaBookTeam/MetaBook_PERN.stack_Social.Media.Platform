@@ -161,11 +161,11 @@ const Profile = () => {
                 </AspectRatio>
               </Box>
               <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
-                <Avatar
+                {/* <Avatar
                   alt="Remy Sharp"
                   src={userProfile.image}
                   sx={{ width: 80, height: 80 }}
-                />
+                /> */}
               </Box>
 
               {userProfile.bio}
@@ -243,8 +243,8 @@ const Profile = () => {
           </Grid>
           <Grid item xs={8}>
             {postProfile ? (
-              postProfile.map((elem) => {
-                return <ProfilePost elem={elem} />;
+              postProfile.map((post) => {
+                return <ProfilePost post={post} />;
               })
             ) : (
               <Item>You do not have any post </Item>

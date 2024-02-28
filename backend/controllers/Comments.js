@@ -1,28 +1,29 @@
 const pool = require("../models/db");
 //create comments
 const createComment = (req, res) => {
-  const user_id = req.token.userId;
+  const { userId } = req.token.userId;
   const { post_id } = req.params;
-
-  //we want to create comment in req.body
   const { comment } = req.body;
+
   pool
     .query(
-      `INSERT INTO comments(user_id,post_id,comment)VALUES($1,$2,$3) RETURNING *`,
-      [user_id, post_id, comment]
+      `INSERT INTO comments (user_id, post_id, comment) 
+      VALUES ($1, $2, $3) 
+      RETURNING *;`,
+      [userId, post_id, comment]
     )
     .then((result) => {
       res.status(201).json({
         success: true,
         message: "Comment created successfully",
-        result: result.rows[0],
+        result: result.rows, // array of one object, will be handled the same as other results with spread operator in axios ...result.data.result
       });
     })
 
     .catch((error) => {
-      res.status(404).json({
+      res.status(500).json({
         success: false,
-        message: "Server error",
+        message: "createComment Server error",
         error,
       });
     });
@@ -73,7 +74,7 @@ GET http://localhost:5000/comments/:post_id/comments
     .catch((error) => {
       return res.status(500).json({
         success: false,
-        message: "Server error",
+        message: "getCommentsByPostId Server error",
         error,
       });
     });
@@ -110,7 +111,7 @@ PUT http://localhost:5000/comments/:comment_id
     .catch((error) => {
       return res.status(500).json({
         success: false,
-        message: "Server error",
+        message: "updateComment Server error",
         error,
       });
     });
@@ -137,7 +138,7 @@ DELETE http://localhost:5000/comments/:comment_id
     .catch((error) => {
       res.status(500).json({
         success: false,
-        message: "Server error",
+        message: "deleteComment Server error",
         error,
       });
     });
@@ -173,7 +174,7 @@ GET http://localhost:5000/comments/:comment_id
     .catch((error) => {
       return res.status(500).json({
         success: false,
-        message: "Server error",
+        message: "getCommentById Server error",
         error,
       });
     });

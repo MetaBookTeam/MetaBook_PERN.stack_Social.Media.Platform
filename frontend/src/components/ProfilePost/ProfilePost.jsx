@@ -39,7 +39,7 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-function ProfilePost({ elem }) {
+function ProfilePost({ post }) {
   const dispatch = useDispatch()
   const auth = useSelector((state) => state.auth);
 
@@ -103,9 +103,9 @@ function ProfilePost({ elem }) {
             },
           }}
         >
-          <Avatar size="sm" src={elem.image} />
+          <Avatar size="sm" src={post.image} />
         </Box>
-        <Typography fontWeight="lg">{elem.user_name}</Typography>
+        <Typography fontWeight="lg">{post.user_name}</Typography>
         <br />
        
         <IconButton onClick={handleOpen} variant="plain" color="neutral" size="sm" sx={{ ml: 'auto' }}>
@@ -113,10 +113,10 @@ function ProfilePost({ elem }) {
         </IconButton>
       </CardContent>
 
-      {elem.photo_url && (
+      {post.photo_url && (
         <CardOverflow>
           <AspectRatio>
-            <img src={elem.photo_url} alt="" loading="lazy" />
+            <img src={post.photo_url} alt="" loading="lazy" />
           </AspectRatio>
         </CardOverflow>
       )}
@@ -129,11 +129,11 @@ function ProfilePost({ elem }) {
             fontWeight="lg"
             textColor="text.primary"
           ></Link>{" "}
-          {elem.content}
+          {post.content}
         </Typography>
         {/* </Paper> */}
         <hr />
-        <Comments post={elem} />
+        <Comments values={post} />
       </CardContent>
       <Modal
         aria-labelledby="transition-modal-title"
@@ -162,7 +162,7 @@ function ProfilePost({ elem }) {
             <TextField id="standard-basic" label="Standard" variant="standard" />
             </Typography>
             <br/>
-            <Button onClick={() => {updatePostById(elem.id)}} variant="text">Edit</Button>
+            <Button onClick={() => {updatePostById(post.id)}} variant="text">Edit</Button>
           </Box>
         </Fade>
       </Modal>
