@@ -2,14 +2,11 @@ import React from "react";
 import { useEffect, useState } from "react";
 
 import ReactDOM from "react-dom";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 
 import axios from "axios";
-
-const imgLink =
-  "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260";
 
 import Divider from "@mui/material/Divider";
 import Collapse from "@mui/material/Collapse";
@@ -43,7 +40,9 @@ import { styled } from "@mui/material/styles";
 import { addShare } from "../../Service/redux/reducers/shares/sharesSlice";
 
 const Comments = ({ values }) => {
+  const navigate = useNavigate();
   const { post, modalStyle } = values;
+  
   // share modal
 
   const [openShare, setOpenShare] = useState(false);
@@ -429,9 +428,12 @@ const Comments = ({ values }) => {
                 // component="span"
                 underline="hover"
                 sx={{ color: "black", my: 0.5 }}
-                href={`/page/${like.user_id}`}
+                // href={`/page/${like.user_id}`}
                 target="_blank"
                 rel="noreferrer"
+                onClick={() => {
+                  navigate(`/page/${like.user_id}`);
+                }}
               >
                 <Box
                   sx={{

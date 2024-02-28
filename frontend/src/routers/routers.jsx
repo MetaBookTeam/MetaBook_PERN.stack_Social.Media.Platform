@@ -11,7 +11,7 @@ import Signup from "../pages/Signup/Signup";
 import Posts from "../pages/Posts/Posts";
 import Page from "../pages/Page/Page";
 import Profile from "../pages/Profile/Profile";
-import FriendPage from '../pages/FriendPage/FriendPage'
+import FriendPage from "../pages/FriendPage/FriendPage";
 
 export const router = createBrowserRouter([
   {
@@ -19,27 +19,27 @@ export const router = createBrowserRouter([
     element: <Main />,
     children: [
       {
-        path: "/home",
+        path: "home",
         element: <Posts />,
       },
       {
-        path: "/about",
+        path: "about",
         element: <About />,
       },
       {
-        path: "/profile",
+        path: "profile",
         element: <Profile />,
       },
       {
-        path:"/pages",
-        element:<Page/>
+        path: "pages",
+        element: <Page />,
       },
       {
-        path:"/contact",
-        element:<Contact/>
+        path: "contact",
+        element: <Contact />,
       },
       {
-        path: "/page/:friend_id", // This for Friend profile
+        path: "page/:friend_id", // This for Friend profile
         element: <FriendPage />,
       },
       {
@@ -58,17 +58,17 @@ export const router = createBrowserRouter([
       },
     ],
   },
- 
+
   {
     path: "/signup",
     element: <Signup />,
   },
   {
-    path: "*",
-    element: <NotFound />,
-  },
-  {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);

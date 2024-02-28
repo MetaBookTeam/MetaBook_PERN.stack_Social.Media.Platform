@@ -209,7 +209,7 @@ const getAllUsers = (req, res) => {
         return;
       }
 
-      console.log(`getAllUsers done`);
+      // console.log(`getAllUsers done`);
       res.status(200).json({
         success: true,
         message: `getAllUsers done`,
@@ -265,7 +265,7 @@ GET http://localhost:5000/users/:user_id
         return;
       }
 
-      console.log(`getUserById done`);
+      // console.log(`getUserById done`);
       res.status(200).json({
         success: true,
         message: `getUserById done`,
@@ -379,7 +379,9 @@ UPDATE user_profile
           message: `updateUserById done`,
           result: result.rows,
         });
-      } else {throw Error};
+      } else {
+        throw Error;
+      }
     })
     .catch((error) => {
       console.log("updateUserById error");
