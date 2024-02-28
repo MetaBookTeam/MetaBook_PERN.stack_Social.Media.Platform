@@ -52,7 +52,6 @@ const Comments = ({ values }) => {
 
   // =========================================
   const [contentAdd, setContentAdd] = useState("");
-  // const [postId, setPostId] = useState(0);
 
   const createNewShare = async (e) => {
     try {
@@ -91,8 +90,6 @@ const Comments = ({ values }) => {
   const handleCommentsModal = async (e) => {
     setCollapseComments((prev) => !prev);
 
-    // console.log(post.id, auth.userId);
-
     try {
       //*  getCommentsByPostId ///////////////////
       // commentsRouter.get("/:post_id/comments", authentication,getCommentsByPostId);
@@ -121,28 +118,6 @@ const Comments = ({ values }) => {
     post.liked_users?.some((user) => auth.userId * 1 === user * 1) ||
       postLikes.some((like) => auth.userId * 1 === like.user_id * 1)
   );
-
-  const getLikesByPostId = async () => {
-    try {
-      // postsRouter.get("/like/:post_id", authentication, getLikesByPostId);
-      const likes = await axios.get(
-        `http://localhost:5000/posts/like/${post.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
-      // console.log("likes.data.result", likes.data.result);
-      setPostLikes(likes.data.result);
-    } catch (error) {
-      console.log("getLikesByPostId", error);
-    }
-  };
-
-  // useEffect(() => {
-  //   getLikesByPostId();
-  // }, []);
 
   // Likes Modal Toggle ======================
   const [openLike, setOpenLike] = useState(false);
@@ -222,7 +197,6 @@ const Comments = ({ values }) => {
 
   // =========================================
   // openSharesModal
-  //! post.shared_users //////////////
   const [postShares, setPostShares] = useState([]);
   const [shareIcon, setShareIcon] = useState(
     post.shared_users?.some((user) => auth.userId * 1 === user * 1) ||
@@ -247,6 +221,29 @@ const Comments = ({ values }) => {
       setOpenShare(true);
     } catch (error) {
       console.log("openSharesModal", error);
+    }
+  };
+
+  // =========================================
+  //* Add new comment
+
+  const AddCommentHandler = async () => {
+    try {
+      // commentsRouter.post("/:post_id", authentication, createComment);
+
+      const newComment = await axios.get(
+        `http://localhost:5000/comments/${post.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      setPostShares(newComment.data.result);
+      setOpenShare(true);
+    } catch (error) {
+      console.log("AddCommentHandler", error);
     }
   };
 
@@ -358,6 +355,7 @@ const Comments = ({ values }) => {
           variant="plain"
           placeholder="Add a comment…"
           sx={{ flex: 1, px: 0, "--Input-focusedThickness": "0px" }}
+          onChange={(e) => {}}
         />
         <Link underline="none" role="button">
           Post

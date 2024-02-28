@@ -83,7 +83,14 @@ GET http://localhost:5000/posts
         group by post_id
         )
 
-      select p.id, p.created_at, users.image, users.user_name, p.content, p.user_id, p.photo_url,
+      select 
+        p.id, 
+        p.created_at, 
+        users.image, 
+        users.user_name, 
+        p.content, 
+        p.user_id, 
+        p.photo_url,
 
       coalesce(l.total_likes, 0)     as likes, 
               ul.liked_users         as liked_users, 
@@ -137,33 +144,73 @@ GET http://localhost:5000/posts/profile
 
   try {
     const post = await pool.query(
-      `with cte_likes as (
+      `
+      with cte_likes as (
         select post_id, count(*) as total_likes
         from posts_likes
         group by post_id
         ), 
+
+        cte_users_Like as (
+          select post_id, array_agg(user_id) as liked_users
+          from posts_likes
+          group by post_id
+          ), 
+
         cte_comments as (
           select post_id, count(*) as total_comments
           from comments
           group by post_id
           ), 
+
         cte_shares as (
           select post_id, count(*) as total_shares
           from shares
           group by post_id
-          )
-      select p.id, 
-      p.content,
-      coalesce(l.total_likes, 0) as likes, 
-      coalesce(c.total_comments, 0) as comments,
-      coalesce(s.total_shares, 0) as shares
+          ),
+
+          cte_users_share as (
+            select post_id, array_agg(user_id) as shared_users
+            from shares
+            group by post_id
+            )
+
+      select 
+        p.id, 
+        p.created_at, 
+        users.image, 
+        users.user_name, 
+        p.content, 
+        p.user_id, 
+        p.photo_url,
+
+        coalesce(l.total_likes, 0)     as likes, 
+                ul.liked_users         as liked_users, 
+        coalesce(c.total_comments, 0)  as comments,
+        coalesce(s.total_shares, 0)    as shares,
+                sh.shared_users        as shared_users
+
       from posts p
+
+      inner join users on users.id = p.user_id
+
       left join cte_likes l
         on p.id = l.post_id
+
+        
+      left join cte_users_Like ul
+      on p.id = ul.post_id
+
       left join cte_comments c
         on p.id = c.post_id
-        left join cte_shares s
-        on p.id = s.post_id WHERE user_id=$1
+
+      left join cte_shares s
+        on p.id = s.post_id 
+
+      left join cte_users_share sh
+        on p.id = sh.post_id
+
+        WHERE users.id=$1
       `,
       placeholder
     );
@@ -193,33 +240,73 @@ GET http://localhost:5000/posts/:user_id
 
   try {
     const post = await pool.query(
-      `with cte_likes as (
-        select post_id, count(*) as total_likes
+      `
+      with cte_likes as (
+        select  post_id, count(post_id) as total_likes
+        from posts_likes
+        group by  post_id
+        ), 
+
+      cte_users_Like as (
+        select post_id, array_agg(user_id) as liked_users
         from posts_likes
         group by post_id
         ), 
-        cte_comments as (
-          select post_id, count(*) as total_comments
-          from comments
-          group by post_id
-          ), 
-        cte_shares as (
-          select post_id, count(*) as total_shares
-          from shares
-          group by post_id
-          )
-      select p.id, 
-      p.content,
-      coalesce(l.total_likes, 0) as likes, 
-      coalesce(c.total_comments, 0) as comments,
-      coalesce(s.total_shares, 0) as shares
+
+      cte_comments as (
+        select post_id, count(*) as total_comments
+        from comments
+        group by post_id
+        ), 
+
+      cte_shares as (
+        select post_id, count(*) as total_shares
+        from shares
+        group by post_id
+        ),
+
+      cte_users_share as (
+        select post_id, array_agg(user_id) as shared_users
+        from shares
+        group by post_id
+        )
+
+      select 
+        p.id, 
+        p.created_at, 
+        users.image, 
+        users.user_name, 
+        p.content, 
+        p.user_id, 
+        p.photo_url,
+
+      coalesce(l.total_likes, 0)     as likes, 
+              ul.liked_users         as liked_users, 
+      coalesce(c.total_comments, 0)  as comments,
+      coalesce(s.total_shares, 0)    as shares,
+              sh.shared_users        as shared_users
+
       from posts p
+
+      inner join users on users.id = p.user_id
+
       left join cte_likes l
         on p.id = l.post_id
+
+      left join cte_users_Like ul
+        on p.id = ul.post_id
+
       left join cte_comments c
         on p.id = c.post_id
-        left join cte_shares s
-        on p.id = s.post_id WHERE p.user_id = $1 AND is_deleted = 0`,
+
+      left join cte_shares s
+        on p.id = s.post_id
+
+      left join cte_users_share sh
+        on p.id = sh.post_id
+      
+      WHERE p.user_id = $1 AND users.is_deleted = 0;
+      `,
       placeholder
     );
     res.status(200).json({
