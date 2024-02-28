@@ -1,11 +1,17 @@
+import React from "react";
 import { useEffect, useState } from "react";
 
+import ReactDOM from "react-dom";
 import { NavLink } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 
 import axios from "axios";
 
+const imgLink =
+  "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260";
+
+import Divider from "@mui/material/Divider";
 import Collapse from "@mui/material/Collapse";
 import Fade from "@mui/material/Fade";
 import Backdrop from "@mui/material/Backdrop";
@@ -33,22 +39,6 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 
 import { styled } from "@mui/material/styles";
-
-import {
-  CommentText,
-  CommentMetadata,
-  CommentGroup,
-  CommentContent,
-  CommentAvatar,
-  CommentActions,
-  CommentAction,
-  CommentAuthor,
-  FormTextArea,
-  // Button,
-  Comment,
-  Form,
-  Header,
-} from "semantic-ui-react";
 
 import { addShare } from "../../Service/redux/reducers/shares/sharesSlice";
 
@@ -103,7 +93,33 @@ const Comments = ({ values }) => {
   // Collapse Comments List ===================================
 
   const [collapseComments, setCollapseComments] = useState(false);
+  const [postComments, setPostComments] = useState([]);
 
+  const handleCommentsModal = async (e) => {
+    setCollapseComments((prev) => !prev);
+
+    console.log(post.id, auth.userId);
+
+    try {
+      //*  getCommentsByPostId ///////////////////
+      // commentsRouter.get("/:post_id/comments", authentication,getCommentsByPostId);
+      const comments = await axios.get(
+        `http://localhost:5000/comments/${post.id}/comments`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      if (comments.data.success) {
+        setPostComments(comments.data.result);
+      } else {
+        setPostComments([]);
+      }
+    } catch (error) {
+      console.log("getCommentsByPostId", error);
+    }
+  };
   // =========================================
 
   // openLikesModal
@@ -123,8 +139,6 @@ const Comments = ({ values }) => {
 
   const getLikesByPostId = async () => {
     try {
-      // console.log('auth.userId', auth.userId)
-
       // postsRouter.get("/like/:post_id", authentication, getLikesByPostId);
       const likes = await axios.get(
         `http://localhost:5000/posts/like/${post.id}`,
@@ -215,95 +229,110 @@ const Comments = ({ values }) => {
   };
 
   return (
-    <Grid
-      container
-      direction="row"
-      justifyContent="space-between"
-      alignItems="center"
-    >
-      <Grid container item alignItems="center" xs={4}>
-        {likeIcon ? (
-          <IconButton
-            variant="plain"
-            color="neutral"
-            size="sm"
-            onClick={handleDislike}
-          >
-            <FavoriteIcon style={{ color: "red" }} />
-          </IconButton>
-        ) : (
-          <IconButton
-            variant="plain"
-            color="neutral"
-            size="sm"
-            onClick={handleLike}
-          >
-            <FavoriteBorder />
-          </IconButton>
-        )}
-
-        <Link
-          component="button"
-          underline="none"
-          fontSize="sm"
-          fontWeight="lg"
-          textColor="text.primary"
-          onClick={openLikesModal}
-        >
-          {likesCount} Likes
-        </Link>
-      </Grid>
-
+    <>
       <Grid
         container
-        item
-        justifyContent="center"
+        direction="row"
+        justifyContent="space-between"
         alignItems="center"
-        xs={4}
-        onClick={() => setCollapseComments((prev) => !prev)}
       >
-        <IconButton variant="plain" color="neutral" size="sm">
-          <ModeCommentOutlined />
-        </IconButton>
-        <Link
-          // onClick={commentsModal}
-          component="button"
-          underline="none"
-          fontSize="sm"
-          fontWeight="lg"
-          textColor="text.primary"
+        <Grid
+          container
+          item
+          alignItems="center"
+          // xs={4}
+          xs="auto"
         >
-          {post.comments} comments
-        </Link>
-      </Grid>
+          {likeIcon ? (
+            <IconButton
+              variant="plain"
+              color="neutral"
+              size="sm"
+              onClick={handleDislike}
+            >
+              <FavoriteIcon style={{ color: "red" }} />
+            </IconButton>
+          ) : (
+            <IconButton
+              variant="plain"
+              color="neutral"
+              size="sm"
+              onClick={handleLike}
+            >
+              <FavoriteBorder />
+            </IconButton>
+          )}
 
-      <Grid container item justifyContent="right" alignItems="center" xs={4}>
-        <IconButton
-          variant="plain"
-          color="neutral"
-          size="sm"
-          onClick={handleOpenShare}
+          <Link
+            component="button"
+            underline="none"
+            fontSize="sm"
+            fontWeight="lg"
+            textColor="text.primary"
+            onClick={openLikesModal}
+          >
+            {likesCount} Likes
+          </Link>
+        </Grid>
+
+        <Grid
+          container
+          item
+          justifyContent="center"
+          alignItems="center"
+          // xs={4}
+          xs="auto"
+          onClick={handleCommentsModal}
         >
-          <SendOutlined />
-        </IconButton>
-        <Link
-          component="button"
-          underline="none"
-          fontSize="sm"
-          fontWeight="lg"
-          textColor="text.primary"
+          <IconButton variant="plain" color="neutral" size="sm">
+            <ModeCommentOutlined />
+          </IconButton>
+          <Link
+            // onClick={commentsModal}
+            component="button"
+            underline="none"
+            fontSize="sm"
+            // fontSize={"0.7em"}
+            fontWeight="lg"
+            textColor="text.primary"
+          >
+            {post.comments} comments
+          </Link>
+        </Grid>
+
+        <Grid
+          container
+          item
+          justifyContent="right"
+          alignItems="center"
+          // xs={4}
+          xs="auto"
         >
-          {post.shares} shares
-        </Link>
+          <IconButton
+            variant="plain"
+            color="neutral"
+            size="sm"
+            onClick={handleOpenShare}
+          >
+            <SendOutlined />
+          </IconButton>
+          <Link
+            component="button"
+            underline="none"
+            fontSize="sm"
+            fontWeight="lg"
+            textColor="text.primary"
+          >
+            {post.shares} shares
+          </Link>
+        </Grid>
       </Grid>
-      <CardContent orientation="horizontal" sx={{ gap: 1 }}>
+      <CardContent orientation="horizontal" sx={{ gap: 1, mb: 2 }}>
         <IconButton size="sm" variant="plain" color="neutral" sx={{ ml: -1 }}>
-          {/* <Face /> */}
           <Avatar size="sm" src={userProfile.image} />
         </IconButton>
         <Input
           variant="plain"
-          size="sm"
           placeholder="Add a comment…"
           sx={{ flex: 1, px: 0, "--Input-focusedThickness": "0px" }}
         />
@@ -311,84 +340,64 @@ const Comments = ({ values }) => {
           Post
         </Link>
       </CardContent>
-
       <Collapse in={collapseComments}>
-        <CommentGroup>
-          <Header as="h3" dividing>
-            Comments
-          </Header>
-
-          <Comment>
-            <CommentAvatar src="https://react.semantic-ui.com/images/avatar/small/matt.jpg" />
-            <CommentContent>
-              <CommentAuthor as="a">Matt</CommentAuthor>
-              <CommentMetadata>
-                <div>Today at 5:42PM</div>
-              </CommentMetadata>
-              <CommentText>How artistic!</CommentText>
-              <CommentActions>
-                <CommentAction>Reply</CommentAction>
-              </CommentActions>
-            </CommentContent>
-          </Comment>
-
-          <Comment>
-            <CommentAvatar src="https://react.semantic-ui.com/images/avatar/small/elliot.jpg" />
-            <CommentContent>
-              <CommentAuthor as="a">Elliot Fu</CommentAuthor>
-              <CommentMetadata>
-                <div>Yesterday at 12:30AM</div>
-              </CommentMetadata>
-              <CommentText>
-                <p>
-                  This has been very useful for my research. Thanks as well!
-                </p>
-              </CommentText>
-              <CommentActions>
-                <CommentAction>Reply</CommentAction>
-              </CommentActions>
-            </CommentContent>
-            <CommentGroup>
-              <Comment>
-                <CommentAvatar src="https://react.semantic-ui.com/images/avatar/small/jenny.jpg" />
-                <CommentContent>
-                  <CommentAuthor as="a">Jenny Hess</CommentAuthor>
-                  <CommentMetadata>
-                    <div>Just now</div>
-                  </CommentMetadata>
-                  <CommentText>Elliot you are always so right :)</CommentText>
-                  <CommentActions>
-                    <CommentAction>Reply</CommentAction>
-                  </CommentActions>
-                </CommentContent>
-              </Comment>
-            </CommentGroup>
-          </Comment>
-
-          <Comment>
-            <CommentAvatar src="https://react.semantic-ui.com/images/avatar/small/joe.jpg" />
-            <CommentContent>
-              <CommentAuthor as="a">Joe Henderson</CommentAuthor>
-              <CommentMetadata>
-                <div>5 days ago</div>
-              </CommentMetadata>
-              <CommentText>Dude, this is awesome. Thanks so much</CommentText>
-              <CommentActions>
-                <CommentAction>Reply</CommentAction>
-              </CommentActions>
-            </CommentContent>
-          </Comment>
-
-          <Form reply>
-            <FormTextArea />
-            <Button
-              content="Add Reply"
-              labelPosition="left"
-              icon="edit"
-              primary
-            />
-          </Form>
-        </CommentGroup>
+        {postComments.length ? (
+          postComments.map((comment, i) => {
+            console.log(comment, i);
+            return (
+              <div key={i}>
+                {i > 0 && (
+                  <Divider variant="fullWidth" style={{ margin: "15px 0" }} />
+                )}
+                <Paper style={{ padding: "15px" }}>
+                  <Grid container wrap="nowrap" spacing={2}>
+                    <Grid item>
+                      <Avatar
+                        alt={comment.commenter_name}
+                        size="sm"
+                        src={comment.commenter_image}
+                      />
+                    </Grid>
+                    <Grid justifyContent="left" item xs zeroMinWidth>
+                      <Typography
+                        component="h4"
+                        variant="h4"
+                        sx={{ color: "black" }}
+                      >
+                        {comment.commenter_name}
+                      </Typography>
+                      <Typography>{comment.comment}</Typography>
+                    </Grid>
+                  </Grid>
+                </Paper>
+                <Grid
+                  container
+                  wrap="nowrap"
+                  columnSpacing={1}
+                  ml={1}
+                  sx={{ mt: "3px" }}
+                >
+                  <Grid item xs="auto">
+                    <Typography>
+                      {new Date(comment.created_at).toLocaleString()} -
+                    </Typography>
+                  </Grid>
+                  <Grid item xs="auto">
+                    <Typography>Like</Typography>
+                  </Grid>
+                  <Grid item ml="auto" xs="auto">
+                    <Typography>Edit</Typography>
+                  </Grid>
+                  <Grid item mr={2} xs="auto">
+                    <Typography>Delete</Typography>
+                  </Grid>
+                </Grid>
+              </div>
+            );
+          })
+        ) : (
+          <Typography>There is no comments on this post yet.</Typography>
+        )}
       </Collapse>
 
       {/* //* ///////////////////////////// */}
@@ -493,7 +502,7 @@ const Comments = ({ values }) => {
           </Grid>
         </Fade>
       </Modal>
-    </Grid>
+    </>
   );
 };
 

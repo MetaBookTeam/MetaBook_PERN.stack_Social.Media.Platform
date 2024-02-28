@@ -37,18 +37,37 @@ GET http://localhost:5000/comments/:post_id/comments
   const { post_id } = req.params;
 
   pool
-    .query(`SELECT * FROM comments WHERE post_id = $1 AND is_deleted = 0;`, [
-      post_id,
-    ])
+    .query(
+      `
+    SELECT 
+      comments.*, 
+      users.image AS commenter_image, 
+      user_profile.first_name AS commenter_name 
+    
+    FROM comments
+
+    LEFT JOIN users
+    ON comments.user_id = users.id
+
+    LEFT JOIN user_profile
+    ON comments.user_id = user_profile.user_id
+
+    WHERE comments.post_id = $1 AND comments.is_deleted = 0;
+    `,
+      [post_id]
+    )
     .then((result) => {
       if (result.rows.length) {
-        return res.status(200).json({
+        res.status(200).json({
           success: true,
           message: "All the comments",
           result: result.rows,
         });
       } else {
-        throw new Error("Error happened while updating comments");
+        res.status(200).json({
+          success: false,
+          message: "There is no comments on this post yet.",
+        });
       }
     })
     .catch((error) => {
