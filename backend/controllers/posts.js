@@ -22,6 +22,7 @@ POST http://localhost:5000/posts
     );
     const placeholder2 = [newPost.rows[0].id];
     console.log(placeholder2);
+
     const newLike = await pool.query(
       ` INSERT INTO
       posts_likes (user_id, post_id)
