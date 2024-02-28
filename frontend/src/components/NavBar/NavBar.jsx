@@ -165,20 +165,17 @@ const NavBar = () => {
           <Box sx={style}>
             <Typography id="transition-modal-title" variant="h6" component="h2">
               Start Chatting
-              <hr/>
+              <hr />
             </Typography>
-            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              {allUsers.map((users) => {
-                return (
-                  <>
-                    {" "}
-                    <Paper elevation={0}>{users.user_name}</Paper>
-                    <ChildModal socket={socket} userId={users.id} />
-               
-                  </>
-                );
-              })}
-            </Typography>
+
+            {allUsers.map((users, i) => {
+              return (
+                <div key={i}>
+                  <Paper elevation={0}>{users.user_name}</Paper>
+                  <ChildModal socket={socket} userId={users.id} />
+                </div>
+              );
+            })}
           </Box>
         </Fade>
       </Modal>
