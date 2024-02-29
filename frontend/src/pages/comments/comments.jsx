@@ -265,11 +265,11 @@ const Comments = ({ values }) => {
 
   // =========================================
   //* add Comment Like
+  // console.log("postComments.comment_likes", postComments);
 
   const [commentsLikesCount, setCommentsLikesCount] = useState(
+    // postComments.comment_likes * 1
     0
-    // post.comments * 1
-    // ! postComments.likes * 1 ////////// backend not ready yet
   );
 
   const addCommentLikeHandler = async (e, commentId) => {
@@ -410,8 +410,9 @@ const Comments = ({ values }) => {
       </CardContent>
       <Collapse in={collapseComments}>
         {postComments.length ? (
-          postComments.map((comment, i) => {
+          postComments.toReversed().map((comment, i) => {
             // console.log(comment, i);
+            // setCommentsLikesCount(comment.comment_likes);
             return (
               <div key={i}>
                 {i > 0 && (
@@ -454,17 +455,34 @@ const Comments = ({ values }) => {
                     <Typography
                       onClick={(e) => {
                         addCommentLikeHandler(e, comment.id);
+                        if (comment.comment_likes * 1 > commentsLikesCount) {
+                          setCommentsLikesCount(comment.comment_likes * 1);
+                        }
                       }}
+                      sx={{ cursor: "pointer" }}
                     >
-                      {commentsLikesCount} Like{commentsLikesCount > 1 && "s"}
+                      {comment.comment_likes * 1 >= commentsLikesCount
+                        ? comment.comment_likes
+                        : commentsLikesCount}{" "}
+                      Like
+                      {comment.comment_likes > 1 && "s"}
+                      {/* {commentsLikesCount} Like
+                      {commentsLikesCount > 1 && "s"} */}
                     </Typography>
                   </Grid>
-                  <Grid item ml="auto" xs="auto">
-                    <Typography>Edit</Typography>
-                  </Grid>
-                  <Grid item mr={2} xs="auto">
-                    <Typography>Delete</Typography>
-                  </Grid>
+
+                  {comment.user_id == auth.userId && (
+                    <>
+                      <Grid item ml="auto" xs="auto">
+                        <Typography sx={{ cursor: "pointer" }}>Edit</Typography>
+                      </Grid>
+                      <Grid item mr={2} xs="auto">
+                        <Typography sx={{ cursor: "pointer" }}>
+                          Delete
+                        </Typography>
+                      </Grid>
+                    </>
+                  )}
                 </Grid>
               </div>
             );

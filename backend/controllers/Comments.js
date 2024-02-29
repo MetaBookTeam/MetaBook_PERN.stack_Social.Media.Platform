@@ -40,21 +40,35 @@ GET http://localhost:5000/comments/:post_id/comments
   pool
     .query(
       `
+
+      WITH cte_comment_likes AS (
+        SELECT comment_id, COUNT(*) AS total_comment_likes
+        FROM comment_likes
+        GROUP BY comment_id
+        )
+    --  ),
+
     SELECT 
-      comments.*, 
+      c.*, 
       users.image AS commenter_image, 
       user_profile.first_name, 
-      user_profile.last_name
+      user_profile.last_name,
     
-    FROM comments
+      COALESCE(cl.total_comment_likes, 0) AS comment_likes
+
+    FROM comments c
 
     LEFT JOIN users
-    ON comments.user_id = users.id
+    ON c.user_id = users.id
 
     LEFT JOIN user_profile
-    ON comments.user_id = user_profile.user_id
+    ON c.user_id = user_profile.user_id
 
-    WHERE comments.post_id = $1 AND comments.is_deleted = 0;
+    left join cte_comment_likes cl
+    on c.id = cl.comment_id
+
+    WHERE c.post_id = $1 AND c.is_deleted = 0;
+
     `,
       [post_id]
     )
