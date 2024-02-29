@@ -41,7 +41,6 @@ const style = {
   p: 4,
 };
 const Shares = ({ elem }) => {
-  console.log("elem", elem);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -114,7 +113,7 @@ const Shares = ({ elem }) => {
             {elem.content}
           </Typography>
           <hr />
-          <Comments post={elem} />
+          <Comments values={elem} />
         </CardContent>
         <Modal
           aria-labelledby="transition-modal-title"
@@ -167,6 +166,7 @@ const Shares = ({ elem }) => {
         </Modal>
       </Card> */}
       <Post post={elem} />
+
     </Paper>
   );
 };
