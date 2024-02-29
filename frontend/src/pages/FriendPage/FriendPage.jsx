@@ -73,7 +73,23 @@ const FriendPage = () => {
   useEffect(() => {
     getUserById();
   }, []);
-
+ 
+  const getUserPost = async () => {
+    try {
+      const user = await axios.get(`http://localhost:5000/posts/${friend_id}`, {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
+      // dispatch(setFriendProfile(...user.data.result));
+      console.log(user);
+    } catch (error) {
+      console.log("setFriendProfile", error);
+    }
+  };
+  useEffect(() => {
+    getUserPost();
+  }, []);
   return (
     <>
       <Container>
