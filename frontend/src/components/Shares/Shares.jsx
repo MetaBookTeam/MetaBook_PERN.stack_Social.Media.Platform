@@ -45,8 +45,10 @@ const Shares = ({ elem }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   return (
-    <Paper elevation={5} >
-      <center><h3>{elem.contentadd ? elem.contentadd : elem.content}</h3></center>
+    <Paper elevation={5}>
+      <center>
+        <h3>{elem.contentadd ? elem.contentadd : "I share this post"}</h3>
+      </center>
       <Card
         variant="outlined"
         sx={{
