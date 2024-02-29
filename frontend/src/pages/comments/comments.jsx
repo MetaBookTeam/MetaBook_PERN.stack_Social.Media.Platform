@@ -263,6 +263,74 @@ const Comments = ({ values }) => {
     }
   };
 
+  // =========================================
+  //* add Comment Like
+  // console.log("postComments.comment_likes", postComments);
+
+  const [commentsLikesCount, setCommentsLikesCount] = useState(
+    // postComments.comment_likes * 1
+    0
+  );
+
+  const addCommentLikeHandler = async (e, commentId) => {
+    try {
+      // commentsRouter.post("/likes/:comment_id", authentication, createCommentLike);
+
+      const commentLike = await axios.post(
+        `http://localhost:5000/comments/likes/${commentId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      setCommentsLikesCount((prev) => prev + 1);
+    } catch (error) {
+      console.log("addCommentLikeHandler", error);
+    }
+  };
+
+  // =========================================
+  //* delete Comment
+
+  const deleteCommentHandler = async (e, commentId) => {
+    try {
+      // commentsRouter.delete("/:comment_id", authentication, deleteComment);
+      // console.log("commentId", commentId);
+
+      const deleteComment = await axios.delete(
+        `http://localhost:5000/comments/${commentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      // console.log("deleteComment.data.result", deleteComment.data.result);
+      /* 
+deleteComment.data.result 
+[
+    {
+        "id": 51,
+        "user_id": 8,
+        "post_id": 11,
+        "comment": "Edit this",
+        "created_at": "2024-02-29T01:05:13.639Z",
+        "is_deleted": 1
+    }
+]
+
+*/
+      setPostComments((prev) =>
+        prev.filter((comment) => comment.id !== commentId)
+      );
+    } catch (error) {
+      console.log("deleteCommentHandler", error);
+    }
+  };
+
   return (
     <>
       <Grid
@@ -382,8 +450,9 @@ const Comments = ({ values }) => {
       </CardContent>
       <Collapse in={collapseComments}>
         {postComments.length ? (
-          postComments.map((comment, i) => {
+          postComments.toReversed().map((comment, i) => {
             // console.log(comment, i);
+            // setCommentsLikesCount(comment.comment_likes);
             return (
               <div key={i}>
                 {i > 0 && (
@@ -423,14 +492,42 @@ const Comments = ({ values }) => {
                     </Typography>
                   </Grid>
                   <Grid item xs="auto">
-                    <Typography>Like</Typography>
+                    <Typography
+                      onClick={(e) => {
+                        addCommentLikeHandler(e, comment.id);
+                        if (comment.comment_likes * 1 > commentsLikesCount) {
+                          setCommentsLikesCount(comment.comment_likes * 1);
+                        }
+                      }}
+                      sx={{ cursor: "pointer" }}
+                    >
+                      {comment.comment_likes * 1 >= commentsLikesCount
+                        ? comment.comment_likes
+                        : commentsLikesCount}{" "}
+                      Like
+                      {comment.comment_likes > 1 && "s"}
+                      {/* {commentsLikesCount} Like
+                      {commentsLikesCount > 1 && "s"} */}
+                    </Typography>
                   </Grid>
-                  <Grid item ml="auto" xs="auto">
-                    <Typography>Edit</Typography>
-                  </Grid>
-                  <Grid item mr={2} xs="auto">
-                    <Typography>Delete</Typography>
-                  </Grid>
+
+                  {comment.user_id == auth.userId && (
+                    <>
+                      <Grid item ml="auto" xs="auto">
+                        <Typography sx={{ cursor: "pointer" }}>Edit</Typography>
+                      </Grid>
+                      <Grid item mr={2} xs="auto">
+                        <Typography
+                          sx={{ cursor: "pointer" }}
+                          onClick={(e) => {
+                            deleteCommentHandler(e, comment.id);
+                          }}
+                        >
+                          Delete
+                        </Typography>
+                      </Grid>
+                    </>
+                  )}
                 </Grid>
               </div>
             );

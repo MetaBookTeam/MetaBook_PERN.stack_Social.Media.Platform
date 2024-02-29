@@ -40,21 +40,35 @@ GET http://localhost:5000/comments/:post_id/comments
   pool
     .query(
       `
+
+      WITH cte_comment_likes AS (
+        SELECT comment_id, COUNT(*) AS total_comment_likes
+        FROM comment_likes
+        GROUP BY comment_id
+        )
+    --  ),
+
     SELECT 
-      comments.*, 
+      c.*, 
       users.image AS commenter_image, 
       user_profile.first_name, 
-      user_profile.last_name
+      user_profile.last_name,
     
-    FROM comments
+      COALESCE(cl.total_comment_likes, 0) AS comment_likes
+
+    FROM comments c
 
     LEFT JOIN users
-    ON comments.user_id = users.id
+    ON c.user_id = users.id
 
     LEFT JOIN user_profile
-    ON comments.user_id = user_profile.user_id
+    ON c.user_id = user_profile.user_id
 
-    WHERE comments.post_id = $1 AND comments.is_deleted = 0;
+    left join cte_comment_likes cl
+    on c.id = cl.comment_id
+
+    WHERE c.post_id = $1 AND c.is_deleted = 0;
+
     `,
       [post_id]
     )
@@ -126,17 +140,20 @@ DELETE http://localhost:5000/comments/:comment_id
   const { comment_id } = req.params;
 
   pool
-    .query(`UPDATE comments SET is_deleted = 1 WHERE id = $1 RETURNING *;`, [
-      comment_id,
-    ])
+    // .query(`UPDATE comments SET is_deleted = 1 WHERE id = $1 RETURNING *;`,
+    .query(
+      `DELETE FROM comments WHERE id = $1 RETURNING *;`,
+      [comment_id]
+    )
     .then((result) => {
       res.status(200).json({
         success: true,
-        message: `Comments with id: ${post_id} deleted successfully`,
+        message: `Comments with id: ${comment_id} deleted successfully`,
         result: result.rows,
       });
     })
     .catch((error) => {
+      console.log("deleteComment Server error", error);
       res.status(500).json({
         success: false,
         message: "deleteComment Server error",

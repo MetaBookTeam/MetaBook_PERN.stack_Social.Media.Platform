@@ -12,15 +12,15 @@ POST http://localhost:5000/users/register
     "user_name": "Bugger",
     "password": "Bug_123456",
     "image": "http://res.cloudinary.com/dpbh42kjy/image/upload/v1708864871/kk9y6ycii6xwvezxbvgx.jpg",
-    "first_name": "Virus",
+    "first_name": "Bug",
     "last_name": "Coder",
     "birthday": "2000-01-01",
     "gender": "male",
     "phone_number": "0790000006",
     "school": "Erroring",
-    "address": "CatchError",
-    "city": "Throw",
-    "country": "Else",
+    "city": "CatchError",
+    "state": "Throw",
+    "country": "Virus",
     "cover_photo": "http://res.cloudinary.com/dpbh42kjy/image/upload/v1708868452/gbjzxlonkhr629vgmfau.webp"
 }
 */
