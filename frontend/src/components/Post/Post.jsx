@@ -84,7 +84,7 @@ const Post = ({ post }) => {
         </Box>
         <Typography fontWeight="lg">
           <NavLink className={"user_name"} to={`/page/${post.user_id}`}>
-            {post.user_name}
+            {post.first_name} {post.last_name}
           </NavLink>
         </Typography>
         <br />

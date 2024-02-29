@@ -231,6 +231,7 @@ const Comments = ({ values }) => {
   // =========================================
   //* Add new comment
   const [newComment, setNewComment] = useState("");
+  const [commentsCount, setCommentsCount] = useState(post.comments * 1);
 
   const AddCommentHandler = async () => {
     try {
@@ -254,7 +255,7 @@ const Comments = ({ values }) => {
       //   ]);
       //   return [...prev, ...comment.data.result];
       // });
-
+      setCommentsCount((prev) => prev + 1);
       handleCommentsModal();
       setCollapseComments(true);
     } catch (error) {
@@ -331,7 +332,7 @@ const Comments = ({ values }) => {
             fontWeight="lg"
             textColor="text.primary"
           >
-            {post.comments} comments
+            {commentsCount} comments
           </Link>
         </Grid>
 
