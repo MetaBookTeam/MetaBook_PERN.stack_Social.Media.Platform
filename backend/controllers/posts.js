@@ -319,7 +319,7 @@ GET http://localhost:5000/posts/:user_id
         on p.id = sh.post_id
       
       WHERE 
-        p.user_id = 8 AND
+        p.user_id = $1 AND
         users.is_deleted = 0 AND
         p.is_deleted = 0;
       `,
