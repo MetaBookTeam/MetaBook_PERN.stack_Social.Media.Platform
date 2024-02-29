@@ -29,7 +29,10 @@ import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
 import Tooltip from "@mui/material/Tooltip";
-
+import {
+  setPosts,
+} from "../../Service/redux/reducers/Posts/postsSlice";
+import Post from "../../components/Post/Post";
 const FriendPage = () => {
   const Demo = styled("div")(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
@@ -56,6 +59,8 @@ const FriendPage = () => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const { userProfile, friendProfile } = useSelector((state) => state.users);
+  const postsFr  = useSelector((state) => state.posts.posts);
+ 
   const { friend_id } = useParams();
 
   const getUserById = async () => {
@@ -81,7 +86,7 @@ const FriendPage = () => {
           Authorization: `Bearer ${auth.token}`,
         },
       });
-      // dispatch(setFriendProfile(...user.data.result));
+      dispatch(setPosts(user.data.result));
       console.log(user);
     } catch (error) {
       console.log("setFriendProfile", error);
@@ -90,6 +95,7 @@ const FriendPage = () => {
   useEffect(() => {
     getUserPost();
   }, []);
+  console.log(postsFr);
   return (
     <>
       <Container>
@@ -190,13 +196,13 @@ const FriendPage = () => {
             </Item>
           </Grid>
           <Grid item xs={8}>
-            {/* {postProfile ? (
-                postProfile.map((elem) => {
-                  return <Item>{elem.content} </Item>;
+            {postsFr ? (
+                postsFr.map((elem) => {
+                  return <Post post={elem}/> ;
                 })
               ) : (
                 <Item>You do not have any post </Item>
-              )} */}
+              )}
           </Grid>
         </Grid>
       </Container>
