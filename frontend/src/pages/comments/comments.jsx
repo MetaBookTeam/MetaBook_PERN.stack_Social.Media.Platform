@@ -60,7 +60,7 @@ const Comments = ({ values }) => {
   const createNewShare = async (e) => {
     try {
       const share = {
-        content: contentAdd,
+        contentadd: contentAdd,
       };
       const result = await axios.post(
         `http://localhost:5000/posts/shares/${post.id}`,

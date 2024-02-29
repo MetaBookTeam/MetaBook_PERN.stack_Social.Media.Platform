@@ -48,7 +48,7 @@ const Profile = () => {
   }));
   const [secondary, setSecondary] = React.useState(false);
   // End extra information
-
+  
   const auth = useSelector((state) => state.auth);
   const shares = useSelector((state) => state.shares.shares);
 
@@ -161,11 +161,11 @@ const Profile = () => {
                 </AspectRatio>
               </Box>
               <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
-                {/* <Avatar
+                <Avatar
                   alt="Remy Sharp"
                   src={userProfile.image}
                   sx={{ width: 80, height: 80 }}
-                /> */}
+                />
               </Box>
 
               {userProfile.bio}

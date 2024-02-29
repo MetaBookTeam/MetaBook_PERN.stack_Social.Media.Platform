@@ -113,7 +113,7 @@ const Shares = ({ elem }) => {
           </Typography>
           {/* </Paper> */}
           <hr />
-          <Comments post={elem} />
+          {/* <Comments post={elem} /> */}
         </CardContent>
         <Modal
           aria-labelledby="transition-modal-title"
