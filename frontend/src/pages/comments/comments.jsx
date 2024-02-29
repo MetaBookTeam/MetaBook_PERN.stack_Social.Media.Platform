@@ -263,6 +263,34 @@ const Comments = ({ values }) => {
     }
   };
 
+  // =========================================
+  //* add Comment Like
+
+  const [commentsLikesCount, setCommentsLikesCount] = useState(
+    0
+    // post.comments * 1
+    // ! postComments.likes * 1 ////////// backend not ready yet
+  );
+
+  const addCommentLikeHandler = async (e, commentId) => {
+    try {
+      // commentsRouter.post("/likes/:comment_id", authentication, createCommentLike);
+
+      const commentLike = await axios.post(
+        `http://localhost:5000/comments/likes/${commentId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      setCommentsLikesCount((prev) => prev + 1);
+    } catch (error) {
+      console.log("addCommentLikeHandler", error);
+    }
+  };
   return (
     <>
       <Grid
@@ -423,7 +451,13 @@ const Comments = ({ values }) => {
                     </Typography>
                   </Grid>
                   <Grid item xs="auto">
-                    <Typography>Like</Typography>
+                    <Typography
+                      onClick={(e) => {
+                        addCommentLikeHandler(e, comment.id);
+                      }}
+                    >
+                      {commentsLikesCount} Like{commentsLikesCount > 1 && "s"}
+                    </Typography>
                   </Grid>
                   <Grid item ml="auto" xs="auto">
                     <Typography>Edit</Typography>
