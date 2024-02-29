@@ -44,6 +44,7 @@ const Comments = ({ values }) => {
   const navigate = useNavigate();
   const { post, modalStyle } = values;
   // console.log(values);// Post
+  console.log('post', post)
   //* Redux =========================
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
@@ -117,6 +118,7 @@ const Comments = ({ values }) => {
   // =========================================
 
   // openLikesModal
+  // console.log("post.liked_users", post.liked_users);
   const [postLikes, setPostLikes] = useState([]);
   const [likeIcon, setLikeIcon] = useState(
     post.liked_users?.some((user) => auth.userId * 1 === user * 1) ||

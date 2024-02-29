@@ -42,7 +42,7 @@ const style = {
 function ProfilePost({ post }) {
   const dispatch = useDispatch()
   const auth = useSelector((state) => state.auth);
-  console.log(post,"ggg");
+  // console.log(post,"ggg");
   const [content, setContent] = useState("")
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);

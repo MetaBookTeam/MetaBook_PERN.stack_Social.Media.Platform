@@ -28,6 +28,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updatePostById } from "../../Service/redux/reducers/Posts/postsSlice";
 import axios from "axios";
 import { Margin } from "@mui/icons-material";
+import Post from "../Post/Post";
 const style = {
   position: "absolute",
   top: "50%",
@@ -40,7 +41,7 @@ const style = {
   p: 4,
 };
 const Shares = ({ elem }) => {
-  // console.log(elem);
+  console.log("elem", elem);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -49,7 +50,7 @@ const Shares = ({ elem }) => {
       <center>
         <h3>{elem.contentadd ? elem.contentadd : "I share this post"}</h3>
       </center>
-      <Card
+      {/* <Card
         variant="outlined"
         sx={{
           marginBlock: "10px",
@@ -112,9 +113,8 @@ const Shares = ({ elem }) => {
             ></Link>{" "}
             {elem.content}
           </Typography>
-          {/* </Paper> */}
           <hr />
-          {/* <Comments post={elem} /> */}
+          <Comments post={elem} />
         </CardContent>
         <Modal
           aria-labelledby="transition-modal-title"
@@ -165,7 +165,8 @@ const Shares = ({ elem }) => {
             </Box>
           </Fade>
         </Modal>
-      </Card>
+      </Card> */}
+      <Post post={elem} />
     </Paper>
   );
 };

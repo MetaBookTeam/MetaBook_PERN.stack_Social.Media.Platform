@@ -39,6 +39,7 @@ import { setUpdateUserInformation } from "../../Service/redux/reducers/users/use
 import Comments from "../Comments/Comments";
 import ProfilePost from "../../components/ProfilePost/ProfilePost";
 import Shares from "../../components/Shares/Shares";
+import Post from "../../components/Post/Post";
 // extra information
 
 const Profile = () => {
@@ -48,7 +49,7 @@ const Profile = () => {
   }));
   const [secondary, setSecondary] = React.useState(false);
   // End extra information
-  
+
   const auth = useSelector((state) => state.auth);
   const shares = useSelector((state) => state.shares.shares);
 
@@ -243,14 +244,16 @@ const Profile = () => {
           </Grid>
           <Grid item xs={8}>
             {postProfile ? (
-              postProfile.map((post) => {
-                return <ProfilePost post={post} />;
+              postProfile.map((post, i) => {
+                // return <ProfilePost key={post.id} post={post} />;
+                return <Post key={post.id} post={post} />;
               })
             ) : (
               <Item>You do not have any post </Item>
             )}
             {shares ? (
-              shares.map((elem) => { console.log(elem);
+              shares.map((elem) => {
+                // console.log(elem);
                 return <Shares elem={elem} />;
               })
             ) : (
