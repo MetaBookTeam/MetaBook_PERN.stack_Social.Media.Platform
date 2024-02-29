@@ -165,7 +165,8 @@ const Shares = ({ elem }) => {
           </Fade>
         </Modal>
       </Card> */}
-      <Post post={elem}/>
+      <Post post={elem} />
+
     </Paper>
   );
 };

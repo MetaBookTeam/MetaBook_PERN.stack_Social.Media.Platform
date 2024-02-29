@@ -778,7 +778,7 @@ CREATE TABLE
     id SERIAL PRIMARY KEY NOT NULL,
     post_id INT NOT NULL REFERENCES posts (id) ON DELETE CASCADE,
     user_id INT REFERENCES users (id) ON DELETE CASCADE,
-    content VARCHAR(255) DEFAULT 'I share this',
+    -- content VARCHAR(255) DEFAULT 'I share this',
     contentadd VARCHAR(255)
     -- OR page_id INT REFERENCES pages (id) ON DELETE CASCADE
   );
@@ -786,7 +786,7 @@ CREATE TABLE
 --! check the role if user or page. //////////////////////
 -- insert shares
 INSERT INTO
-  shares (post_id, user_id, content)
+  shares (post_id, user_id, contentadd)
 VALUES
   (1, 1, 'welcome'),
   (1, 2, 'I share this too'),
