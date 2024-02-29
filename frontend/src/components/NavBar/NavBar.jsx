@@ -171,7 +171,9 @@ const NavBar = () => {
             {allUsers.map((users, i) => {
               return (
                 <div key={i}>
-                  <Paper elevation={0}>{users.user_name}</Paper>
+                  <Paper elevation={0}>
+                    {users.first_name} {users.last_name}
+                  </Paper>
                   <ChildModal socket={socket} userId={users.id} />
                 </div>
               );
@@ -196,7 +198,7 @@ const NavBar = () => {
         <Stack spacing={2} sx={{ width: 300, bgcolor: "white" }}>
           <Autocomplete
             disableClearable
-            options={allUsers.map((option) => option.user_name)}
+            options={allUsers.map((option) => option.first_name)}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -225,10 +227,13 @@ const NavBar = () => {
             src={userProfile.image}
             onClick={(e) => setOpen(true)}
           />
+          <Typography variant="span" onClick={(e) => setOpen(true)}>
+            {userProfile.first_name} {userProfile.last_name}
+          </Typography>
         </Icons>
         <UserBox onClick={(e) => setOpen(true)}>
           <Avatar sx={{ width: 30, height: 30 }} src={userProfile.image} />
-          <Typography variant="span">{userProfile.user_name}</Typography>
+          <Typography variant="span">{userProfile.first_name}</Typography>
         </UserBox>
       </StyledToolbar>
       <Menu

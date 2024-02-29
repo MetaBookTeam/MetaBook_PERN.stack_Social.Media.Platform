@@ -1,7 +1,7 @@
 const pool = require("../models/db");
 //create comments
 const createComment = (req, res) => {
-  const { userId } = req.token.userId;
+  const { userId } = req.token;
   const { post_id } = req.params;
   const { comment } = req.body;
 
@@ -43,7 +43,8 @@ GET http://localhost:5000/comments/:post_id/comments
     SELECT 
       comments.*, 
       users.image AS commenter_image, 
-      user_profile.first_name AS commenter_name 
+      user_profile.first_name, 
+      user_profile.last_name
     
     FROM comments
 

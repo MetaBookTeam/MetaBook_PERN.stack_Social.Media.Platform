@@ -38,6 +38,7 @@ import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 
 import { addShare } from "../../Service/redux/reducers/shares/sharesSlice";
+import { addComment } from "../../Service/redux/reducers/comments/commentsSlice";
 
 const Comments = ({ values }) => {
   const navigate = useNavigate();
@@ -49,6 +50,9 @@ const Comments = ({ values }) => {
   // const shares = useSelector((state) => state.shares.shares);
   // auth.isLoggedIn, auth.token, auth.userId;
   const { userProfile } = useSelector((state) => state.users);
+  const { comments, commentLike, shares } = useSelector(
+    (state) => state.comments
+  );
 
   // =========================================
   const [contentAdd, setContentAdd] = useState("");
@@ -226,13 +230,16 @@ const Comments = ({ values }) => {
 
   // =========================================
   //* Add new comment
+  const [newComment, setNewComment] = useState("");
+  const [commentsCount, setCommentsCount] = useState(post.comments * 1);
 
   const AddCommentHandler = async () => {
     try {
       // commentsRouter.post("/:post_id", authentication, createComment);
 
-      const newComment = await axios.get(
+      const comment = await axios.post(
         `http://localhost:5000/comments/${post.id}`,
+        { comment: newComment },
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -240,8 +247,17 @@ const Comments = ({ values }) => {
         }
       );
 
-      setPostShares(newComment.data.result);
-      setOpenShare(true);
+      // console.log("comment.data.result", ...comment.data.result);
+      // setPostComments((prev) => {
+      //   console.log("[...prev, ...comment.data.result]", [
+      //     ...prev,
+      //     ...comment.data.result,
+      //   ]);
+      //   return [...prev, ...comment.data.result];
+      // });
+      setCommentsCount((prev) => prev + 1);
+      handleCommentsModal();
+      setCollapseComments(true);
     } catch (error) {
       console.log("AddCommentHandler", error);
     }
@@ -306,6 +322,7 @@ const Comments = ({ values }) => {
           <IconButton variant="plain" color="neutral" size="sm">
             <ModeCommentOutlined />
           </IconButton>
+
           <Link
             // onClick={commentsModal}
             component="button"
@@ -315,7 +332,7 @@ const Comments = ({ values }) => {
             fontWeight="lg"
             textColor="text.primary"
           >
-            {post.comments} comments
+            {commentsCount} comments
           </Link>
         </Grid>
 
@@ -355,9 +372,11 @@ const Comments = ({ values }) => {
           variant="plain"
           placeholder="Add a comment…"
           sx={{ flex: 1, px: 0, "--Input-focusedThickness": "0px" }}
-          onChange={(e) => {}}
+          onChange={(e) => {
+            setNewComment(e.target.value);
+          }}
         />
-        <Link underline="none" role="button">
+        <Link underline="none" role="button" onClick={AddCommentHandler}>
           Post
         </Link>
       </CardContent>
@@ -374,7 +393,7 @@ const Comments = ({ values }) => {
                   <Grid container wrap="nowrap" spacing={2}>
                     <Grid item>
                       <Avatar
-                        alt={comment.commenter_name}
+                        alt={comment.first_name}
                         size="sm"
                         src={comment.commenter_image}
                       />
@@ -385,7 +404,7 @@ const Comments = ({ values }) => {
                         variant="h4"
                         sx={{ color: "black" }}
                       >
-                        {comment.commenter_name}
+                        {comment.first_name} {comment.last_name}
                       </Typography>
                       <Typography>{comment.comment}</Typography>
                     </Grid>

@@ -9,6 +9,9 @@ const commentsSlice = createSlice({
   },
 
   reducers: {
+    addComment: (state, action) => {
+      state.comments.push(action.payload);
+    },
     setComments: (state, action) => {
       state.comments = action.payload;
     },
@@ -35,6 +38,7 @@ const commentsSlice = createSlice({
   },
 });
 export const {
+  addComment,
   setComments,
   getCommentsByPostId,
   deleteComments,

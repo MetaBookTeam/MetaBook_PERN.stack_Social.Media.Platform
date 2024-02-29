@@ -143,7 +143,7 @@ const Add = () => {
           <UserBox>
             <Avatar src={userProfile.image} sx={{ width: 30, height: 30 }} />
             <Typography fontWeight={500} variant="span">
-              {userProfile.user_name}
+              {userProfile.first_name} {userProfile.last_name}
             </Typography>
           </UserBox>
           <TextField
