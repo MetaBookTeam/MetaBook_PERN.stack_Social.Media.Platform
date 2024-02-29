@@ -43,7 +43,7 @@ import { addComment } from "../../Service/redux/reducers/comments/commentsSlice"
 const Comments = ({ values }) => {
   const navigate = useNavigate();
   const { post, modalStyle } = values;
-
+ 
   //* Redux =========================
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
@@ -71,7 +71,7 @@ const Comments = ({ values }) => {
           },
         }
       );
-      // console.log(...result.data.result);
+      console.log(...result.data.result);
       dispatch(addShare(...result.data.result));
       if (result.data.success) {
         // setStatus(true);
