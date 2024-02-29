@@ -44,7 +44,7 @@ const Comments = ({ values }) => {
   const navigate = useNavigate();
   const { post, modalStyle } = values;
   // console.log(values);// Post
-  console.log('post', post)
+  // console.log('post', post)
   //* Redux =========================
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
@@ -72,7 +72,7 @@ const Comments = ({ values }) => {
           },
         }
       );
-      console.log(...result.data.result);
+      // console.log(...result.data.result);
       dispatch(addShare(...result.data.result));
       if (result.data.success) {
         // setStatus(true);
@@ -91,7 +91,7 @@ const Comments = ({ values }) => {
 
   const [collapseComments, setCollapseComments] = useState(false);
   const [postComments, setPostComments] = useState([]);
-
+  // console.log('postComments', postComments)
   const handleCommentsModal = async (e) => {
     setCollapseComments((prev) => !prev);
 
@@ -334,6 +334,66 @@ deleteComment.data.result
     }
   };
 
+  // =========================================
+
+  //* Edit Comment Modal
+  // Likes Modal Toggle ======================
+  const [openEditComment, setOpenEditComment] = useState(false);
+  const closeEditCommentModal = () => setOpenEditComment(false);
+  const [editComment, setEditComment] = useState("");
+
+  const openEditCommentModal = async (e, comment) => {
+    // try {
+    //   const likes = await axios.get(
+    //     `http://localhost:5000/posts/like/${post.id}`,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${auth.token}`,
+    //       },
+    //     }
+    //   );
+
+    // console.log(comment.comment);
+    setEditComment(comment.comment);
+    setOpenEditComment(true);
+    // } catch (error) {
+    //   console.log("openLikesModal", error);
+    // }
+  };
+
+  //* Edit Comment
+
+  const editCommentHandler = async (e, comment) => {
+    try {
+      // commentsRouter.put("/:comment_id", authentication, updateComment);
+      // console.log("commentId", commentId);
+
+      const updateComment = await axios.put(
+        `http://localhost:5000/comments/${comment.id}`,
+        { comment: editComment },
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      // console.log("updateComment.data.result", updateComment.data.result);
+
+      setPostComments((prev) =>
+        prev.map((oldComment) => {
+          if (oldComment.id === comment.id) {
+            return { ...comment, comment: editComment };
+          }
+          return oldComment;
+        })
+      );
+      closeEditCommentModal();
+    } catch (error) {
+      console.log("editCommentHandler", error);
+    }
+  };
+
   return (
     <>
       <Grid
@@ -518,7 +578,15 @@ deleteComment.data.result
                   {comment.user_id == auth.userId && (
                     <>
                       <Grid item ml="auto" xs="auto">
-                        <Typography sx={{ cursor: "pointer" }}>Edit</Typography>
+                        <Typography
+                          sx={{ cursor: "pointer" }}
+                          onClick={(e) => {
+                            // editCommentHandler(e, comment.id);
+                            openEditCommentModal(e, comment);
+                          }}
+                        >
+                          Edit
+                        </Typography>
                       </Grid>
                       <Grid item mr={2} xs="auto">
                         <Typography
@@ -533,6 +601,61 @@ deleteComment.data.result
                     </>
                   )}
                 </Grid>
+                {/* //* ///////////////////////////// */}
+                {/* //* ///////////////////////////// */}
+                {/* //* Edit Comment Modal */}
+                {/* //* ///////////////////////////// */}
+                {/* //* ///////////////////////////// */}
+
+                <Modal
+                  keepMounted
+                  open={openEditComment}
+                  onClose={closeEditCommentModal}
+                  aria-labelledby="keep-mounted-modal-title"
+                  aria-describedby="keep-mounted-modal-description"
+                >
+                  <Box
+                    sx={{
+                      ...modalStyle,
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "left",
+                    }}
+                  >
+                    <Typography
+                      id="keep-mounted-modal-title"
+                      variant="h6"
+                      component="h2"
+                    >
+                      Edit comment No.{comment.id}
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      placeholder="Edit this comment…"
+                      sx={{
+                        // flex: 1,
+                        // px: 0,
+                        // "--Input-focusedThickness": "0px",
+                        margin: "10px 0",
+                      }}
+                      onChange={(e) => {
+                        setEditComment(e.target.value);
+                      }}
+                      value={editComment}
+                    />
+                    <Button
+                      variant="contained"
+                      onClick={(e) => {
+                        editCommentHandler(e, comment);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  </Box>
+                </Modal>
               </div>
             );
           })
