@@ -41,13 +41,12 @@ const style = {
 };
 const Shares = ({ elem }) => {
   console.log(elem);
-
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   return (
     <Paper elevation={5} >
-      <center><h3>{elem.contentadd}</h3></center>
+      <center><h3>{elem.contentadd ? elem.contentadd : elem.content}</h3></center>
       <Card
         variant="outlined"
         sx={{
