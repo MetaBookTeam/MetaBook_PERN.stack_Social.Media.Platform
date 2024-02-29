@@ -29,11 +29,16 @@ import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
 import Tooltip from "@mui/material/Tooltip";
-
+import {
+  setPosts,
+} from "../../Service/redux/reducers/Posts/postsSlice";
+import Post from "../../components/Post/Post";
 const FriendPage = () => {
   const Demo = styled("div")(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
   }));
+  const [secondary, setSecondary] = React.useState(false);
+
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
     ...theme.typography.body2,
@@ -56,6 +61,8 @@ const FriendPage = () => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const { userProfile, friendProfile } = useSelector((state) => state.users);
+  const postsFr  = useSelector((state) => state.posts.posts);
+  
   const { friend_id } = useParams();
 
   const getUserById = async () => {
@@ -73,7 +80,22 @@ const FriendPage = () => {
   useEffect(() => {
     getUserById();
   }, []);
-
+ 
+  const getUserPost = async () => {
+    try {
+      const user = await axios.get(`http://localhost:5000/posts/${friend_id}`, {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
+      dispatch(setPosts(user.data.result));
+    } catch (error) {
+      console.log("setFriendProfile", error);
+    }
+  };
+  useEffect(() => {
+    getUserPost();
+  }, []);
   return (
     <>
       <Container>
@@ -132,41 +154,41 @@ const FriendPage = () => {
                   <ListItem>
                     <ListItemText
                       primary="Email"
-                      // secondary={
-                      //   secondary ? "Secondary text" : friendProfile.email
-                      // }
+                      secondary={
+                        secondary ? "Secondary text" : friendProfile.email
+                      }
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemText
                       primary="Name"
-                      //   secondary={
-                      //     secondary ? "Secondary text" : friendProfile.user_name
-                      //   }
+                        secondary={
+                          secondary ? "Secondary text" : friendProfile.user_name
+                        }
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemText
                       primary="Phone"
-                      //   secondary={
-                      //     secondary ? "Secondary text" : friendProfile.phone_number
-                      //   }
+                        secondary={
+                          secondary ? "Secondary text" : friendProfile.phone_number
+                        }
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemText
                       primary="Address"
-                      //   secondary={
-                      //     secondary ? "Secondary text" : friendProfile.address
-                      //   }
+                        secondary={
+                          secondary ? "Secondary text" : friendProfile.address
+                        }
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemText
                       primary="Gender"
-                      //   secondary={
-                      //     secondary ? "Secondary text" : friendProfile.gender
-                      //   }
+                        secondary={
+                          secondary ? "Secondary text" : friendProfile.gender
+                        }
                     />
                   </ListItem>
                 </List>
@@ -174,13 +196,13 @@ const FriendPage = () => {
             </Item>
           </Grid>
           <Grid item xs={8}>
-            {/* {postProfile ? (
-                postProfile.map((elem) => {
-                  return <Item>{elem.content} </Item>;
+            {postsFr ? (
+                postsFr.map((elem,i) => {
+                  return <Post key={i} post={elem}/> ;
                 })
               ) : (
-                <Item>You do not have any post </Item>
-              )} */}
+                <Item>{friendProfile.first_name} do not have any post </Item>
+              )}
           </Grid>
         </Grid>
       </Container>
