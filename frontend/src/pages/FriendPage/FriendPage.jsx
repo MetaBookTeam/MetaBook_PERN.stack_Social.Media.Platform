@@ -37,6 +37,8 @@ const FriendPage = () => {
   const Demo = styled("div")(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
   }));
+  const [secondary, setSecondary] = React.useState(false);
+
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
     ...theme.typography.body2,
@@ -60,7 +62,7 @@ const FriendPage = () => {
   const auth = useSelector((state) => state.auth);
   const { userProfile, friendProfile } = useSelector((state) => state.users);
   const postsFr  = useSelector((state) => state.posts.posts);
- 
+  
   const { friend_id } = useParams();
 
   const getUserById = async () => {
@@ -95,7 +97,6 @@ const FriendPage = () => {
   useEffect(() => {
     getUserPost();
   }, []);
-  console.log(postsFr);
   return (
     <>
       <Container>
@@ -154,41 +155,41 @@ const FriendPage = () => {
                   <ListItem>
                     <ListItemText
                       primary="Email"
-                      // secondary={
-                      //   secondary ? "Secondary text" : friendProfile.email
-                      // }
+                      secondary={
+                        secondary ? "Secondary text" : friendProfile.email
+                      }
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemText
                       primary="Name"
-                      //   secondary={
-                      //     secondary ? "Secondary text" : friendProfile.user_name
-                      //   }
+                        secondary={
+                          secondary ? "Secondary text" : friendProfile.user_name
+                        }
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemText
                       primary="Phone"
-                      //   secondary={
-                      //     secondary ? "Secondary text" : friendProfile.phone_number
-                      //   }
+                        secondary={
+                          secondary ? "Secondary text" : friendProfile.phone_number
+                        }
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemText
                       primary="Address"
-                      //   secondary={
-                      //     secondary ? "Secondary text" : friendProfile.address
-                      //   }
+                        secondary={
+                          secondary ? "Secondary text" : friendProfile.address
+                        }
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemText
                       primary="Gender"
-                      //   secondary={
-                      //     secondary ? "Secondary text" : friendProfile.gender
-                      //   }
+                        secondary={
+                          secondary ? "Secondary text" : friendProfile.gender
+                        }
                     />
                   </ListItem>
                 </List>
