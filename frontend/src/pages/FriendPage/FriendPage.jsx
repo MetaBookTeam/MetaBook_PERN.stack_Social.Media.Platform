@@ -89,7 +89,6 @@ const FriendPage = () => {
         },
       });
       dispatch(setPosts(user.data.result));
-      console.log(user);
     } catch (error) {
       console.log("setFriendProfile", error);
     }
@@ -198,11 +197,11 @@ const FriendPage = () => {
           </Grid>
           <Grid item xs={8}>
             {postsFr ? (
-                postsFr.map((elem) => {
-                  return <Post post={elem}/> ;
+                postsFr.map((elem,i) => {
+                  return <Post key={i} post={elem}/> ;
                 })
               ) : (
-                <Item>You do not have any post </Item>
+                <Item>{friendProfile.first_name} do not have any post </Item>
               )}
           </Grid>
         </Grid>

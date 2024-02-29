@@ -2,7 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useRef  } from "react";
 import { useSelector } from "react-redux";
 const style = {
   position: "absolute",
@@ -27,6 +27,8 @@ function ChildModal({ socket, userId }) {
   };
   const auth = useSelector((state) => state.auth);
   const [allMessage, setAllMessage] = useState([]);
+    // const [to, setTo] = useState(userId);
+
   useEffect(() => {
     socket.on("message", receveMessage);
 
@@ -35,7 +37,6 @@ function ChildModal({ socket, userId }) {
       socket.off("message", receveMessage);
     };
   }, [allMessage]);
-  const [to, setTo] = useState(userId);
   const [message, setMessage] = useState("");
   const sendMessage = () => {
     // we send to the server
@@ -46,14 +47,18 @@ function ChildModal({ socket, userId }) {
   };
   return (
     <div>
-      <Button onClick={handleOpen}>Click To chat </Button>
+      <Button onClick={() => {
+        setTo(userId);
+        console.log(userId);
+        setOpen(true);
+      }}>Click To chat </Button>
       <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="child-modal-title"
         aria-describedby="child-modal-description"
       >
-        <Box sx={{ ...style, width: 500 }}>
+          <Box sx={{ ...style, width: 500 }}>
           <h2 id="child-modal-title">
             <div>
               <h3>Message</h3>
