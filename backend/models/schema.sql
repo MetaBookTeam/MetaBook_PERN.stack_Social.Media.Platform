@@ -778,7 +778,8 @@ CREATE TABLE
     id SERIAL PRIMARY KEY NOT NULL,
     post_id INT NOT NULL REFERENCES posts (id) ON DELETE CASCADE,
     user_id INT REFERENCES users (id) ON DELETE CASCADE,
-    content VARCHAR(255) DEFAULT 'I share this'
+    content VARCHAR(255) DEFAULT 'I share this',
+    contentadd VARCHAR(255)
     -- OR page_id INT REFERENCES pages (id) ON DELETE CASCADE
   );
 
