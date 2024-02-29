@@ -43,7 +43,7 @@ import { addComment } from "../../Service/redux/reducers/comments/commentsSlice"
 const Comments = ({ values }) => {
   const navigate = useNavigate();
   const { post, modalStyle } = values;
-
+  // console.log(values);// Post
   //* Redux =========================
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
@@ -60,7 +60,7 @@ const Comments = ({ values }) => {
   const createNewShare = async (e) => {
     try {
       const share = {
-        content: contentAdd,
+        contentadd: contentAdd,
       };
       const result = await axios.post(
         `http://localhost:5000/posts/shares/${post.id}`,
@@ -71,7 +71,7 @@ const Comments = ({ values }) => {
           },
         }
       );
-      // console.log(...result.data.result);
+      console.log(...result.data.result);
       dispatch(addShare(...result.data.result));
       if (result.data.success) {
         // setStatus(true);

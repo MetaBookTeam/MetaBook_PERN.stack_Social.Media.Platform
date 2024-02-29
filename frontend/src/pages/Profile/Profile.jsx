@@ -48,7 +48,7 @@ const Profile = () => {
   }));
   const [secondary, setSecondary] = React.useState(false);
   // End extra information
-
+  
   const auth = useSelector((state) => state.auth);
   const shares = useSelector((state) => state.shares.shares);
 
@@ -103,7 +103,7 @@ const Profile = () => {
         }
       );
       dispatch(setShares(result.data.result));
-      // console.log(result);
+      console.log(result);
     } catch (error) {
       console.log(error);
     }
@@ -161,11 +161,11 @@ const Profile = () => {
                 </AspectRatio>
               </Box>
               <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
-                {/* <Avatar
+                <Avatar
                   alt="Remy Sharp"
                   src={userProfile.image}
                   sx={{ width: 80, height: 80 }}
-                /> */}
+                />
               </Box>
 
               {userProfile.bio}
@@ -250,9 +250,7 @@ const Profile = () => {
               <Item>You do not have any post </Item>
             )}
             {shares ? (
-              shares.map((elem) => {
-                console.log(elem.content);
-
+              shares.map((elem) => { console.log(elem);
                 return <Shares elem={elem} />;
               })
             ) : (

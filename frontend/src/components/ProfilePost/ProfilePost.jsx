@@ -17,7 +17,7 @@ import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import Comments from "../../pages/Comments/Comments";
+import Comments from "../../pages/Comments/Comments"
 import { styled } from "@mui/material/styles";
 import IconButton from '@mui/joy/IconButton';
 import Backdrop from '@mui/material/Backdrop';
@@ -42,7 +42,7 @@ const style = {
 function ProfilePost({ post }) {
   const dispatch = useDispatch()
   const auth = useSelector((state) => state.auth);
-
+  console.log(post,"ggg");
   const [content, setContent] = useState("")
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -152,8 +152,6 @@ function ProfilePost({ post }) {
           <Box sx={style}>
             <Typography id="transition-modal-title" variant="h6" component="h2">
               Edit post 
-            
-             
             </Typography>
             <Typography id="transition-modal-description" sx={{ mt: 2 }}>
             <TextField onChange={(e) => {

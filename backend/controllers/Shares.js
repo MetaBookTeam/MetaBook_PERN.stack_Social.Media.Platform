@@ -42,14 +42,14 @@ const getShareByPostId = (req, res) => {
 const createShareByPostId = (req, res) => {
   const { post_id } = req.params;
   const { userId } = req.token;
-  const { content } = req.body;
+  const { contentadd } = req.body;
 
   pool
     .query(
-      ` INSERT INTO shares (post_id, user_id, content)
+      ` INSERT INTO shares (post_id, user_id, contentadd)
         VALUES ($1, $2, $3)
         RETURNING *;`,
-      [post_id, userId, content]
+      [post_id, userId, contentadd]
     )
     .then((result) => {
       res.status(200).json({
@@ -57,6 +57,7 @@ const createShareByPostId = (req, res) => {
         message: "create share successfully",
         result: result.rows,
       });
+      console.log(result);
     })
     .catch((error) => {
       res.status(500).json({

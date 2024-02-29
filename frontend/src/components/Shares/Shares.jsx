@@ -40,14 +40,15 @@ const style = {
   p: 4,
 };
 const Shares = ({ elem }) => {
-  console.log(elem);
-
+  // console.log(elem);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   return (
-    <Paper elevation={5} >
-      <center><h3>{elem.contentadd}</h3></center>
+    <Paper elevation={5}>
+      <center>
+        <h3>{elem.contentadd ? elem.contentadd : "I share this post"}</h3>
+      </center>
       <Card
         variant="outlined"
         sx={{
@@ -113,7 +114,7 @@ const Shares = ({ elem }) => {
           </Typography>
           {/* </Paper> */}
           <hr />
-          <Comments post={elem} />
+          {/* <Comments post={elem} /> */}
         </CardContent>
         <Modal
           aria-labelledby="transition-modal-title"
