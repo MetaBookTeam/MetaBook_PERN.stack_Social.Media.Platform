@@ -54,7 +54,7 @@ GET http://localhost:5000/posts
     const post = await pool.query(
       `
       with cte_likes as (
-        select post_id, count(*) as total_likes
+        select  post_id, count(*) as total_likes
         from posts_likes
         group by post_id
         ), 
@@ -66,7 +66,7 @@ GET http://localhost:5000/posts
           ), 
 
         cte_comments as (
-          select post_id, count(*) as total_comments
+          select post_id, count(post_id) as total_comments
           from comments
           group by post_id
           ), 

@@ -291,6 +291,46 @@ const Comments = ({ values }) => {
       console.log("addCommentLikeHandler", error);
     }
   };
+
+  // =========================================
+  //* delete Comment
+
+  const deleteCommentHandler = async (e, commentId) => {
+    try {
+      // commentsRouter.delete("/:comment_id", authentication, deleteComment);
+      // console.log("commentId", commentId);
+
+      const deleteComment = await axios.delete(
+        `http://localhost:5000/comments/${commentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      // console.log("deleteComment.data.result", deleteComment.data.result);
+      /* 
+deleteComment.data.result 
+[
+    {
+        "id": 51,
+        "user_id": 8,
+        "post_id": 11,
+        "comment": "Edit this",
+        "created_at": "2024-02-29T01:05:13.639Z",
+        "is_deleted": 1
+    }
+]
+
+*/
+      setPostComments((prev) =>
+        prev.filter((comment) => comment.id !== commentId)
+      );
+    } catch (error) {
+      console.log("deleteCommentHandler", error);
+    }
+  };
+
   return (
     <>
       <Grid
@@ -477,7 +517,12 @@ const Comments = ({ values }) => {
                         <Typography sx={{ cursor: "pointer" }}>Edit</Typography>
                       </Grid>
                       <Grid item mr={2} xs="auto">
-                        <Typography sx={{ cursor: "pointer" }}>
+                        <Typography
+                          sx={{ cursor: "pointer" }}
+                          onClick={(e) => {
+                            deleteCommentHandler(e, comment.id);
+                          }}
+                        >
                           Delete
                         </Typography>
                       </Grid>

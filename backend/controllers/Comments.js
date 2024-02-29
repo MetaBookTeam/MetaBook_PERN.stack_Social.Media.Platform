@@ -140,17 +140,20 @@ DELETE http://localhost:5000/comments/:comment_id
   const { comment_id } = req.params;
 
   pool
-    .query(`UPDATE comments SET is_deleted = 1 WHERE id = $1 RETURNING *;`, [
-      comment_id,
-    ])
+    // .query(`UPDATE comments SET is_deleted = 1 WHERE id = $1 RETURNING *;`,
+    .query(
+      `DELETE FROM comments WHERE id = $1 RETURNING *;`,
+      [comment_id]
+    )
     .then((result) => {
       res.status(200).json({
         success: true,
-        message: `Comments with id: ${post_id} deleted successfully`,
+        message: `Comments with id: ${comment_id} deleted successfully`,
         result: result.rows,
       });
     })
     .catch((error) => {
+      console.log("deleteComment Server error", error);
       res.status(500).json({
         success: false,
         message: "deleteComment Server error",
