@@ -140,8 +140,8 @@ CREATE TABLE
   user_profile (
     id SERIAL PRIMARY KEY NOT NULL,
     user_id INT UNIQUE NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    first_name VARCHAR(255),
-    last_name VARCHAR(255),
+    first_name VARCHAR(255) DEFAULT 'John',
+    last_name VARCHAR(255) DEFAULT 'Doe',
     birthday TIMESTAMP,
     gender VARCHAR(6) CHECK (gender IN ('male', 'female')),
     phone_number INT UNIQUE,
