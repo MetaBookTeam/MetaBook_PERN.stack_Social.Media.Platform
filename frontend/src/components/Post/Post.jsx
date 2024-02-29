@@ -3,6 +3,7 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
+import { deletePost } from "../../Service/redux/reducers/Posts/postsSlice";
 
 import AspectRatio from "@mui/joy/AspectRatio";
 import Avatar from "@mui/joy/Avatar";
@@ -43,6 +44,7 @@ import { styled } from "@mui/material/styles";
 import Message from "../Socket";
 
 import Comments from "../../pages/Comments/Comments";
+import axios from "axios";
 
 const modalStyle = {
   position: "absolute",
@@ -65,9 +67,12 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Post = ({ post }) => {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
   const { userProfile } = useSelector((state) => state.users);
   // users.users , users.userProfile;
-
+  // console.log(auth.userId == post.user_id);
+  // console.log(auth.userId*1 === post.user_id);
   // ====================================================
   //* Edit post dropdown menu
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -77,6 +82,28 @@ const Post = ({ post }) => {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  // =========================================
+  //* delete Post
+
+  const deletePostHandler = async (e) => {
+    try {
+      // postsRouter.delete("/:post_id", authentication, deletePostById); //done
+
+      const deletedPost = await axios.delete(
+        `http://localhost:5000/posts/${post.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      // console.log("deletedPost.data.result", deletedPost.data.result.rows[0].id);
+      dispatch(deletePost(deletedPost.data.result.rows[0].id));
+    } catch (error) {
+      console.log("deletePostHandler", error);
+    }
   };
 
   return (
@@ -128,15 +155,17 @@ const Post = ({ post }) => {
             {new Date(post.created_at).toLocaleString()}
           </Link>
 
-          <IconButton
-            // variant="plain"
-            // color="neutral"
-            size="sm"
-            // sx={{ ml: "auto" }}
-            onClick={handleClick}
-          >
-            <MoreHoriz />
-          </IconButton>
+          {auth.userId == post.user_id && (
+            <IconButton
+              // variant="plain"
+              // color="neutral"
+              size="sm"
+              // sx={{ ml: "auto" }}
+              onClick={handleClick}
+            >
+              <MoreHoriz />
+            </IconButton>
+          )}
         </CardContent>
 
         {post.photo_url && (
@@ -216,7 +245,12 @@ const Post = ({ post }) => {
           </ListItemIcon>
           Edit
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem
+          onClick={(e) => {
+            deletePostHandler(e);
+            handleClose(e);
+          }}
+        >
           <ListItemIcon>
             <DeleteForeverIcon fontSize="small" />
           </ListItemIcon>

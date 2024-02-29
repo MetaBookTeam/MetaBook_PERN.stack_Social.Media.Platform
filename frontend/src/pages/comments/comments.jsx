@@ -255,6 +255,7 @@ const Comments = ({ values }) => {
       //   ]);
       //   return [...prev, ...comment.data.result];
       // });
+      setNewComment("");
       setCommentsCount((prev) => prev + 1);
       handleCommentsModal();
       setCollapseComments(true);
@@ -443,6 +444,7 @@ deleteComment.data.result
           onChange={(e) => {
             setNewComment(e.target.value);
           }}
+          value={newComment}
         />
         <Link underline="none" role="button" onClick={AddCommentHandler}>
           Post

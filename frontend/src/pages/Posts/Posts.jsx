@@ -113,6 +113,7 @@ export default function Posts() {
         <Grid item md={5} sm={8} xs={9}>
           {posts &&
             posts.toReversed().map((post) => {
+              // posts.map((post) => {
               return <Post key={post.id} post={post} />;
             })}
         </Grid>

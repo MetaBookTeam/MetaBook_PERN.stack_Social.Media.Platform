@@ -121,6 +121,7 @@ GET http://localhost:5000/posts
       left join cte_users_share sh
         on p.id = sh.post_id
 
+        WHERE p.is_deleted = 0
       `
     );
 
@@ -218,7 +219,7 @@ GET http://localhost:5000/posts/profile
       left join cte_users_share sh
         on p.id = sh.post_id
 
-        WHERE users.id=$1
+        WHERE users.id=$1 AND p.is_deleted = 0;
       `,
       placeholder
     );
@@ -317,7 +318,10 @@ GET http://localhost:5000/posts/:user_id
       left join cte_users_share sh
         on p.id = sh.post_id
       
-      WHERE p.user_id = $1 AND users.is_deleted = 0;
+      WHERE 
+        p.user_id = 8 AND
+        users.is_deleted = 0 AND
+        p.is_deleted = 0;
       `,
       placeholder
     );
