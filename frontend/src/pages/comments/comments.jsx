@@ -43,7 +43,7 @@ import { addComment } from "../../Service/redux/reducers/comments/commentsSlice"
 const Comments = ({ values }) => {
   const navigate = useNavigate();
   const { post, modalStyle } = values;
- 
+  // console.log(values);// Post
   //* Redux =========================
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);

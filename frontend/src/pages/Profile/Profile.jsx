@@ -250,9 +250,7 @@ const Profile = () => {
               <Item>You do not have any post </Item>
             )}
             {shares ? (
-              shares.map((elem) => {
-                console.log(elem.content);
-
+              shares.map((elem) => { console.log(elem);
                 return <Shares elem={elem} />;
               })
             ) : (

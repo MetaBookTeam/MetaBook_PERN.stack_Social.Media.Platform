@@ -40,7 +40,7 @@ const style = {
   p: 4,
 };
 const Shares = ({ elem }) => {
-  console.log(elem);
+  // console.log(elem);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
