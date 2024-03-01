@@ -349,7 +349,7 @@ export default function Login() {
                     // width="400px"
                   />
                 </Box>
-                {/* <Divider sx={{ mb: 2 }} /> */}
+                <Divider sx={{ mb: 2 }} />
 
                 {status
                   ? message && <Alert severity="success">{message}</Alert>

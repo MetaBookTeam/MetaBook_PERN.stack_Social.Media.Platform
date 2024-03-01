@@ -192,7 +192,7 @@ const Post = ({ post }) => {
       <Card
         variant="outlined"
         sx={{
-          marginBlock: "20px",
+          margin: "20px",
           minWidth: 300,
           "--Card-radius": (theme) => theme.vars.radius.xl,
         }}

@@ -110,14 +110,24 @@ export default function Posts() {
           <SideBar />
         </Grid>
 
-        <Grid item md={7} sm={8} xs={10}>
-          {posts &&
-            posts.toReversed().map((post) => {
-              // posts.map((post) => {
-              return <Post key={post.id} post={post} />;
-            })}
+        <Grid item md={6} sm={8} xs={10}>
+          <Box
+            sx={{
+              mb: 2,
+              display: "flex",
+              flexDirection: "column",
+              height: 1000,
+              overflow: "hidden",
+              overflowY: "scroll",
+            }}
+          >
+            {posts &&
+              posts.toReversed().map((post) => {
+                // posts.map((post) => {
+                return <Post key={post.id} post={post} />;
+              })}
+          </Box>
         </Grid>
-
         <Grid
           item
           md={3}
