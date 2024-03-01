@@ -1,4 +1,4 @@
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -55,7 +55,9 @@ export default function Posts() {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(<Loader />);
   const getAllPosts = async () => {
+    // setIsLoading(true)
     try {
       const result = await axios.get("http://localhost:5000/posts/", {
         headers: {
@@ -66,6 +68,7 @@ export default function Posts() {
         setStatus(true);
         // console.log(result.data.result);
         dispatch(setPosts(result.data.result));
+        setIsLoading(false);
       } else throw Error;
     } catch (error) {
       if (!error.response.data.success) {
@@ -167,9 +170,13 @@ export default function Posts() {
             {posts &&
               posts.toReversed().map((post) => {
                 return (
-                  <Suspense fallback={<Loader />}>
-                    <Post key={post.id} post={post} />
-                  </Suspense>
+                  <>
+                    {isLoading ? (
+                      <Loader />
+                    ) : (
+                      <Post key={post.id} post={post} />
+                    )}
+                  </>
                 );
               })}
           </Box>
