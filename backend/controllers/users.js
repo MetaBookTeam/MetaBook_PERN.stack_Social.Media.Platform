@@ -56,6 +56,7 @@ POST http://localhost:5000/users/register
     city,
     state,
     country,
+    cover_photo,
   } = req.body;
 
   const role_id = "1"; //! edit the value of role_id depend on role id in role table.
@@ -81,8 +82,8 @@ POST http://localhost:5000/users/register
 
       const query = `
       INSERT INTO user_profile 
-      (user_id, first_name, last_name, birthday, gender, phone_number, school, city, state, country) 
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10);`;
+      (user_id, first_name, last_name, birthday, gender, phone_number, school, city, state, country, cover_photo) 
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11);`;
 
       const data = [
         user_id,
@@ -95,6 +96,7 @@ POST http://localhost:5000/users/register
         city,
         state,
         country,
+        cover_photo,
       ];
 
       await pool
@@ -189,17 +191,17 @@ POST http://localhost:5000/users/login
 //? getAllUsers  /////////////////////////////////
 
 const getAllUsers = (req, res) => {
-  const query = `
-  with cte_friends as (
-    select  user_id, count(*) as total_friends
+  const query = `   
+  with cte_following as (
+    select user_id, array_agg(friend_id) as following
     from friends
     group by user_id
     ),
 
-  cte_user_friends as (
-    select user_id, array_agg(friend_id) as user_friends
+  cte_followers as (
+    select friend_id, array_agg(user_id) as followers
     from friends
-    group by user_id
+    group by friend_id
     )
 
   SELECT *
@@ -209,11 +211,11 @@ const getAllUsers = (req, res) => {
   FULL OUTER JOIN user_profile 
     ON users.id = user_profile.user_id 
 
-  left join cte_friends f
-    on users.id = f.user_id
+  left join cte_following fg
+    on users.id = fg.user_id
 
-  left join cte_user_friends uf
-    on users.id = uf.user_id
+  left join cte_followers fr
+    on users.id = fr.friend_id
 
   WHERE users.is_deleted = 0
   
@@ -264,13 +266,34 @@ GET http://localhost:5000/users/:user_id
 
   const { user_id } = req.params;
 
-  const query = `
-  SELECT * 
+  const query = `   with cte_following as (
+    select user_id, array_agg(friend_id) as following
+    from friends
+    group by user_id
+    ),
+
+  cte_followers as (
+    select friend_id, array_agg(user_id) as followers
+    from friends
+    group by friend_id
+    )
+
+  SELECT *
+
   FROM users 
+
   FULL OUTER JOIN user_profile 
-  ON users.id = user_profile.user_id 
-  WHERE users.id = $1
-  AND users.is_deleted = 0;
+    ON users.id = user_profile.user_id 
+
+  left join cte_following fg
+    on users.id = fg.user_id
+
+  left join cte_followers fr
+    on users.id = fr.friend_id
+
+  WHERE users.id = $1 AND users.is_deleted = 0
+  
+  ORDER BY users.id;
   `;
 
   const data = [user_id];
