@@ -2,8 +2,13 @@ import * as React from "react";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
+import axios from "axios";
+
 import { useDispatch, useSelector } from "react-redux";
-import { deletePost } from "../../Service/redux/reducers/Posts/postsSlice";
+import {
+  deletePost,
+  updatePostById,
+} from "../../Service/redux/reducers/Posts/postsSlice";
 
 import AspectRatio from "@mui/joy/AspectRatio";
 import Avatar from "@mui/joy/Avatar";
@@ -22,6 +27,7 @@ import SendOutlined from "@mui/icons-material/SendOutlined";
 import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
 import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/joy/IconButton";
 // import Box from '@mui/material/Box';
@@ -44,7 +50,6 @@ import { styled } from "@mui/material/styles";
 // import Message from "../Socket";
 
 import Comments from "../../pages/Comments/Comments";
-import axios from "axios";
 
 const modalStyle = {
   position: "absolute",
@@ -104,6 +109,75 @@ const Post = ({ post }) => {
     } catch (error) {
       console.log("deletePostHandler", error);
     }
+  };
+
+  // =========================================
+
+  //* Edit Post Modal
+  // post Modal Toggle ======================
+  const [openEditPost, setOpenEditPost] = useState(false);
+  const closeEditPostModal = () => setOpenEditPost(false);
+  const [editPostContent, setEditPostContent] = useState("");
+  const [editPostPhoto, setEditPostPhoto] = useState("");
+
+  const openEditPostModal = async (e) => {
+    setEditPostContent(post.content);
+    setOpenEditPost(true);
+  };
+
+  //* Edit Post
+
+  const editPostHandler = async (e) => {
+    try {
+      // postsRouter.put("/:post_id", authentication, updatePostById);
+
+      const updatePost = await axios.put(
+        `http://localhost:5000/posts/${post.id}`,
+        {
+          // content: editPostContent ? editPostContent : post.content,
+          // photo_url: editPostPhoto ? editPostPhoto : post.photo_url,
+          content: editPostContent,
+          photo_url: editPostPhoto ? editPostPhoto : null,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      // console.log("updatePost.data.result", updatePost.data.result);
+      dispatch(updatePostById(...updatePost.data.result));
+      closeEditPostModal();
+    } catch (error) {
+      console.log("editPostHandler", error);
+    }
+  };
+
+  //===============================================================
+  //* Cloudinary
+
+  const [image, setImg] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [uploadMessage, setUploadMessage] = useState("");
+
+  //* Upload Images to Cloudinary //////////////////////////
+  const uploadImage = () => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "cloudUploadP5");
+    data.append("cloud_name", "dpbh42kjy");
+    axios
+      .post("https://api.cloudinary.com/v1_1/dpbh42kjy/image/upload", data)
+      .then((data) => {
+        console.log(data.data.url);
+        setImageUrl(data.data.url);
+        setUploadMessage("Image Uploaded Successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+        setUploadMessage("Image Upload Error");
+      });
   };
 
   return (
@@ -239,7 +313,12 @@ const Post = ({ post }) => {
           <Avatar /> Profile
         </MenuItem> */}
         {/* <Divider /> */}
-        <MenuItem onClick={handleClose}>
+        <MenuItem
+          onClick={(e) => {
+            openEditPostModal(e);
+            handleClose(e);
+          }}
+        >
           <ListItemIcon>
             <EditIcon fontSize="small" />
           </ListItemIcon>
@@ -257,6 +336,74 @@ const Post = ({ post }) => {
           Delete
         </MenuItem>
       </Menu>
+      {/* //* ///////////////////////////// */}
+      {/* //* ///////////////////////////// */}
+      {/* //* Edit Post Modal */}
+      {/* //* ///////////////////////////// */}
+      {/* //* ///////////////////////////// */}
+
+      <Modal
+        keepMounted
+        open={openEditPost}
+        onClose={closeEditPostModal}
+        aria-labelledby="keep-mounted-modal-title"
+        aria-describedby="keep-mounted-modal-description"
+      >
+        <Box
+          sx={{
+            ...modalStyle,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
+            Edit Post No.{post.id}
+          </Typography>
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Edit this comment…"
+            sx={{
+              margin: "10px 0",
+            }}
+            onChange={(e) => {
+              setEditPostContent(e.target.value);
+            }}
+            value={editPostContent}
+          />
+          {/* //* Cloudinary /////////////////////*/}
+
+          <TextField
+            sx={{ width: "75%" }}
+            id="image"
+            name="image"
+            type="file"
+            // marginBottom={3}
+            helperText={uploadMessage && uploadMessage}
+            onChange={(e) => {
+              setImg(e.target.files[0]);
+            }}
+          />
+          <Button
+            variant="outlined"
+            sx={{
+              width: "22%",
+              height: "4em",
+              marginLeft: "3%",
+              marginBlockEnd: "16px",
+            }}
+            onClick={uploadImage}
+          >
+            upload
+          </Button>
+
+          <Button variant="contained" onClick={editPostHandler}>
+            Apply Edits
+          </Button>
+        </Box>
+      </Modal>
     </>
   );
 };

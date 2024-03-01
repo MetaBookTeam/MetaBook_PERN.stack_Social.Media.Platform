@@ -155,19 +155,19 @@ GET http://localhost:5000/posts/profile
       //   select post_id, count(*) as total_likes
       //   from posts_likes
       //   group by post_id
-      //   ), 
+      //   ),
 
       //   cte_users_Like as (
       //     select post_id, array_agg(user_id) as liked_users
       //     from posts_likes
       //     group by post_id
-      //     ), 
+      //     ),
 
       //   cte_comments as (
       //     select post_id, count(*) as total_comments
       //     from comments
       //     group by post_id
-      //     ), 
+      //     ),
 
       //   cte_shares as (
       //     select post_id, count(*) as total_shares
@@ -181,19 +181,19 @@ GET http://localhost:5000/posts/profile
       //       group by post_id
       //       )
 
-      // select 
-      //   p.id, 
-      //   p.created_at, 
-      //   users.image, 
+      // select
+      //   p.id,
+      //   p.created_at,
+      //   users.image,
       //   users.user_name,
       //   user_profile.first_name,
       //   user_profile.last_name,
-      //   p.content, 
-      //   p.user_id, 
+      //   p.content,
+      //   p.user_id,
       //   p.photo_url,
 
-      //   coalesce(l.total_likes, 0)     as likes, 
-      //           ul.liked_users         as liked_users, 
+      //   coalesce(l.total_likes, 0)     as likes,
+      //           ul.liked_users         as liked_users,
       //   coalesce(c.total_comments, 0)  as comments,
       //   coalesce(s.total_shares, 0)    as shares,
       //           sh.shared_users        as shared_users
@@ -214,7 +214,7 @@ GET http://localhost:5000/posts/profile
       //   on p.id = c.post_id
 
       // left join cte_shares s
-      //   on p.id = s.post_id 
+      //   on p.id = s.post_id
 
       // left join cte_users_share sh
       //   on p.id = sh.post_id
