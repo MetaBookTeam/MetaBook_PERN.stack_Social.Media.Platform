@@ -77,6 +77,7 @@ const Comments = ({ values }) => {
       if (result.data.success) {
         // setStatus(true);
         // setMessage(result.data.message);
+        handleCloseAddShare();
       }
     } catch (error) {
       if (!error.response.data.success) {
@@ -337,28 +338,14 @@ deleteComment.data.result
   // =========================================
 
   //* Edit Comment Modal
-  // Likes Modal Toggle ======================
+  // comment Modal Toggle ======================
   const [openEditComment, setOpenEditComment] = useState(false);
   const closeEditCommentModal = () => setOpenEditComment(false);
   const [editComment, setEditComment] = useState("");
 
   const openEditCommentModal = async (e, comment) => {
-    // try {
-    //   const likes = await axios.get(
-    //     `http://localhost:5000/posts/like/${post.id}`,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${auth.token}`,
-    //       },
-    //     }
-    //   );
-
-    // console.log(comment.comment);
     setEditComment(comment.comment);
     setOpenEditComment(true);
-    // } catch (error) {
-    //   console.log("openLikesModal", error);
-    // }
   };
 
   //* Edit Comment
@@ -581,7 +568,6 @@ deleteComment.data.result
                         <Typography
                           sx={{ cursor: "pointer" }}
                           onClick={(e) => {
-                            // editCommentHandler(e, comment.id);
                             openEditCommentModal(e, comment);
                           }}
                         >
@@ -621,7 +607,6 @@ deleteComment.data.result
                       flexDirection: "column",
                       justifyContent: "center",
                       alignItems: "center",
-                      textAlign: "left",
                     }}
                   >
                     <Typography
@@ -636,9 +621,6 @@ deleteComment.data.result
                       variant="outlined"
                       placeholder="Edit this comment…"
                       sx={{
-                        // flex: 1,
-                        // px: 0,
-                        // "--Input-focusedThickness": "0px",
                         margin: "10px 0",
                       }}
                       onChange={(e) => {
