@@ -5,6 +5,7 @@ import commentsReducer from "./reducers/comments/commentsSlice";
 import usersReducer from "./reducers/users/usersSlice";
 import sharesReducer from "./reducers/shares/sharesSlice";
 
+import friendsReducer from "./reducers/friend/friendSlice";
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
@@ -15,6 +16,7 @@ const store = configureStore({
     posts: postsReducer,
     users: usersReducer,
     shares:sharesReducer,
+    friends:friendsReducer,
   },
 });
 
