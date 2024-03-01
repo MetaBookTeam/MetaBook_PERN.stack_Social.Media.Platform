@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setUserProfile,
-  setFriendProfile,
+  setFriendProfile
 } from "../../Service/redux/reducers/users/usersSlice";
 import { useParams } from "react-router-dom";
-
+ import {getfriend,setUnfollow,setFollow} from '../../Service/redux/reducers/friend/friendSlice'
 import Stack from "@mui/material/Stack";
 import axios from "axios";
 import Container from "@mui/material/Container";
@@ -29,16 +29,14 @@ import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
 import Tooltip from "@mui/material/Tooltip";
-import {
-  setPosts,
-} from "../../Service/redux/reducers/Posts/postsSlice";
+import { setPosts } from "../../Service/redux/reducers/Posts/postsSlice";
 import Post from "../../components/Post/Post";
 const FriendPage = () => {
   const Demo = styled("div")(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
   }));
   const [secondary, setSecondary] = React.useState(false);
-
+  useParams;
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
     ...theme.typography.body2,
@@ -61,8 +59,8 @@ const FriendPage = () => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const { userProfile, friendProfile } = useSelector((state) => state.users);
-  const postsFr  = useSelector((state) => state.posts.posts);
-  
+  const friends = useSelector((state) => state.friends.friends);
+  const postsFr = useSelector((state) => state.posts.posts);
   const { friend_id } = useParams();
 
   const getUserById = async () => {
@@ -80,7 +78,7 @@ const FriendPage = () => {
   useEffect(() => {
     getUserById();
   }, []);
- 
+
   const getUserPost = async () => {
     try {
       const user = await axios.get(`http://localhost:5000/posts/${friend_id}`, {
@@ -96,6 +94,58 @@ const FriendPage = () => {
   useEffect(() => {
     getUserPost();
   }, []);
+  const AddNewFriend = async () => {
+    try {
+      const user = await axios.post(
+        `http://localhost:5000/users/friends/${friend_id}`,
+        { user_id: auth.userId },
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      dispatch(setFollow(...user.data.result));
+    } catch (error) {
+      console.log("setFollow", error);
+    }
+  };
+  const [userFriends, setUserFriends] = useState([])
+  const getAllFriend = async () => {
+    try {
+      const user = await axios.get(
+        `http://localhost:5000/users/friends/${friend_id}/${auth.userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      setUserFriends(user.data.result);
+ 
+    
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getAllFriend();
+  }, []);
+  const deleteFriend = async() => {
+    try {
+      const user = await axios.delete(
+        `http://localhost:5000/users/friends/${friend_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      dispatch(setUnfollow(user.data.result));
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <>
       <Container>
@@ -112,7 +162,9 @@ const FriendPage = () => {
                 <Grid container sx={{ paddingTop: "10px" }}>
                   <Grid item sx={3}>
                     <Tooltip title="Add" enterDelay={500} leaveDelay={200}>
-                      <Button>Follow</Button>
+                      
+                       {userFriends.length ? <Button onClick={deleteFriend}>UnFollow </Button>:<Button onClick={AddNewFriend}>Follow </Button>}
+                     
                     </Tooltip>
                   </Grid>
                   <Grid item sx={3}></Grid>
@@ -130,11 +182,11 @@ const FriendPage = () => {
               <Grid container sx={{ paddingTop: "10px" }}>
                 <Grid item xs={4}>
                   Followers
-                  <h1>4</h1>
+                  <h1>{userFriends.length}</h1>
                 </Grid>
                 <Grid item xs={4}>
                   Following
-                  <h1>0</h1>
+                  <h1>{userFriends.length}</h1>
                 </Grid>
                 <Grid item xs={4}>
                   Post
@@ -162,33 +214,35 @@ const FriendPage = () => {
                   <ListItem>
                     <ListItemText
                       primary="Name"
-                        secondary={
-                          secondary ? "Secondary text" : friendProfile.user_name
-                        }
+                      secondary={
+                        secondary ? "Secondary text" : friendProfile.user_name
+                      }
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemText
                       primary="Phone"
-                        secondary={
-                          secondary ? "Secondary text" : friendProfile.phone_number
-                        }
+                      secondary={
+                        secondary
+                          ? "Secondary text"
+                          : friendProfile.phone_number
+                      }
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemText
                       primary="Address"
-                        secondary={
-                          secondary ? "Secondary text" : friendProfile.address
-                        }
+                      secondary={
+                        secondary ? "Secondary text" : friendProfile.address
+                      }
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemText
                       primary="Gender"
-                        secondary={
-                          secondary ? "Secondary text" : friendProfile.gender
-                        }
+                      secondary={
+                        secondary ? "Secondary text" : friendProfile.gender
+                      }
                     />
                   </ListItem>
                 </List>
@@ -197,12 +251,12 @@ const FriendPage = () => {
           </Grid>
           <Grid item xs={8}>
             {postsFr ? (
-                postsFr.map((elem,i) => {
-                  return <Post key={i} post={elem}/> ;
-                })
-              ) : (
-                <Item>{friendProfile.first_name} do not have any post </Item>
-              )}
+              postsFr.map((elem, i) => {
+                return <Post key={i} post={elem} />;
+              })
+            ) : (
+              <Item>{friendProfile.first_name} do not have any post </Item>
+            )}
           </Grid>
         </Grid>
       </Container>
