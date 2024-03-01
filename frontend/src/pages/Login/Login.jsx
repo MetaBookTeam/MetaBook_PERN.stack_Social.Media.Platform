@@ -320,14 +320,13 @@ export default function Login() {
                     </Link>
                   </Grid>
                 </Grid>
-                <Divider sx={{ mb: 5, mt: 5 }} />
+                <Divider sx={{ mb: 2, mt: 2 }} />
 
                 <Box
                   display={"flex"}
                   flexDirection={"column"}
                   justifyContent={"center"}
                   alignItems={"center"}
-                  // mb={2}
                   gap={3}
                 >
                   <Typography component="h1" variant="h5">
@@ -349,7 +348,7 @@ export default function Login() {
                     // width="400px"
                   />
                 </Box>
-                <Divider sx={{ mb: 2 }} />
+                <Divider sx={{ mb: 2, mt: 2 }} />
 
                 {status
                   ? message && <Alert severity="success">{message}</Alert>

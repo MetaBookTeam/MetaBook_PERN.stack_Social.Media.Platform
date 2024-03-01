@@ -7,18 +7,21 @@ export const friendsSlice = createSlice({
   },
 
   reducers: {
-    setFollow: (state , action) => {
+    getAllFriends: (state, action) => {
+      state.friends == action.payload;
+    },
+    setFollow: (state, action) => {
       state.friends.push(action.payload);
     },
-    setUnfollow: (state , action) => {
+    setUnfollow: (state, action) => {
       state.friends !== action.payload;
     },
-    getfriend: (state , action) => {
+    getfriend: (state, action) => {
       state.friends == action.payload;
     },
   },
 });
 
-export const {setFollow,setUnfollow,getfriend} =
-friendsSlice.actions;
+export const { getAllFriends, setFollow, setUnfollow, getfriend } =
+  friendsSlice.actions;
 export default friendsSlice.reducer;
