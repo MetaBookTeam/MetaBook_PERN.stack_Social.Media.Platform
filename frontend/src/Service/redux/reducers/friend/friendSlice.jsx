@@ -3,22 +3,22 @@ import { createSlice } from "@reduxjs/toolkit";
 export const friendsSlice = createSlice({
   name: "friends",
   initialState: {
-    friends: "",
+    friends: [],
   },
 
   reducers: {
     setFollow: (state , action) => {
-      state.friends == action.payload;
+      state.friends.push(action.payload);
     },
     setUnfollow: (state , action) => {
       state.friends !== action.payload;
     },
-    setfriend: (state , action) => {
+    getfriend: (state , action) => {
       state.friends == action.payload;
     },
   },
 });
 
-export const {setFollow,setUnfollow,setfriend} =
+export const {setFollow,setUnfollow,getfriend} =
 friendsSlice.actions;
 export default friendsSlice.reducer;

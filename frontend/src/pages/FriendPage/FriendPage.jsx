@@ -7,7 +7,7 @@ import {
   setFriendProfile
 } from "../../Service/redux/reducers/users/usersSlice";
 import { useParams } from "react-router-dom";
-
+ import {getfriend,setUnfollow,setFollow} from '../../Service/redux/reducers/friend/friendSlice'
 import Stack from "@mui/material/Stack";
 import axios from "axios";
 import Container from "@mui/material/Container";
@@ -59,8 +59,9 @@ const FriendPage = () => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const { userProfile, friendProfile } = useSelector((state) => state.users);
+  const friends = useSelector((state) => state.friends.friends);
   const postsFr = useSelector((state) => state.posts.posts);
-
+ console.log(postsFr);
   const { friend_id } = useParams();
 
   const getUserById = async () => {
@@ -105,12 +106,14 @@ const FriendPage = () => {
           },
         }
       );
-      // dispatch(setNewFollow(user.data.result));
-      console.log("mm", user.data.result);
+      dispatch(setFollow(user.data.result));
+      console.log(user.data.result);
+      console.log("jj",friends);
     } catch (error) {
       console.log("mm", error);
     }
   };
+  console.log("jj",friends);
   return (
     <>
       <Container>
