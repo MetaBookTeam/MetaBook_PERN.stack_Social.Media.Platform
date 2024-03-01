@@ -22,22 +22,38 @@ const RightBar = () => {
   const auth = useSelector((state) => state.auth);
   // auth.isLoggedIn, auth.token, auth.userId;
   const posts = useSelector((state) => state.posts.posts);
+
   const users = useSelector((state) => state.users.users);
   console.log(users);
-  //===============================================================
 
+  //===============================================================
   return (
     <Box flex={2} p={2} sx={{ display: { xs: "none", sm: "block" } }}>
       <Box position="stick" width={300}>
         <Typography variant="h6" fontWeight={100}>
           Online Friends
         </Typography>
+       
         <AvatarGroup max={7}>
-          <Avatar
+          {users.map(user => (
+            <Avatar
+            key={user.id}
+            src={user.image}  
+            alt={`${user.first_name} ${user.last_name}`}
+            />
+              
+           
+            
+             
+           
+          ))}
+        </AvatarGroup>
+
+         {/* <Avatar 
             alt="Remy Sharp"
             src="https://material-ui.com/static/images/avatar/1.jpg"
           />
-          <Avatar
+           <Avatar
             alt="Travis Howard"
             src="https://material-ui.com/static/images/avatar/2.jpg"
           />
@@ -64,8 +80,8 @@ const RightBar = () => {
           <Avatar
             alt="Trevor Henderson"
             src="https://material-ui.com/static/images/avatar/9.jpg"
-          />
-        </AvatarGroup>
+          /> */}
+        
 
         {/* //* Images Collage ///////////// */}
 

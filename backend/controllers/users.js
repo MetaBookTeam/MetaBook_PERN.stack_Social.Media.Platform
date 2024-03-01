@@ -625,10 +625,11 @@ DELETE http://localhost:5000/users/delete/3
 
 const getAllFriends = async (req, res) => {
   const { userId } = req.token;
-  const placeholder = [userId];
+  const {friend_id} = req.params
+  const placeholder = [userId,friend_id];
   try {
     const friend = await pool.query(
-      `SELECT * FROM friends WHERE user_id=$1`,
+      `SELECT user_id,friend_id FROM friends WHERE user_id=$1 AND friend_id = $2`,
       placeholder
     );
     res.status(200).json({
@@ -649,8 +650,12 @@ const addFriend = async (req, res) => {
   const { userId } = req.token;
   const { friend_id } = req.params;
   const placeholder = [userId, friend_id];
-  console.log(placeholder);
   try {
+    const select = await pool.query(
+      `SELECT user_id,friend_id FROM friends WHERE user_id= $1 AND friend_id = $2`,
+      placeholder
+    );
+   if(!select.rowCount >=1) {
     const addFriend = await pool.query(
       `INSERT INTO friends (user_id,friend_id) VALUES ($1,$2) RETURNING *`,
       placeholder
@@ -660,8 +665,14 @@ const addFriend = async (req, res) => {
       message: "Friend added successfully",
       result: addFriend.rows,
     });
-    console.log(addFriend);
+   } else {
+    res.status(400).json({
+      success: false,
+      message: "You are a friend",
+    });
+   }
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Server error",
@@ -673,10 +684,10 @@ const addFriend = async (req, res) => {
 const deleteFriend = async (req, res) => {
   const { userId } = req.token;
   const { friend_id } = req.params;
-  const placeholder = [friend_id];
+  const placeholder = [friend_id,userId];
   try {
     const deleteFriend = await pool.query(
-      `DELETE FROM friends WHERE friend_id=$1`,
+      `DELETE FROM friends WHERE friend_id=$1 AND user_id=$2`,
       placeholder
     );
     res.status(200).json({
@@ -685,6 +696,7 @@ const deleteFriend = async (req, res) => {
       result: deleteFriend.rows,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Server error",
