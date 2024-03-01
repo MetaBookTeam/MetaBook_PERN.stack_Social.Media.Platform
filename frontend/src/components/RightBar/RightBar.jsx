@@ -24,7 +24,7 @@ const RightBar = () => {
   const posts = useSelector((state) => state.posts.posts);
 
   const users = useSelector((state) => state.users.users);
-  console.log(users);
+  // console.log(users);
 
   //===============================================================
   return (

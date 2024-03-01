@@ -102,7 +102,7 @@ const Profile = () => {
         }
       );
       dispatch(setShares(result.data.result));
-      console.log(result);
+      // console.log(result);
     } catch (error) {
       console.log(error);
     }
@@ -136,7 +136,7 @@ const Profile = () => {
         },
       });
       setPostProfile(post.data.result);
-      console.log(post.data.result);
+      // console.log(post.data.result);
     } catch (error) {
       console.log(error);
     }

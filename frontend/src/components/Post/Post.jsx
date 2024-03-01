@@ -380,6 +380,7 @@ const Post = ({ post }) => {
             }}
             value={editPostContent}
           />
+          
           {/* //* Cloudinary /////////////////////*/}
 
           <TextField

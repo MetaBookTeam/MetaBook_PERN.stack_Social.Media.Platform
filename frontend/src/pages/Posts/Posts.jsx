@@ -12,6 +12,12 @@ import {
   setUsers,
   setUserProfile,
 } from "../../Service/redux/reducers/users/usersSlice";
+import {
+  getAllFriends,
+  getfriend,
+  setUnfollow,
+  setFollow,
+} from "../../Service/redux/reducers/friend/friendSlice";
 
 import Paper from "@mui/material/Paper";
 import Modal from "@mui/material/Modal";
@@ -104,11 +110,29 @@ export default function Posts() {
       console.log("getAllUsers", error);
     }
   };
+  //* ////////////////////////////
+  const getAllFriendsHandler = async () => {
+    try {
+      // usersRouter.get("/friends", authentication, getAllFriends);
+      const allFriends = await axios.get(
+        `http://localhost:5000/users/friends`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      dispatch(getAllFriends(allFriends.data.result));
+    } catch (error) {
+      console.log("getAllFriendsHandler", error);
+    }
+  };
 
   useEffect(() => {
     getUserById();
     getAllPosts();
     getAllUsers();
+    getAllFriendsHandler();
   }, []);
 
   return (

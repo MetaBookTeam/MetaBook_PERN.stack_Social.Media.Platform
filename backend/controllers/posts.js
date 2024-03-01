@@ -121,7 +121,9 @@ GET http://localhost:5000/posts
       left join cte_users_share sh
         on p.id = sh.post_id
 
-        WHERE p.is_deleted = 0
+      WHERE p.is_deleted = 0
+
+      ORDER BY p.id;
       `
     );
 
@@ -263,13 +265,16 @@ GET http://localhost:5000/posts/profile
 
       left join cte_likes l
         on p.id = l.post_id
+
       left join cte_comments c
         on p.id = c.post_id
 
       left join cte_shares s
         on p.id = s.post_id 
 
-        WHERE p.user_id=$1 AND p.is_deleted = 0;`,
+        WHERE p.user_id=$1 AND p.is_deleted = 0
+        
+        ORDER BY p.id;`,
       placeholder
     );
     res.status(200).json({
@@ -370,7 +375,9 @@ GET http://localhost:5000/posts/:user_id
       WHERE 
         p.user_id = $1 AND
         users.is_deleted = 0 AND
-        p.is_deleted = 0;
+        p.is_deleted = 0
+        
+      ORDER BY p.id;
       `,
       placeholder
     );

@@ -1,15 +1,23 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
+import axios from "axios";
 
 import { useDispatch, useSelector } from "react-redux";
+import { setPosts } from "../../Service/redux/reducers/Posts/postsSlice";
 import {
   setUserProfile,
-  setFriendProfile
+  setFriendProfile,
 } from "../../Service/redux/reducers/users/usersSlice";
-import { useParams } from "react-router-dom";
- import {getfriend,setUnfollow,setFollow} from '../../Service/redux/reducers/friend/friendSlice'
+import {
+  getAllFriends,
+  getfriend,
+  setUnfollow,
+  setFollow,
+} from "../../Service/redux/reducers/friend/friendSlice";
+
 import Stack from "@mui/material/Stack";
-import axios from "axios";
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
@@ -17,7 +25,6 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import AspectRatio from "@mui/joy/AspectRatio";
 // import Box from '@mui/joy/Box';
-import { styled } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Backdrop from "@mui/material/Backdrop";
 import Modal from "@mui/material/Modal";
@@ -29,14 +36,17 @@ import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
 import Tooltip from "@mui/material/Tooltip";
-import { setPosts } from "../../Service/redux/reducers/Posts/postsSlice";
+import { styled } from "@mui/material/styles";
+
 import Post from "../../components/Post/Post";
+
 const FriendPage = () => {
   const Demo = styled("div")(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
   }));
+
   const [secondary, setSecondary] = React.useState(false);
-  useParams;
+
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
     ...theme.typography.body2,
@@ -44,23 +54,13 @@ const FriendPage = () => {
     textAlign: "center",
     color: theme.palette.text.secondary,
   }));
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
 
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const { userProfile, friendProfile } = useSelector((state) => state.users);
   const friends = useSelector((state) => state.friends.friends);
   const postsFr = useSelector((state) => state.posts.posts);
+
   const { friend_id } = useParams();
 
   const getUserById = async () => {
@@ -70,14 +70,12 @@ const FriendPage = () => {
           Authorization: `Bearer ${auth.token}`,
         },
       });
+
       dispatch(setFriendProfile(...user.data.result));
     } catch (error) {
       console.log("setFriendProfile", error);
     }
   };
-  useEffect(() => {
-    getUserById();
-  }, []);
 
   const getUserPost = async () => {
     try {
@@ -86,14 +84,14 @@ const FriendPage = () => {
           Authorization: `Bearer ${auth.token}`,
         },
       });
+      
       dispatch(setPosts(user.data.result));
+
     } catch (error) {
       console.log("setFriendProfile", error);
     }
   };
-  useEffect(() => {
-    getUserPost();
-  }, []);
+
   const AddNewFriend = async () => {
     try {
       const user = await axios.post(
@@ -110,7 +108,9 @@ const FriendPage = () => {
       console.log("setFollow", error);
     }
   };
-  const [userFriends, setUserFriends] = useState([])
+
+  const [userFriends, setUserFriends] = useState([]);
+
   const getAllFriend = async () => {
     try {
       const user = await axios.get(
@@ -122,16 +122,18 @@ const FriendPage = () => {
         }
       );
       setUserFriends(user.data.result);
- 
-    
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
+    getUserPost();
+    getUserById();
     getAllFriend();
   }, []);
-  const deleteFriend = async() => {
+
+  const deleteFriend = async () => {
     try {
       const user = await axios.delete(
         `http://localhost:5000/users/friends/${friend_id}`,
@@ -141,11 +143,13 @@ const FriendPage = () => {
           },
         }
       );
+
       dispatch(setUnfollow(user.data.result));
     } catch (error) {
       console.log(error);
     }
-  }
+  };
+
   return (
     <>
       <Container>
@@ -160,14 +164,16 @@ const FriendPage = () => {
                   />
                 </AspectRatio>
                 <Grid container sx={{ paddingTop: "10px" }}>
-                  <Grid item sx={3}>
+                  <Grid item xs={3}>
                     <Tooltip title="Add" enterDelay={500} leaveDelay={200}>
-                      
-                       {userFriends.length ? <Button onClick={deleteFriend}>UnFollow </Button>:<Button onClick={AddNewFriend}>Follow </Button>}
-                     
+                      {userFriends.length ? (
+                        <Button onClick={deleteFriend}>UnFollow </Button>
+                      ) : (
+                        <Button onClick={AddNewFriend}>Follow </Button>
+                      )}
                     </Tooltip>
                   </Grid>
-                  <Grid item sx={3}></Grid>
+                  <Grid item xs={3}></Grid>
                 </Grid>
               </Box>
               <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
