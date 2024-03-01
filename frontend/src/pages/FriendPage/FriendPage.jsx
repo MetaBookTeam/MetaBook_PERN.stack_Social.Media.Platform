@@ -106,10 +106,8 @@ const FriendPage = () => {
         }
       );
       dispatch(setFollow(...user.data.result));
-      console.log(user.data.result);
-      console.log("jj",friends);
     } catch (error) {
-      console.log("mm", error);
+      console.log("setFollow", error);
     }
   };
   const [userFriends, setUserFriends] = useState([])
@@ -144,7 +142,6 @@ const FriendPage = () => {
         }
       );
       dispatch(setUnfollow(user.data.result));
-     console.log(user);
     } catch (error) {
       console.log(error);
     }
@@ -185,11 +182,11 @@ const FriendPage = () => {
               <Grid container sx={{ paddingTop: "10px" }}>
                 <Grid item xs={4}>
                   Followers
-                  <h1>4</h1>
+                  <h1>{userFriends.length}</h1>
                 </Grid>
                 <Grid item xs={4}>
                   Following
-                  <h1>0</h1>
+                  <h1>{userFriends.length}</h1>
                 </Grid>
                 <Grid item xs={4}>
                   Post
