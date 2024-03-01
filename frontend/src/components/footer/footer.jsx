@@ -15,6 +15,7 @@ function Copyright() {
   <NavLink className={"Home"} to={"/about"}>
     About Us
   </NavLink>
+
     <Typography variant="body2" color="text.secondary">
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
@@ -204,7 +205,7 @@ export default function ColorInversionFooter() {
   );
 } */
 import * as React from 'react';
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import AspectRatio from '@mui/joy/AspectRatio';
 import Box from '@mui/joy/Box';
 import IconButton from '@mui/joy/IconButton';
@@ -222,10 +223,12 @@ import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import SendIcon from '@mui/icons-material/Send';
 import ColorLensRoundedIcon from '@mui/icons-material/ColorLensRounded';
-
+import { AppBar } from '@mui/material';
 export default function ColorInversionFooter() {
   const [color, setColor] = React.useState('neutral');
   return (
+    <>
+    <AppBar position='absolute' sx={{ top: "200%", bottom: 0 }}>
     <Sheet
       variant="solid"
       color={color}
@@ -245,7 +248,6 @@ export default function ColorInversionFooter() {
           size="sm"
           onClick={() => {
             const colors = ['primary', 'neutral', 'danger', 'success', 'warning'];
-
             const nextColorIndex = colors.indexOf(color) + 1;
             setColor(colors[nextColorIndex] ?? colors[0]);
           }}
@@ -253,24 +255,15 @@ export default function ColorInversionFooter() {
           <ColorLensRoundedIcon fontSize="small" />
         </IconButton>
         <Divider orientation="vertical" />
+        
         <IconButton variant="plain">
           <FacebookRoundedIcon />
         </IconButton>
+        
         <IconButton variant="plain">
           <GitHubIcon />
         </IconButton>
-        <Input
-          variant="soft"
-          placeholder="Type in your email"
-          type="email"
-          name="email"
-          endDecorator={
-            <IconButton variant="soft" aria-label="subscribe">
-              <SendIcon />
-            </IconButton>
-          }
-          sx={{ ml: 'auto', display: { xs: 'none', md: 'flex' } }}
-        />
+        
       </Box>
       <Divider sx={{ my: 2 }} />
       <Box
@@ -290,19 +283,11 @@ export default function ColorInversionFooter() {
             flexDirection: { xs: 'row', md: 'column' },
             minWidth: { xs: '100%', md: 'auto' },
             gap: 1,
-            justifyContent: 'center', // Center the content
+            justifyContent: 'center', 
           }}
         >
-          <AspectRatio
-            ratio="21/9"
-            minHeight={80}
-            sx={{ flexBasis: { xs: 200, md: 'initial' }, justifyContent: 'center' }} // Center the image
-          >
-            <img alt="" src="/static/blog/mui-product-comparison/ecosystem.png" />
-          </AspectRatio>
           <CardContent>
-            <Typography level="body-sm">Intro to the MUI ecosystem</Typography>
-            <Typography level="body-xs">Blog post</Typography>
+            
           </CardContent>
         </Card>
         <List
@@ -312,39 +297,51 @@ export default function ColorInversionFooter() {
           sx={{ flexGrow: 0, '--ListItem-radius': '8px', '--ListItem-gap': '0px' }}
         >
           <ListItem nested sx={{ width: { xs: '50%', md: 140 } }}>
-            <ListSubheader sx={{ fontWeight: 'xl' }}>Sitemap</ListSubheader>
+            <ListSubheader sx={{ fontWeight: 'xl' }}>Web Details</ListSubheader>
             <List>
               <ListItem>
-                <ListItemButton>Services</ListItemButton>
-              </ListItem>
-              <ListItem>
                 <ListItemButton><NavLink className={"Home"} to={"/contact"}>
-    Contact Us
-  </NavLink></ListItemButton>
+                  Contact Us
+                </NavLink></ListItemButton>
               </ListItem>
               <ListItem>
                 <ListItemButton><NavLink className={"Home"} to={"/about"}>
-    About Us
-  </NavLink></ListItemButton>
+                  About Us
+                </NavLink></ListItemButton>
               </ListItem>
             </List>
           </ListItem>
           <ListItem nested sx={{ width: { xs: '50%', md: 180 } }}>
-            <ListSubheader sx={{ fontWeight: 'xl' }}>Products</ListSubheader>
+            <ListSubheader sx={{ fontWeight: 'xl' }}> created website</ListSubheader>
             <List sx={{ '--ListItemDecorator-size': '32px' }}>
               <ListItem>
-                <ListItemButton>Joy UI</ListItemButton>
+                <ListItemButton>osama</ListItemButton>
               </ListItem>
               <ListItem>
-                <ListItemButton>Base UI</ListItemButton>
+                <ListItemButton>nassar</ListItemButton>
               </ListItem>
               <ListItem>
-                <ListItemButton>Material UI</ListItemButton>
+                <ListItemButton>kammal</ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton>saqqa</ListItemButton>
               </ListItem>
             </List>
           </ListItem>
         </List>
       </Box>
+      <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 2 }}>
+        {'Copyright © '}
+        <Link color="inherit" href="https://mui.com/">
+          Your Website
+        </Link>{' '}
+        {new Date().getFullYear()}
+        {'.'}
+      </Typography>
     </Sheet>
+    </AppBar>
+    </>
   );
 }
+
+ 
