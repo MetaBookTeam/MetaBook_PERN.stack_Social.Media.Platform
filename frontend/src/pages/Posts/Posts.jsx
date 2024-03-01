@@ -87,9 +87,28 @@ export default function Posts() {
       console.log("getUserById", error);
     }
   };
+
+  //* ////////////////////////////
+  const getAllUsers = async () => {
+    try {
+      // console.log('auth.userId', auth.userId)
+      const allUser = await axios.get(`http://localhost:5000/users`, {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
+      dispatch(setUsers(allUser.data.result));
+      // console.log(...user.data.result);
+      // console.log(user.data.result[0]);
+    } catch (error) {
+      console.log("getAllUsers", error);
+    }
+  };
+
   useEffect(() => {
     getUserById();
     getAllPosts();
+    getAllUsers();
   }, []);
 
   return (

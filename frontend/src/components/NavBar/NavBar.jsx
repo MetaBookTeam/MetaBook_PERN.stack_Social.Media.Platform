@@ -149,7 +149,7 @@ const NavBar = () => {
   // console.log(filter);
 
   return (
-    <AppBar position="sticky">
+    <AppBar position="fixed">
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
