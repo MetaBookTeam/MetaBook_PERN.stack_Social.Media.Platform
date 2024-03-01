@@ -22,8 +22,10 @@ const RightBar = () => {
   const auth = useSelector((state) => state.auth);
   // auth.isLoggedIn, auth.token, auth.userId;
   const posts = useSelector((state) => state.posts.posts);
-const users=useSelector((state)=>state.users.users)
-console.log(users);
+
+  const users = useSelector((state) => state.users.users);
+  console.log(users);
+
   //===============================================================
   return (
     <Box flex={2} p={2} sx={{ display: { xs: "none", sm: "block" } }}>
@@ -97,10 +99,9 @@ console.log(users);
                     alt={post.id}
                     loading="lazy"
                   />
-                
                 </ImageListItem>
               );
-            } 
+            }
           })}
         </ImageList>
 

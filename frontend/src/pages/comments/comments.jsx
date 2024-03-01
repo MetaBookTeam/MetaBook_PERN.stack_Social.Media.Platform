@@ -501,152 +501,164 @@ deleteComment.data.result
         </Link>
       </CardContent>
       <Collapse in={collapseComments}>
-        {postComments.length ? (
-          postComments.toReversed().map((comment, i) => {
-            // postComments.map((comment, i) => {
-              
-            // console.log(comment, i);
-            // setCommentsLikesCount(comment.comment_likes);
-            return (
-              <div key={i}>
-                {i > 0 && (
-                  <Divider variant="fullWidth" style={{ margin: "15px 0" }} />
-                )}
-                <Paper style={{ padding: "15px" }}>
-                  <Grid container wrap="nowrap" spacing={2}>
-                    <Grid item>
-                      <Avatar
-                        alt={comment.first_name}
-                        size="sm"
-                        src={comment.commenter_image}
-                      />
-                    </Grid>
-                    <Grid justifyContent="left" item xs zeroMinWidth>
-                      <Typography
-                        component="h4"
-                        variant="h4"
-                        sx={{ color: "black" }}
-                      >
-                        {comment.first_name} {comment.last_name}
-                      </Typography>
-                      <Typography>{comment.comment}</Typography>
-                    </Grid>
-                  </Grid>
-                </Paper>
-                <Grid
-                  container
-                  wrap="nowrap"
-                  columnSpacing={1}
-                  ml={1}
-                  sx={{ mt: "3px" }}
-                >
-                  <Grid item xs="auto">
-                    <Typography>
-                      {new Date(comment.created_at).toLocaleString()} -
-                    </Typography>
-                  </Grid>
-                  <Grid item xs="auto">
-                    <Typography
-                      onClick={(e) => {
-                        addCommentLikeHandler(e, comment.id);
-                        if (comment.comment_likes * 1 > commentsLikesCount) {
-                          setCommentsLikesCount(comment.comment_likes * 1);
-                        }
-                      }}
-                      sx={{ cursor: "pointer" }}
-                    >
-                      {comment.comment_likes * 1 >= commentsLikesCount
-                        ? comment.comment_likes
-                        : commentsLikesCount}{" "}
-                      Like
-                      {comment.comment_likes > 1 && "s"}
-                      {/* {commentsLikesCount} Like
-                      {commentsLikesCount > 1 && "s"} */}
-                    </Typography>
-                  </Grid>
+        <Box
+          sx={{
+            mb: 2,
+            display: "flex",
+            flexDirection: "column",
+            maxHeight: 700,
+            overflow: "hidden",
+            overflowY: "scroll",
+            padding: "15px",
+          }}
+        >
+          {postComments.length ? (
+            postComments.toReversed().map((comment, i) => {
+              // postComments.map((comment, i) => {
 
-                  {comment.user_id == auth.userId && (
-                    <>
-                      <Grid item ml="auto" xs="auto">
-                        <Typography
-                          sx={{ cursor: "pointer" }}
-                          onClick={(e) => {
-                            openEditCommentModal(e, comment);
-                          }}
-                        >
-                          Edit
-                        </Typography>
-                      </Grid>
-                      <Grid item mr={2} xs="auto">
-                        <Typography
-                          sx={{ cursor: "pointer" }}
-                          onClick={(e) => {
-                            deleteCommentHandler(e, comment.id);
-                          }}
-                        >
-                          Delete
-                        </Typography>
-                      </Grid>
-                    </>
+              // console.log(comment, i);
+              // setCommentsLikesCount(comment.comment_likes);
+              return (
+                <div key={i}>
+                  {i > 0 && (
+                    <Divider variant="fullWidth" style={{ margin: "15px 0" }} />
                   )}
-                </Grid>
-                {/* //* ///////////////////////////// */}
-                {/* //* ///////////////////////////// */}
-                {/* //* Edit Comment Modal */}
-                {/* //* ///////////////////////////// */}
-                {/* //* ///////////////////////////// */}
-
-                <Modal
-                  keepMounted
-                  open={openEditComment}
-                  onClose={closeEditCommentModal}
-                  aria-labelledby="keep-mounted-modal-title"
-                  aria-describedby="keep-mounted-modal-description"
-                >
-                  <Box
-                    sx={{
-                      ...modalStyle,
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
+                  <Paper style={{ padding: "15px" }}>
+                    <Grid container wrap="nowrap" spacing={2}>
+                      <Grid item>
+                        <Avatar
+                          alt={comment.first_name}
+                          size="sm"
+                          src={comment.commenter_image}
+                        />
+                      </Grid>
+                      <Grid justifyContent="left" item xs zeroMinWidth>
+                        <Typography
+                          component="h4"
+                          variant="h4"
+                          sx={{ color: "black" }}
+                        >
+                          {comment.first_name} {comment.last_name}
+                        </Typography>
+                        <Typography>{comment.comment}</Typography>
+                      </Grid>
+                    </Grid>
+                  </Paper>
+                  <Grid
+                    container
+                    wrap="nowrap"
+                    columnSpacing={1}
+                    ml={1}
+                    sx={{ mt: "3px" }}
                   >
-                    <Typography
-                      id="keep-mounted-modal-title"
-                      variant="h6"
-                      component="h2"
-                    >
-                      Edit comment No.{comment.id}
-                    </Typography>
-                    <TextField
-                      fullWidth
-                      variant="outlined"
-                      placeholder="Edit this comment…"
+                    <Grid item xs="auto">
+                      <Typography>
+                        {new Date(comment.created_at).toLocaleString()} -
+                      </Typography>
+                    </Grid>
+                    <Grid item xs="auto">
+                      <Typography
+                        onClick={(e) => {
+                          addCommentLikeHandler(e, comment.id);
+                          if (comment.comment_likes * 1 > commentsLikesCount) {
+                            setCommentsLikesCount(comment.comment_likes * 1);
+                          }
+                        }}
+                        sx={{ cursor: "pointer" }}
+                      >
+                        {comment.comment_likes * 1 >= commentsLikesCount
+                          ? comment.comment_likes
+                          : commentsLikesCount}{" "}
+                        Like
+                        {comment.comment_likes > 1 && "s"}
+                        {/* {commentsLikesCount} Like
+                      {commentsLikesCount > 1 && "s"} */}
+                      </Typography>
+                    </Grid>
+
+                    {comment.user_id == auth.userId && (
+                      <>
+                        <Grid item ml="auto" xs="auto">
+                          <Typography
+                            sx={{ cursor: "pointer" }}
+                            onClick={(e) => {
+                              openEditCommentModal(e, comment);
+                            }}
+                          >
+                            Edit
+                          </Typography>
+                        </Grid>
+                        <Grid item mr={2} xs="auto">
+                          <Typography
+                            sx={{ cursor: "pointer" }}
+                            onClick={(e) => {
+                              deleteCommentHandler(e, comment.id);
+                            }}
+                          >
+                            Delete
+                          </Typography>
+                        </Grid>
+                      </>
+                    )}
+                  </Grid>
+                  {/* //* ///////////////////////////// */}
+                  {/* //* ///////////////////////////// */}
+                  {/* //* Edit Comment Modal */}
+                  {/* //* ///////////////////////////// */}
+                  {/* //* ///////////////////////////// */}
+
+                  <Modal
+                    keepMounted
+                    open={openEditComment}
+                    onClose={closeEditCommentModal}
+                    aria-labelledby="keep-mounted-modal-title"
+                    aria-describedby="keep-mounted-modal-description"
+                  >
+                    <Box
                       sx={{
-                        margin: "10px 0",
-                      }}
-                      onChange={(e) => {
-                        setEditComment(e.target.value);
-                      }}
-                      value={editComment}
-                    />
-                    <Button
-                      variant="contained"
-                      onClick={(e) => {
-                        editCommentHandler(e, comment);
+                        ...modalStyle,
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
                       }}
                     >
-                      Edit
-                    </Button>
-                  </Box>
-                </Modal>
-              </div>
-            );
-          })
-        ) : (
-          <Typography>There is no comments on this post yet.</Typography>
-        )}
+                      <Typography
+                        id="keep-mounted-modal-title"
+                        variant="h6"
+                        component="h2"
+                      >
+                        Edit comment No.{comment.id}
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        variant="outlined"
+                        placeholder="Edit this comment…"
+                        sx={{
+                          margin: "10px 0",
+                        }}
+                        onChange={(e) => {
+                          setEditComment(e.target.value);
+                        }}
+                        value={editComment}
+                      />
+                      <Button
+                        variant="contained"
+                        onClick={(e) => {
+                          editCommentHandler(e, comment);
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </Box>
+                  </Modal>
+                </div>
+              );
+            })
+          ) : (
+            <Typography>There is no comments on this post yet.</Typography>
+          )}
+        </Box>
       </Collapse>
 
       {/* //* ///////////////////////////// */}
