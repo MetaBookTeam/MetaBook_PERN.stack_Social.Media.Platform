@@ -673,10 +673,10 @@ const addFriend = async (req, res) => {
 const deleteFriend = async (req, res) => {
   const { userId } = req.token;
   const { friend_id } = req.params;
-  const placeholder = [friend_id];
+  const placeholder = [friend_id,userId];
   try {
     const deleteFriend = await pool.query(
-      `DELETE FROM friends WHERE friend_id=$1`,
+      `DELETE FROM friends WHERE friend_id=$1 AND user_id=&2`,
       placeholder
     );
     res.status(200).json({
