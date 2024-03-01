@@ -7,7 +7,9 @@ import {
   Person,
   Settings,
   Storefront,
+  WbSunny,
 } from "@mui/icons-material";
+
 import {
   Box,
   List,
@@ -18,8 +20,11 @@ import {
   Switch,
 } from "@mui/material";
 import React from "react";
+import Weather from "../../Weather/Weather";
+
 
 const SideBar = ({ mode, setMode }) => {
+ 
   return (
     <Box flex={1} p={2} sx={{ display: { xs: "none", sm: "block" } }}>
       <Box position="stick">
@@ -90,9 +95,16 @@ const SideBar = ({ mode, setMode }) => {
               />
             </ListItemButton>
           </ListItem>
+
+          
+          
+          <Weather/>
         </List>
+       
       </Box>
+     
     </Box>
+    
   );
 };
 
