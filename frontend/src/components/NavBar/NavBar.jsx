@@ -21,6 +21,8 @@ import React, { useState, useEffect } from "react";
 
 import { NavLink } from "react-router-dom";
 
+import { googleLogout } from "@react-oauth/google";
+
 import axios from "axios";
 
 const StyledToolbar = styled(Toolbar)({
@@ -260,6 +262,7 @@ const NavBar = () => {
             className={"userInfo"}
             onClick={() => {
               dispatch(setLogout());
+              googleLogout();
             }}
             to="/login"
           >
