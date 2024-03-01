@@ -50,8 +50,34 @@ export default function Posts() {
   const auth = useSelector((state) => state.auth);
   // auth.isLoggedIn, auth.token, auth.userId;
   const posts = useSelector((state) => state.posts.posts);
-  const { userProfile } = useSelector((state) => state.users);
-
+  const { users, userProfile } = useSelector((state) => state.users);
+  // console.log('users', users)
+  /* 
+{
+    "id": 6,
+    "email": "meraki@gmail.com",
+    "user_name": "Meraki",
+    "password": "123456",
+    "image": "http://res.cloudinary.com/dpbh42kjy/image/upload/v1708829657/xmazfa0odnmjlqtcjg4u.jpg",
+    "role_id": 2,
+    "created_at": "2024-03-01T13:51:31.021Z",
+    "is_deleted": 0,
+    "user_id": 6,
+    "first_name": "Meraki",
+    "last_name": "Academy",
+    "birthday": "2020-02-01T22:00:00.000Z",
+    "gender": "male",
+    "phone_number": 790000007,
+    "school": "Academy",
+    "city": "Full",
+    "state": "Stack",
+    "country": "Developer",
+    "cover_photo": "https://colorfully.eu/wp-content/uploads/2013/07/beautiful-sea-view-facebook-cover.jpg",
+    "bio": "add bio",
+    "total_friends": null,
+    "user_friends": null
+}
+*/
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(false);
 

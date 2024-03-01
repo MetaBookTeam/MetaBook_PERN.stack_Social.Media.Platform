@@ -1,8 +1,14 @@
-import { useDispatch, useSelector } from "react-redux";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import Stack from "@mui/material/Stack";
+
 import axios from "axios";
+
+import { useDispatch, useSelector } from "react-redux";
+import { setShares } from "../../Service/redux/reducers/shares/sharesSlice";
+import { addPost } from "../../Service/redux/reducers/Posts/postsSlice";
+import { setUpdateUserInformation } from "../../Service/redux/reducers/users/usersSlice";
+
+import Stack from "@mui/material/Stack";
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
 // import Box from "@mui/material/Box";
@@ -32,12 +38,11 @@ import Input from "@mui/joy/Input";
 import Box from "@mui/joy/Box";
 import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
-import { setShares } from "../../Service/redux/reducers/shares/sharesSlice";
-import { addPost } from "../../Service/redux/reducers/Posts/postsSlice";
 import Add from "../../components/Add/Add";
-import { setUpdateUserInformation } from "../../Service/redux/reducers/users/usersSlice";
+
 import Shares from "../../components/Shares/Shares";
 import Post from "../../components/Post/Post";
+
 // extra information
 
 const Profile = () => {
@@ -45,17 +50,45 @@ const Profile = () => {
   const Demo = styled("div")(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
   }));
+
   const [secondary, setSecondary] = React.useState(false);
   // End extra information
 
+  const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const shares = useSelector((state) => state.shares.shares);
-
   const { userProfile } = useSelector((state) => state.users);
-  // users.users , users.userProfile;
-
-  // const [userProfile, setUserProfile] = useState([]);
+  // console.log('userProfile.followers', userProfile.followers)
+  // console.log("userProfile", userProfile);
+  /* 
+{
+    "id": 8,
+    "email": "bugger@gmail.com",
+    "user_name": "Bugger",
+    "password": "$2a$10$0FYTK4az6G1WQ35bbZAitO0jFTEdg4BXCKir1Ek9Xx1cFAikItDEa",
+    "image": "http://res.cloudinary.com/dpbh42kjy/image/upload/v1708864871/kk9y6ycii6xwvezxbvgx.jpg",
+    "role_id": 1,
+    "created_at": "2024-03-01T18:28:13.887Z",
+    "is_deleted": 0,
+    "user_id": 8,
+    "first_name": "Bug",
+    "last_name": "Coder",
+    "birthday": "1999-12-31T22:00:00.000Z",
+    "gender": "male",
+    "phone_number": 790000006,
+    "school": "Erroring",
+    "city": "CatchError",
+    "state": "Throw",
+    "country": "Virus",
+    "cover_photo": "http://res.cloudinary.com/dpbh42kjy/image/upload/v1709326708/hwapqzqew2nsuwqldy9g.jpg",
+    "bio": "add bio",
+    "following": null,
+    "friend_id": null,
+    "followers": null
+}
+*/
   const [postProfile, setPostProfile] = useState([]);
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -67,6 +100,7 @@ const Profile = () => {
     boxShadow: 24,
     p: 4,
   };
+
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
     ...theme.typography.body2,
@@ -74,12 +108,11 @@ const Profile = () => {
     textAlign: "center",
     color: theme.palette.text.secondary,
   }));
+
   // for update user info
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const dispatch = useDispatch();
 
   const [bio, setUpdatedBio] = useState("");
   const [name, setUpdatedName] = useState("");
@@ -89,24 +122,7 @@ const Profile = () => {
     name: "",
     phone: 0,
   });
-  // shares
 
-  const getAllShares = async () => {
-    try {
-      const result = await axios.get(
-        `http://localhost:5000/posts/shares/${auth.userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
-      dispatch(setShares(result.data.result));
-      // console.log(result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const updateUserInformation = async () => {
     try {
       const newInfo = await axios.put(
@@ -124,10 +140,26 @@ const Profile = () => {
       console.log(error.message);
     }
   };
-  useEffect(() => {
-    updateUserInformation();
-  }, [update]);
 
+  // get all profile shared posts ===================================
+  const getAllShares = async () => {
+    try {
+      const result = await axios.get(
+        `http://localhost:5000/posts/shares/${auth.userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      dispatch(setShares(result.data.result));
+      // console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get all profile posts ===========================================
   const getPostProfile = async () => {
     try {
       const post = await axios.get(`http://localhost:5000/posts/profile`, {
@@ -141,7 +173,9 @@ const Profile = () => {
       console.log(error);
     }
   };
+
   useEffect(() => {
+    updateUserInformation();
     getAllShares();
     getPostProfile();
   }, []);
@@ -162,7 +196,7 @@ const Profile = () => {
               </Box>
               <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
                 <Avatar
-                  alt="Remy Sharp"
+                  alt={userProfile.user_name}
                   src={userProfile.image}
                   sx={{ width: 80, height: 80 }}
                 />
@@ -173,15 +207,19 @@ const Profile = () => {
               <Grid container sx={{ paddingTop: "10px" }}>
                 <Grid item xs={4}>
                   Followers
-                  <h1>4</h1>
+                  <h1>
+                    {userProfile.followers ? userProfile.followers.length : 0}
+                  </h1>
                 </Grid>
                 <Grid item xs={4}>
                   Following
-                  <h1>0</h1>
+                  <h1>
+                    {userProfile.following ? userProfile.following.length : 0}
+                  </h1>
                 </Grid>
                 <Grid item xs={4}>
                   Post
-                  <h1>10</h1>
+                  <h1>{postProfile.length}</h1>
                 </Grid>
                 <Button onClick={handleOpen} variant="outlined">
                   Edit
@@ -251,7 +289,7 @@ const Profile = () => {
               <Item>You do not have any post </Item>
             )}
             {shares ? (
-              shares.map((elem) => { 
+              shares.map((elem) => {
                 return <Shares elem={elem} />;
               })
             ) : (
