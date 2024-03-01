@@ -111,49 +111,6 @@ const Post = ({ post }) => {
     }
   };
 
-  // =========================================
-
-  //* Edit Post Modal
-  // post Modal Toggle ======================
-  const [openEditPost, setOpenEditPost] = useState(false);
-  const closeEditPostModal = () => setOpenEditPost(false);
-  const [editPostContent, setEditPostContent] = useState("");
-  const [editPostPhoto, setEditPostPhoto] = useState("");
-
-  const openEditPostModal = async (e) => {
-    setEditPostContent(post.content);
-    setOpenEditPost(true);
-  };
-
-  //* Edit Post
-
-  const editPostHandler = async (e) => {
-    try {
-      // postsRouter.put("/:post_id", authentication, updatePostById);
-
-      const updatePost = await axios.put(
-        `http://localhost:5000/posts/${post.id}`,
-        {
-          // content: editPostContent ? editPostContent : post.content,
-          // photo_url: editPostPhoto ? editPostPhoto : post.photo_url,
-          content: editPostContent,
-          photo_url: editPostPhoto ? editPostPhoto : null,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
-
-      // console.log("updatePost.data.result", updatePost.data.result);
-      dispatch(updatePostById(...updatePost.data.result));
-      closeEditPostModal();
-    } catch (error) {
-      console.log("editPostHandler", error);
-    }
-  };
-
   //===============================================================
   //* Cloudinary
 
@@ -178,6 +135,56 @@ const Post = ({ post }) => {
         console.log(err);
         setUploadMessage("Image Upload Error");
       });
+  };
+
+  // =========================================
+
+  //* Edit Post Modal
+  // post Modal Toggle ======================
+  const [openEditPost, setOpenEditPost] = useState(false);
+  const closeEditPostModal = () => setOpenEditPost(false);
+  const [editPostContent, setEditPostContent] = useState("");
+
+  const openEditPostModal = async (e) => {
+    setEditPostContent(post.content);
+    setOpenEditPost(true);
+  };
+
+  //* Edit Post
+
+  const editPostHandler = async (e) => {
+    try {
+      // postsRouter.put("/:post_id", authentication, updatePostById);
+
+      const updatePost = await axios.put(
+        `http://localhost:5000/posts/${post.id}`,
+        {
+          // content: editPostContent ? editPostContent : post.content,
+          // photo_url: editPostPhoto ? editPostPhoto : post.photo_url,
+          content: editPostContent,
+          photo_url: imageUrl ? imageUrl : null,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      const newContent = updatePost.data.result[0].content;
+      const newPhoto = updatePost.data.result[0].photo_url;
+      console.log("first", { newContent, newPhoto });
+      dispatch(
+        updatePostById({
+          ...post,
+          content: newContent ? newContent : post.content,
+          photo_url: newPhoto ? newPhoto : post.photo_url,
+        })
+      );
+      closeEditPostModal();
+    } catch (error) {
+      console.log("editPostHandler", error);
+    }
   };
 
   return (
