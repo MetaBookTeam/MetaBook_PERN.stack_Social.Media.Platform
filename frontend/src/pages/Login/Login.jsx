@@ -8,6 +8,13 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
@@ -47,15 +54,32 @@ export default function Login() {
   const [status, setStatus] = useState(false);
 
   //===============================================================
+  //* show/hide Password
+
+  const [showPassword, setShowPassword] = useState(false);
+  // const [passwordMessage, setPasswordMessage] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  // console.log("loginPassword", loginPassword);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+    // console.log("event.target.value", event.target.value);
+    // setLoginPassword(event.target.value);
+  };
+  //===============================================================
 
   const login = async (event) => {
     event.preventDefault();
+    // setPasswordMessage("");
+
     const data = new FormData(event.currentTarget);
 
     try {
       const result = await axios.post("http://localhost:5000/users/login", {
         email: data.get("email"),
-        password: data.get("password"),
+        // password: data.get("password"),
+        password: loginPassword,
       });
       if (result.data) {
         setStatus(true);
@@ -231,7 +255,7 @@ export default function Login() {
                   autoComplete="email"
                   autoFocus
                 />
-                <TextField
+                {/* <TextField
                   margin="normal"
                   required
                   fullWidth
@@ -240,7 +264,38 @@ export default function Login() {
                   type="password"
                   id="password"
                   autoComplete="current-password"
-                />
+                /> */}
+
+                {/* <Grid item xs={12}> */}
+                <FormControl fullWidth required>
+                  <InputLabel htmlFor="password">Password</InputLabel>
+                  <OutlinedInput
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    label="Password"
+                    name="password"
+                    onChange={(event) => {
+                      setLoginPassword(event.target.value);
+                    }}
+                  />
+                  {/* <FormHelperText sx={{ color: "red" }}>
+                      {passwordMessage && passwordMessage}
+                    </FormHelperText> */}
+                </FormControl>
+                {/* </Grid> */}
+
                 <FormControlLabel
                   control={<Checkbox value="remember" color="primary" />}
                   label="Remember me"
@@ -253,8 +308,31 @@ export default function Login() {
                 >
                   Login
                 </Button>
-                {/* <Divider /> */}
-                <Box display={"flex"} justifyContent={"center"} mb={2}>
+                <Grid container>
+                  <Grid item xs>
+                    <Link href="#" variant="body2">
+                      Forgot password?
+                    </Link>
+                  </Grid>
+                  <Grid item>
+                    <Link href="/signup" variant="body2">
+                      {"Don't have an account? Sign Up"}
+                    </Link>
+                  </Grid>
+                </Grid>
+                <Divider sx={{ mb: 5, mt: 5 }} />
+
+                <Box
+                  display={"flex"}
+                  flexDirection={"column"}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                  // mb={2}
+                  gap={3}
+                >
+                  <Typography component="h1" variant="h5">
+                    Or Signup and Login with Google
+                  </Typography>
                   <GoogleLogin
                     onSuccess={(credentialResponse) => {
                       console.log(credentialResponse);
@@ -272,18 +350,7 @@ export default function Login() {
                   />
                 </Box>
                 {/* <Divider sx={{ mb: 2 }} /> */}
-                <Grid container>
-                  <Grid item xs>
-                    <Link href="#" variant="body2">
-                      Forgot password?
-                    </Link>
-                  </Grid>
-                  <Grid item>
-                    <Link href="/signup" variant="body2">
-                      {"Don't have an account? Sign Up"}
-                    </Link>
-                  </Grid>
-                </Grid>
+
                 {status
                   ? message && <Alert severity="success">{message}</Alert>
                   : message && <Alert severity="error">{message}</Alert>}
