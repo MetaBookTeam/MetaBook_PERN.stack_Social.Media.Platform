@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import CircularProgress from '@mui/material/CircularProgress';
 
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
@@ -143,7 +144,6 @@ export default function Posts() {
 
       {/* //* Add new post button //////////////// */}
       <Add />
-
       <Grid container spacing={5} direction="row" justifyContent="center">
         <Grid
           item
