@@ -34,7 +34,7 @@ usersRouter.get(
   getAllUsers
 );
 // friend
-usersRouter.get("/friends", authentication, getAllFriends);
+usersRouter.get("/friends/:friend_id/:userId", authentication, getAllFriends);
 
 usersRouter.get(
   "/:user_id",

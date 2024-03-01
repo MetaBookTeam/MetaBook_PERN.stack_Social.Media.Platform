@@ -625,10 +625,11 @@ DELETE http://localhost:5000/users/delete/3
 
 const getAllFriends = async (req, res) => {
   const { userId } = req.token;
-  const placeholder = [userId];
+  const {friend_id} = req.params
+  const placeholder = [userId,friend_id];
   try {
     const friend = await pool.query(
-      `SELECT * FROM friends WHERE user_id=$1`,
+      `SELECT user_id,friend_id FROM friends WHERE user_id=$1 AND friend_id = $2`,
       placeholder
     );
     res.status(200).json({

@@ -61,7 +61,6 @@ const FriendPage = () => {
   const { userProfile, friendProfile } = useSelector((state) => state.users);
   const friends = useSelector((state) => state.friends.friends);
   const postsFr = useSelector((state) => state.posts.posts);
- console.log(postsFr);
   const { friend_id } = useParams();
 
   const getUserById = async () => {
@@ -106,14 +105,36 @@ const FriendPage = () => {
           },
         }
       );
-      dispatch(setFollow(user.data.result));
+      dispatch(setFollow(...user.data.result));
       console.log(user.data.result);
       console.log("jj",friends);
     } catch (error) {
       console.log("mm", error);
     }
   };
-  console.log("jj",friends);
+  const [userFriends, setUserFriends] = useState([])
+  const getAllFriend = async () => {
+    console.log(friend_id);
+    try {
+      const user = await axios.get(
+        `http://localhost:5000/users/friends/${friend_id}/${auth.userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      setUserFriends(user.data.result);
+ 
+    
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getAllFriend();
+  }, []);
+  // const deleteFriend
   return (
     <>
       <Container>
@@ -130,7 +151,9 @@ const FriendPage = () => {
                 <Grid container sx={{ paddingTop: "10px" }}>
                   <Grid item sx={3}>
                     <Tooltip title="Add" enterDelay={500} leaveDelay={200}>
-                      <Button onClick={AddNewFriend}>Follow</Button>
+                      
+                       {userFriends.length ? <Button onClick={deleteFriend}>UnFollow </Button>:<Button onClick={AddNewFriend}>Follow </Button>}
+                     
                     </Tooltip>
                   </Grid>
                   <Grid item sx={3}></Grid>
