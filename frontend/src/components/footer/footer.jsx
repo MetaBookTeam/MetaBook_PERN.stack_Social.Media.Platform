@@ -1,4 +1,4 @@
-import * as React from 'react';
+/* import * as React from 'react';
 // import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -8,6 +8,13 @@ import Link from '@mui/material/Link';
 
 function Copyright() {
   return (
+    <>
+    <NavLink className={"Home"} to={"/contact"}>
+    Contact Us
+  </NavLink>
+  <NavLink className={"Home"} to={"/about"}>
+    About Us
+  </NavLink>
     <Typography variant="body2" color="text.secondary">
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
@@ -16,6 +23,7 @@ function Copyright() {
       {new Date().getFullYear()}
       {'.'}
     </Typography>
+    </>
   );
 }
 
@@ -46,5 +54,297 @@ export default function Footer() {
         </Box>
       
     </ThemeProvider>
+  );
+} */
+/* import * as React from 'react';
+import { NavLink } from "react-router-dom";
+import AspectRatio from '@mui/joy/AspectRatio';
+import Box from '@mui/joy/Box';
+import IconButton from '@mui/joy/IconButton';
+import Card from '@mui/joy/Card';
+import CardContent from '@mui/joy/CardContent';
+import Divider from '@mui/joy/Divider';
+import Input from '@mui/joy/Input';
+import List from '@mui/joy/List';
+import ListSubheader from '@mui/joy/ListSubheader';
+import ListItem from '@mui/joy/ListItem';
+import ListItemButton from '@mui/joy/ListItemButton';
+import Typography from '@mui/joy/Typography';
+import Sheet from '@mui/joy/Sheet';
+import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import SendIcon from '@mui/icons-material/Send';
+import ColorLensRoundedIcon from '@mui/icons-material/ColorLensRounded';
+
+export default function ColorInversionFooter() {
+  const [color, setColor] = React.useState('neutral');
+  return (
+    <Sheet
+      variant="solid"
+      color={color}
+      invertedColors
+      sx={{
+        ...(color !== 'neutral' && {
+          bgcolor: `${color}.800`,
+        }),
+        flexGrow: 1,
+        p: 2,
+        borderRadius: { xs: 0, sm: 'sm' },
+      }}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <IconButton
+          variant="soft"
+          size="sm"
+          onClick={() => {
+            const colors = ['primary', 'neutral', 'danger', 'success', 'warning'];
+
+            const nextColorIndex = colors.indexOf(color) + 1;
+            setColor(colors[nextColorIndex] ?? colors[0]);
+          }}
+        >
+          <ColorLensRoundedIcon fontSize="small" />
+        </IconButton>
+        <Divider orientation="vertical" />
+        <IconButton variant="plain">
+          <FacebookRoundedIcon />
+        </IconButton>
+        <IconButton variant="plain">
+          <GitHubIcon />
+        </IconButton>
+        <Input
+          variant="soft"
+          placeholder="Type in your email"
+          type="email"
+          name="email"
+          endDecorator={
+            <IconButton variant="soft" aria-label="subscribe">
+              <SendIcon />
+            </IconButton>
+          }
+          sx={{ ml: 'auto', display: { xs: 'none', md: 'flex' } }}
+        />
+      </Box>
+      <Divider sx={{ my: 2 }} />
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          alignItems: { md: 'flex-start' },
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 2,
+        }}
+      >
+        <Card
+          variant="soft"
+          size="sm"
+          sx={{
+            flexDirection: { xs: 'row', md: 'column' },
+            minWidth: { xs: '100%', md: 'auto' },
+            gap: 1,
+          }}
+        >
+          <AspectRatio
+            ratio="21/9"
+            minHeight={80}
+            sx={{ flexBasis: { xs: 200, md: 'initial' } }}
+          >
+            <img alt="" src="/static/blog/mui-product-comparison/ecosystem.png" />
+          </AspectRatio>
+          <CardContent>
+            <Typography level="body-sm">Intro to the MUI ecosystem</Typography>
+            <Typography level="body-xs">Blog post</Typography>
+          </CardContent>
+        </Card>
+        <List
+          size="sm"
+          orientation="horizontal"
+          wrap
+          sx={{ flexGrow: 0, '--ListItem-radius': '8px', '--ListItem-gap': '0px' }}
+        >
+          <ListItem nested sx={{ width: { xs: '50%', md: 140 } }}>
+            <ListSubheader sx={{ fontWeight: 'xl' }}>Sitemap</ListSubheader>
+            <List>
+              <ListItem>
+                <ListItemButton>Services</ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton><NavLink className={"Home"} to={"/contact"}>
+    Contact Us
+  </NavLink></ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton><NavLink className={"Home"} to={"/about"}>
+    About Us
+  </NavLink></ListItemButton>
+              </ListItem>
+              
+  
+              
+            </List>
+          </ListItem>
+          <ListItem nested sx={{ width: { xs: '50%', md: 180 } }}>
+            <ListSubheader sx={{ fontWeight: 'xl' }}>Products</ListSubheader>
+            <List sx={{ '--ListItemDecorator-size': '32px' }}>
+              <ListItem>
+                <ListItemButton>Joy UI</ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton>Base UI</ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton>Material UI</ListItemButton>
+              </ListItem>
+            </List>
+          </ListItem>
+        </List>
+      </Box>
+    </Sheet>
+  );
+} */
+import * as React from 'react';
+import { NavLink } from "react-router-dom";
+import AspectRatio from '@mui/joy/AspectRatio';
+import Box from '@mui/joy/Box';
+import IconButton from '@mui/joy/IconButton';
+import Card from '@mui/joy/Card';
+import CardContent from '@mui/joy/CardContent';
+import Divider from '@mui/joy/Divider';
+import Input from '@mui/joy/Input';
+import List from '@mui/joy/List';
+import ListSubheader from '@mui/joy/ListSubheader';
+import ListItem from '@mui/joy/ListItem';
+import ListItemButton from '@mui/joy/ListItemButton';
+import Typography from '@mui/joy/Typography';
+import Sheet from '@mui/joy/Sheet';
+import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import SendIcon from '@mui/icons-material/Send';
+import ColorLensRoundedIcon from '@mui/icons-material/ColorLensRounded';
+
+export default function ColorInversionFooter() {
+  const [color, setColor] = React.useState('neutral');
+  return (
+    <Sheet
+      variant="solid"
+      color={color}
+      invertedColors
+      sx={{
+        ...(color !== 'neutral' && {
+          bgcolor: `${color}.800`,
+        }),
+        flexGrow: 1,
+        p: 2,
+        borderRadius: { xs: 0, sm: 'sm' },
+      }}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <IconButton
+          variant="soft"
+          size="sm"
+          onClick={() => {
+            const colors = ['primary', 'neutral', 'danger', 'success', 'warning'];
+
+            const nextColorIndex = colors.indexOf(color) + 1;
+            setColor(colors[nextColorIndex] ?? colors[0]);
+          }}
+        >
+          <ColorLensRoundedIcon fontSize="small" />
+        </IconButton>
+        <Divider orientation="vertical" />
+        <IconButton variant="plain">
+          <FacebookRoundedIcon />
+        </IconButton>
+        <IconButton variant="plain">
+          <GitHubIcon />
+        </IconButton>
+        <Input
+          variant="soft"
+          placeholder="Type in your email"
+          type="email"
+          name="email"
+          endDecorator={
+            <IconButton variant="soft" aria-label="subscribe">
+              <SendIcon />
+            </IconButton>
+          }
+          sx={{ ml: 'auto', display: { xs: 'none', md: 'flex' } }}
+        />
+      </Box>
+      <Divider sx={{ my: 2 }} />
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          alignItems: { md: 'flex-start' },
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 2,
+        }}
+      >
+        <Card
+          variant="soft"
+          size="sm"
+          sx={{
+            flexDirection: { xs: 'row', md: 'column' },
+            minWidth: { xs: '100%', md: 'auto' },
+            gap: 1,
+            justifyContent: 'center', // Center the content
+          }}
+        >
+          <AspectRatio
+            ratio="21/9"
+            minHeight={80}
+            sx={{ flexBasis: { xs: 200, md: 'initial' }, justifyContent: 'center' }} // Center the image
+          >
+            <img alt="" src="/static/blog/mui-product-comparison/ecosystem.png" />
+          </AspectRatio>
+          <CardContent>
+            <Typography level="body-sm">Intro to the MUI ecosystem</Typography>
+            <Typography level="body-xs">Blog post</Typography>
+          </CardContent>
+        </Card>
+        <List
+          size="sm"
+          orientation="horizontal"
+          wrap
+          sx={{ flexGrow: 0, '--ListItem-radius': '8px', '--ListItem-gap': '0px' }}
+        >
+          <ListItem nested sx={{ width: { xs: '50%', md: 140 } }}>
+            <ListSubheader sx={{ fontWeight: 'xl' }}>Sitemap</ListSubheader>
+            <List>
+              <ListItem>
+                <ListItemButton>Services</ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton><NavLink className={"Home"} to={"/contact"}>
+    Contact Us
+  </NavLink></ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton><NavLink className={"Home"} to={"/about"}>
+    About Us
+  </NavLink></ListItemButton>
+              </ListItem>
+            </List>
+          </ListItem>
+          <ListItem nested sx={{ width: { xs: '50%', md: 180 } }}>
+            <ListSubheader sx={{ fontWeight: 'xl' }}>Products</ListSubheader>
+            <List sx={{ '--ListItemDecorator-size': '32px' }}>
+              <ListItem>
+                <ListItemButton>Joy UI</ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton>Base UI</ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton>Material UI</ListItemButton>
+              </ListItem>
+            </List>
+          </ListItem>
+        </List>
+      </Box>
+    </Sheet>
   );
 }
