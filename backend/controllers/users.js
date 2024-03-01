@@ -687,7 +687,7 @@ const deleteFriend = async (req, res) => {
   const placeholder = [friend_id,userId];
   try {
     const deleteFriend = await pool.query(
-      `DELETE FROM friends WHERE friend_id=$1 AND user_id=&2`,
+      `DELETE FROM friends WHERE friend_id=$1 AND user_id=$2`,
       placeholder
     );
     res.status(200).json({
@@ -696,6 +696,7 @@ const deleteFriend = async (req, res) => {
       result: deleteFriend.rows,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Server error",

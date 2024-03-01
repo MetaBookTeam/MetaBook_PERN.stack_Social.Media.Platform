@@ -114,7 +114,6 @@ const FriendPage = () => {
   };
   const [userFriends, setUserFriends] = useState([])
   const getAllFriend = async () => {
-    console.log(friend_id);
     try {
       const user = await axios.get(
         `http://localhost:5000/users/friends/${friend_id}/${auth.userId}`,
@@ -134,7 +133,22 @@ const FriendPage = () => {
   useEffect(() => {
     getAllFriend();
   }, []);
-  // const deleteFriend
+  const deleteFriend = async() => {
+    try {
+      const user = await axios.delete(
+        `http://localhost:5000/users/friends/${friend_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      dispatch(setUnfollow(user.data.result));
+     console.log(user);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <>
       <Container>
