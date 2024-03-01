@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
 
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
@@ -27,7 +28,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-
+import Loader from "../../components/Loader/Loader";
 import { styled } from "@mui/material/styles";
 
 import Post from "../../components/Post/Post";
@@ -143,7 +144,6 @@ export default function Posts() {
 
       {/* //* Add new post button //////////////// */}
       <Add />
-
       <Grid container spacing={5} direction="row" justifyContent="center">
         <Grid
           item
@@ -166,8 +166,11 @@ export default function Posts() {
           >
             {posts &&
               posts.toReversed().map((post) => {
-                // posts.map((post) => {
-                return <Post key={post.id} post={post} />;
+                return (
+                  <Suspense fallback={<Loader />}>
+                    <Post key={post.id} post={post} />
+                  </Suspense>
+                );
               })}
           </Box>
         </Grid>
