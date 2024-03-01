@@ -88,6 +88,85 @@ export default function Login() {
   }, [auth.isLoggedIn]);
 
   //===============================================================
+  //* Signup and Login with Google
+
+  const googleLoginHandler = (decoded) => {
+    const user_name = decoded.name;
+    const first_name = decoded.given_name;
+    const last_name = decoded.family_name;
+    const password = decoded.sub;
+    const email = decoded.email;
+    const image = decoded.picture;
+
+    // usersRouter.post("/register", register);
+    axios
+      .post("http://localhost:5000/users/register", {
+        user_name,
+        first_name,
+        last_name,
+        password,
+        email,
+        image,
+      })
+      .then((result) => {
+        axios
+          .post("http://localhost:5000/users/login", {
+            email,
+            password,
+          })
+          .then((result) => {
+            if (result.data) {
+              setStatus(true);
+              setMessage(result.data.message);
+              dispatch(setLogin(result.data.token));
+              dispatch(setUserId(result.data.userId));
+
+              setTimeout(() => {
+                navigate("/");
+              }, 2000);
+            } else throw Error;
+          })
+          .catch((error) => {
+            if (error.response && error.response.data) {
+              setStatus(false);
+              return setMessage(error.response.data.message);
+            }
+            setStatus(false);
+            setMessage("Error happened while Login, please try again");
+          });
+      })
+      .catch((error) => {
+        if (!error.response.data.success) {
+          axios
+            .post("http://localhost:5000/users/login", {
+              email,
+              password,
+            })
+            .then((result) => {
+              if (result.data) {
+                setStatus(true);
+                setMessage(result.data.message);
+                dispatch(setLogin(result.data.token));
+                dispatch(setUserId(result.data.userId));
+
+                setTimeout(() => {
+                  navigate("/");
+                }, 2000);
+              } else throw Error;
+            })
+            .catch((error) => {
+              if (error.response && error.response.data) {
+                setStatus(false);
+                return setMessage(error.response.data.message);
+              }
+              setStatus(false);
+              setMessage("Error happened while Login, please try again");
+            });
+        } else {
+          console.log(error);
+        }
+      });
+  };
 
   return (
     <>
@@ -182,6 +261,7 @@ export default function Login() {
                       const token = credentialResponse.credential;
                       const decoded = jwtDecode(token);
                       console.log("decoded", decoded);
+                      googleLoginHandler(decoded);
                     }}
                     onError={() => {
                       console.log("Login Failed");
