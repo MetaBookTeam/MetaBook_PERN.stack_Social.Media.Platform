@@ -368,6 +368,7 @@ deleteComment.data.result
       // console.log("updateComment.data.result", updateComment.data.result);
 
       setPostComments((prev) =>
+        // prev.toReversed().map((oldComment) => {
         prev.map((oldComment) => {
           if (oldComment.id === comment.id) {
             return { ...comment, comment: editComment };
@@ -502,6 +503,8 @@ deleteComment.data.result
       <Collapse in={collapseComments}>
         {postComments.length ? (
           postComments.toReversed().map((comment, i) => {
+            // postComments.map((comment, i) => {
+              
             // console.log(comment, i);
             // setCommentsLikesCount(comment.comment_likes);
             return (

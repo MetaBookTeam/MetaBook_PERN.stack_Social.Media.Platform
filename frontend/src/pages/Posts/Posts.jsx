@@ -101,7 +101,7 @@ export default function Posts() {
       {/* //* Add new post button //////////////// */}
       <Add />
 
-      <Grid container spacing={10} direction="row" justifyContent="center">
+      <Grid container spacing={5} direction="row" justifyContent="center">
         <Grid
           item
           md={2}
@@ -110,7 +110,7 @@ export default function Posts() {
           <SideBar />
         </Grid>
 
-        <Grid item md={5} sm={8} xs={9}>
+        <Grid item md={7} sm={8} xs={10}>
           {posts &&
             posts.toReversed().map((post) => {
               // posts.map((post) => {
@@ -120,7 +120,7 @@ export default function Posts() {
 
         <Grid
           item
-          md="auto"
+          md={3}
           sx={{ display: { md: "block", sm: "none", xs: "none" } }}
         >
           <RightBar />
