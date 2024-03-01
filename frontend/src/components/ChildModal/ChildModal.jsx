@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
+import TextField from "@mui/material/TextField";
 
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
@@ -22,19 +23,20 @@ const style = {
   pb: 3,
 };
 const ItemFriend = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  backgroundColor: "#e3dede",
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: "left",
-  color: theme.palette.text.secondary,
+  color: "#000000",
+  fontSize: 20,
 }));
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  backgroundColor: "#e3dede",
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: "right",
-  color: theme.palette.text.secondary,
-  dir: "ltr",
+  color: "#474eff",
+  fontSize: 20,
 }));
 function ChildModal({ socket, userId, name }) {
   const [open, setOpen] = useState(false);
@@ -94,7 +96,9 @@ function ChildModal({ socket, userId, name }) {
                         <Grid container spacing={1}>
                           {message.from == auth.userId ? (
                             <Grid item xs={12}>
-                              <Item elevation={0}>{message.message}</Item>
+                              <Item square={true} elevation={0}>
+                                {message.message}
+                              </Item>
                             </Grid>
                           ) : (
                             <Grid item xs={12}>
@@ -108,12 +112,13 @@ function ChildModal({ socket, userId, name }) {
                     </p>
                   );
                 })}
-              <input
-                type="text"
+              <TextField
                 onChange={(e) => {
                   setMessage(e.target.value);
                 }}
-                placeholder="Message"
+                id="standard-basic"
+                label="Type a message"
+                variant="standard"
               />
             </div>
           </h2>

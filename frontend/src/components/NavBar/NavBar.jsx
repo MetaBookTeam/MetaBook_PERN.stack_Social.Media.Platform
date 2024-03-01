@@ -176,7 +176,11 @@ const NavBar = () => {
                   <Paper elevation={0}>
                     {users.first_name} {users.last_name}
                   </Paper>
-                  <ChildModal socket={socket} userId={users.id} name={users.first_name}/>
+                  <ChildModal
+                    socket={socket}
+                    userId={users.id}
+                    name={users.first_name}
+                  />
                 </div>
               );
             })}
