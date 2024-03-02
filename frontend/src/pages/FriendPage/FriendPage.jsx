@@ -79,8 +79,8 @@ const FriendPage = () => {
   const { friends } = useSelector((state) => state.friends);
   const postsFr = useSelector((state) => state.posts.posts);
 
-  console.log("friends", friends);
-  console.log("friendProfile", friendProfile);
+  // console.log("friends", friends);
+  // console.log("friendProfile", friendProfile);
 
   const { friend_id } = useParams();
 
@@ -127,12 +127,16 @@ const FriendPage = () => {
       );
       console.log("...user.data.result", ...user.data.result);
       dispatch(setFollow(...user.data.result));
+      setUserFollowersCounter((prev) => prev + 1);
+      setIsMyFriend(true);
     } catch (error) {
       console.log("setFollow", error);
     }
   };
 
-  const [isMyFriend, setIsMyFriend] = useState([]);
+  // const [isMyFriend, setIsMyFriend] = useState([]);
+  const [isMyFriend, setIsMyFriend] = useState(false);
+
   console.log("isMyFriend", isMyFriend);
 
   const isMyFriendHandler = async () => {
@@ -145,7 +149,9 @@ const FriendPage = () => {
           },
         }
       );
-      setIsMyFriend(user.data.result);
+      console.log("isMyFriendHandler", user.data.result);
+      // setIsMyFriend(user.data.result);
+      setIsMyFriend(true);
     } catch (error) {
       console.log(error);
     }
@@ -181,6 +187,8 @@ const FriendPage = () => {
 ]
       */
       dispatch(setUnfollow(friend_id));
+      setUserFollowersCounter((prev) => prev - 1);
+      setIsMyFriend(false);
     } catch (error) {
       console.log(error);
     }
@@ -225,7 +233,9 @@ const FriendPage = () => {
   // =========================================
   // openFollowingModal
   const [userFollowing, setUserFollowing] = useState([]);
-
+  // const [userFollowingCounter, setUserFollowingCounter] = useState(
+  //   friendProfile.following?.length
+  // );
   // Following Modal Toggle ======================
   const [openFollowing, setOpenFollowing] = useState(false);
   const closeFollowingModal = () => setOpenFollowing(false);
@@ -277,7 +287,7 @@ const FriendPage = () => {
                 {/* <Grid container sx={{ paddingTop: "10px" }}>
                   <Grid item xs={3}>
                     <Tooltip title="Add" enterDelay={500} leaveDelay={200}> */}
-                {isMyFriend.length ? (
+                {isMyFriend ? (
                   <Button
                     onClick={deleteFriend}
                     variant="outlined"
@@ -345,9 +355,7 @@ const FriendPage = () => {
                   }}
                 >
                   Followers
-                  <h1>
-                    {friendProfile.followers && friendProfile.followers.length}
-                  </h1>
+                  <h1>{userFollowersCounter}</h1>
                 </Grid>
                 <Grid
                   item

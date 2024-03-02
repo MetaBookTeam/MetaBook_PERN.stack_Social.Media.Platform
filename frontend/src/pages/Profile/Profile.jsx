@@ -93,7 +93,6 @@ const Profile = () => {
   }));
 
   // End extra information
-
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
