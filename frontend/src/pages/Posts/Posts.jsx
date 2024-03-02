@@ -194,7 +194,8 @@ export default function Posts() {
             }}
           >
             {posts &&
-              posts.toReversed().map((post) => {
+              // posts.toReversed().map((post) => {
+              posts.map((post) => {
                 return (
                   <>
                     {isLoading ? (

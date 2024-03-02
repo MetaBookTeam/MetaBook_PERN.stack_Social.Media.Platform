@@ -12,14 +12,14 @@ export const postsSlice = createSlice({
 
     addPost: (state, action) => {
       action.payload = { ...action.payload, likes: 0, comments: 0, shares: 0 };
-      state.posts.push(action.payload);
+      state.posts.unshift(action.payload);
       // state.posts = [...state.posts, action.payload];
     },
 
     updatePostById: (state, action) => {
       state.posts = state.posts.map((elem, i) => {
         if (elem.id == action.payload.id) {
-          return elem = action.payload;
+          return (elem = action.payload);
         }
         return elem;
       });
