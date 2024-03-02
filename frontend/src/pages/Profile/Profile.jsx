@@ -220,7 +220,11 @@ const Profile = () => {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Item>
-              <Box>
+              <Box
+                sx={{
+                  m: "10px",
+                }}
+              >
                 <AspectRatio minHeight={120} maxHeight={350}>
                   <img
                     src={userProfile.cover_photo}
@@ -258,7 +262,7 @@ const Profile = () => {
                 />
               </Box>
 
-              <hr />
+              {/* <hr /> */}
               <Grid container sx={{ paddingTop: "10px" }}>
                 <Grid
                   item
@@ -289,9 +293,8 @@ const Profile = () => {
               <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
                 {userProfile.user_name} info
               </Typography>
-
+              <Divider />
               <Demo>
-                <Divider />
                 <List>
                   <ListItem>
                     <ListItemText

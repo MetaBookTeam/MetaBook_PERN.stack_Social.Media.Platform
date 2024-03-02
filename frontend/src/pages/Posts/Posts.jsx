@@ -185,7 +185,7 @@ export default function Posts() {
         <Grid item md={6} sm={8} xs={10}>
           <Box
             sx={{
-              mb: 2,
+              // mb: 2,
               display: "flex",
               flexDirection: "column",
               height: 1000,
