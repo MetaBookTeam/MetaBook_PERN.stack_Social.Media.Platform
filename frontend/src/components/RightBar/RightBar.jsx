@@ -24,7 +24,7 @@ const RightBar = () => {
   const posts = useSelector((state) => state.posts.posts);
 
   const users = useSelector((state) => state.users.users);
-  // console.log(users);
+  // console.log("users", users);
 
   //===============================================================
   return (
@@ -35,14 +35,16 @@ const RightBar = () => {
         </Typography>
 
         <AvatarGroup max={7}>
-          {!users.length &&
-            users.map((user) => (
+          {users.map((user) => {
+            // console.log("user.image", user.image);
+            return (
               <Avatar
                 key={user.id}
                 src={user.image}
                 alt={`${user.first_name} ${user.last_name}`}
               />
-            ))}
+            );
+          })}
         </AvatarGroup>
 
         {/* <Avatar 

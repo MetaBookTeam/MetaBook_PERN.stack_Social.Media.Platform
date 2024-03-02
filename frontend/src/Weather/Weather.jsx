@@ -5,7 +5,7 @@ import { Box, Typography, CircularProgress } from '@mui/material';
 const Weather = () => {
   const [weatherData, setWeatherData] = useState(null);
   const API_KEY = 'e40986643efbc254f6bd9da91248f2a6'; // Your OpenWeatherMap API key
-  const CITY = 'zarqa'; // City for which you want to fetch weather data
+  const CITY = 'amman'; // City for which you want to fetch weather data
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
