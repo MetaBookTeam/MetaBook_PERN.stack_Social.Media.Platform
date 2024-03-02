@@ -204,79 +204,84 @@ export default function ColorInversionFooter() {
     </Sheet>
   );
 } */
-import * as React from 'react';
+import * as React from "react";
 import { Link, NavLink } from "react-router-dom";
-import AspectRatio from '@mui/joy/AspectRatio';
-import Box from '@mui/joy/Box';
-import IconButton from '@mui/joy/IconButton';
-import Card from '@mui/joy/Card';
-import CardContent from '@mui/joy/CardContent';
-import Divider from '@mui/joy/Divider';
-import Input from '@mui/joy/Input';
-import List from '@mui/joy/List';
-import ListSubheader from '@mui/joy/ListSubheader';
-import ListItem from '@mui/joy/ListItem';
-import ListItemButton from '@mui/joy/ListItemButton';
-import Typography from '@mui/joy/Typography';
-import Sheet from '@mui/joy/Sheet';
-import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import SendIcon from '@mui/icons-material/Send';
-import ColorLensRoundedIcon from '@mui/icons-material/ColorLensRounded';
-import { AppBar } from '@mui/material';
+import AspectRatio from "@mui/joy/AspectRatio";
+import Box from "@mui/joy/Box";
+import IconButton from "@mui/joy/IconButton";
+import Card from "@mui/joy/Card";
+import CardContent from "@mui/joy/CardContent";
+import Divider from "@mui/joy/Divider";
+import Input from "@mui/joy/Input";
+import List from "@mui/joy/List";
+import ListSubheader from "@mui/joy/ListSubheader";
+import ListItem from "@mui/joy/ListItem";
+import ListItemButton from "@mui/joy/ListItemButton";
+import Typography from "@mui/joy/Typography";
+import Sheet from "@mui/joy/Sheet";
+import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import SendIcon from "@mui/icons-material/Send";
+import ColorLensRoundedIcon from "@mui/icons-material/ColorLensRounded";
+import { AppBar } from "@mui/material";
 export default function ColorInversionFooter() {
-  const [color, setColor] = React.useState('neutral');
+  const [color, setColor] = React.useState("neutral");
   return (
     <>
-    <AppBar position='absolute' sx={{ top: "200%", bottom: 0 }}>
-    <Sheet
-      variant="solid"
-      color={color}
-      invertedColors
-      sx={{
-        ...(color !== 'neutral' && {
-          bgcolor: `${color}.800`,
-        }),
-        flexGrow: 1,
-        p: 2,
-        borderRadius: { xs: 0, sm: 'sm' },
-      }}
-    >
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <IconButton
-          variant="soft"
-          size="sm"
-          onClick={() => {
-            const colors = ['primary', 'neutral', 'danger', 'success', 'warning'];
-            const nextColorIndex = colors.indexOf(color) + 1;
-            setColor(colors[nextColorIndex] ?? colors[0]);
+      <AppBar position="sticky" sx={{ margin: "0 0 -20px 0" }}>
+        <Sheet
+          variant="solid"
+          color={color}
+          invertedColors
+          sx={{
+            ...(color !== "neutral" && {
+              bgcolor: `${color}.800`,
+            }),
+            flexGrow: 1,
+            p: 2,
+            borderRadius: { xs: 0, sm: "sm" },
           }}
         >
-          <ColorLensRoundedIcon fontSize="small" />
-        </IconButton>
-        <Divider orientation="vertical" />
-        
-        <IconButton variant="plain">
-          <FacebookRoundedIcon />
-        </IconButton>
-        
-        <IconButton variant="plain">
-          <GitHubIcon />
-        </IconButton>
-        
-      </Box>
-      <Divider sx={{ my: 2 }} />
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
-          alignItems: { md: 'flex-start' },
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: 2,
-        }}
-      >
-        <Card
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <IconButton
+              variant="soft"
+              size="sm"
+              onClick={() => {
+                const colors = [
+                  "primary",
+                  "neutral",
+                  "danger",
+                  "success",
+                  "warning",
+                ];
+                const nextColorIndex = colors.indexOf(color) + 1;
+                setColor(colors[nextColorIndex] ?? colors[0]);
+              }}
+            >
+              <ColorLensRoundedIcon fontSize="small" />
+            </IconButton>
+            <Divider orientation="vertical" />
+
+            <IconButton variant="plain">
+              <FacebookRoundedIcon />
+            </IconButton>
+
+            <IconButton variant="plain">
+              <GitHubIcon />
+            </IconButton>
+          </Box>
+          <Divider sx={{ my: 2 }} />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              alignItems: { md: "flex-start" },
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: 2,
+            }}
+          >
+            {/* <Card
           variant="soft"
           size="sm"
           sx={{
@@ -285,63 +290,77 @@ export default function ColorInversionFooter() {
             gap: 1,
             justifyContent: 'center', 
           }}
-        >
-          <CardContent>
-            
-          </CardContent>
-        </Card>
-        <List
-          size="sm"
-          orientation="horizontal"
-          wrap
-          sx={{ flexGrow: 0, '--ListItem-radius': '8px', '--ListItem-gap': '0px' }}
-        >
-          <ListItem nested sx={{ width: { xs: '50%', md: 140 } }}>
-            <ListSubheader sx={{ fontWeight: 'xl' }}>Web Details</ListSubheader>
-            <List>
-              <ListItem>
-                <ListItemButton><NavLink className={"Home"} to={"/contact"}>
-                  Contact Us
-                </NavLink></ListItemButton>
+        > */}
+            {/* <CardContent> */}
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              align="center"
+              sx={{ mt: 2 }}
+            >
+              {"Copyright © "}
+              <Link color="inherit" href="https://mui.com/">
+                Your Website
+              </Link>{" "}
+              {new Date().getFullYear()}
+              {"."}
+            </Typography>
+            {/* </CardContent> */}
+            {/* </Card> */}
+            <List
+              size="sm"
+              orientation="horizontal"
+              wrap
+              sx={{
+                flexGrow: 0,
+                "--ListItem-radius": "8px",
+                "--ListItem-gap": "0px",
+              }}
+            >
+              <ListItem nested sx={{ width: { xs: "50%", md: 140 } }}>
+                <ListSubheader sx={{ fontWeight: "xl" }}>
+                  Web Details
+                </ListSubheader>
+                <List>
+                  <ListItem>
+                    <ListItemButton>
+                      <NavLink className={"Home"} to={"/contact"}>
+                        Contact Us
+                      </NavLink>
+                    </ListItemButton>
+                  </ListItem>
+                  <ListItem>
+                    <ListItemButton>
+                      <NavLink className={"Home"} to={"/about"}>
+                        About Us
+                      </NavLink>
+                    </ListItemButton>
+                  </ListItem>
+                </List>
               </ListItem>
-              <ListItem>
-                <ListItemButton><NavLink className={"Home"} to={"/about"}>
-                  About Us
-                </NavLink></ListItemButton>
+              <ListItem nested sx={{ width: { xs: "50%", md: 180 } }}>
+                <ListSubheader sx={{ fontWeight: "xl" }}>
+                  website created by{" "}
+                </ListSubheader>
+                <List>
+                  <ListItem>
+                    <ListItemButton>Ahmad Nassar</ListItemButton>
+                  </ListItem>
+                  <ListItem>
+                    <ListItemButton>Kamal Lahloh</ListItemButton>
+                  </ListItem>
+                  <ListItem>
+                    <ListItemButton>Osama Bani Melhem</ListItemButton>
+                  </ListItem>
+                  <ListItem>
+                    <ListItemButton>Ra'fat Saqqa</ListItemButton>
+                  </ListItem>
+                </List>
               </ListItem>
             </List>
-          </ListItem>
-          <ListItem nested sx={{ width: { xs: '50%', md: 180 } }}>
-            <ListSubheader sx={{ fontWeight: 'xl' }}> created website</ListSubheader>
-            <List sx={{ '--ListItemDecorator-size': '32px' }}>
-              <ListItem>
-                <ListItemButton>osama</ListItemButton>
-              </ListItem>
-              <ListItem>
-                <ListItemButton>nassar</ListItemButton>
-              </ListItem>
-              <ListItem>
-                <ListItemButton>kammal</ListItemButton>
-              </ListItem>
-              <ListItem>
-                <ListItemButton>saqqa</ListItemButton>
-              </ListItem>
-            </List>
-          </ListItem>
-        </List>
-      </Box>
-      <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 2 }}>
-        {'Copyright © '}
-        <Link color="inherit" href="https://mui.com/">
-          Your Website
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
-    </Sheet>
-    </AppBar>
+          </Box>
+        </Sheet>
+      </AppBar>
     </>
   );
 }
-
- 

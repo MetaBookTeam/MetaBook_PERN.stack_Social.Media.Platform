@@ -36,6 +36,8 @@ import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
 import Tooltip from "@mui/material/Tooltip";
+import Divider from "@mui/material/Divider";
+
 import { styled } from "@mui/material/styles";
 
 import Post from "../../components/Post/Post";
@@ -84,9 +86,8 @@ const FriendPage = () => {
           Authorization: `Bearer ${auth.token}`,
         },
       });
-      
-      dispatch(setPosts(user.data.result));
 
+      dispatch(setPosts(user.data.result));
     } catch (error) {
       console.log("setFriendProfile", error);
     }
@@ -156,35 +157,79 @@ const FriendPage = () => {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Item>
-              <Box sx={{ borderRadius: "sm", p: 1 }}>
+              <Box
+                sx={{
+                  m: "10px",
+                }}
+              >
                 <AspectRatio minHeight={120} maxHeight={350}>
                   <img
                     src={friendProfile.cover_photo}
                     alt="A beautiful Cover photo."
+                    style={{ borderRadius: "20px" }}
                   />
                 </AspectRatio>
-                <Grid container sx={{ paddingTop: "10px" }}>
+                {/* <Grid container sx={{ paddingTop: "10px" }}>
                   <Grid item xs={3}>
-                    <Tooltip title="Add" enterDelay={500} leaveDelay={200}>
-                      {userFriends.length ? (
-                        <Button onClick={deleteFriend}>UnFollow </Button>
-                      ) : (
-                        <Button onClick={AddNewFriend}>Follow </Button>
-                      )}
-                    </Tooltip>
-                  </Grid>
-                  <Grid item xs={3}></Grid>
-                </Grid>
+                    <Tooltip title="Add" enterDelay={500} leaveDelay={200}> */}
+                {userFriends.length ? (
+                  <Button
+                    onClick={deleteFriend}
+                    variant="outlined"
+                    sx={{
+                      // position: "fixed",
+                      zIndex: 10,
+                      display: "flex",
+                      justifyContent: "center",
+                      // alignItems: "center",
+                      m: "10px",
+                    }}
+                  >
+                    Unfollow
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={AddNewFriend}
+                    variant="outlined"
+                    sx={{
+                      // position: "fixed",
+                      zIndex: 10,
+                      display: "flex",
+                      justifyContent: "center",
+                      // alignItems: "center",
+                      m: "10px",
+                    }}
+                  >
+                    Follow
+                  </Button>
+                )}
+                {/* </Tooltip>
+                  </Grid> */}
+                {/* <Grid item xs={3}></Grid> */}
+                {/* </Grid> */}
               </Box>
-              <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  // gap: 2,
+                  justifyContent: "center",
+                }}
+              >
                 <Avatar
                   alt={friendProfile.first_name}
                   src={friendProfile.image}
-                  sx={{ width: 80, height: 80 }}
+                  sx={{
+                    width: 120,
+                    height: 120,
+                    border: "white solid 5px",
+                    borderRadius: "50%",
+                    margin: " -120px 0 0 0",
+                    zIndex: 5,
+                  }}
                 />
               </Box>
-              {friendProfile.bio}
-              <hr />
+
+              {/* <hr /> */}
               <Grid container sx={{ paddingTop: "10px" }}>
                 <Grid item xs={4}>
                   Followers
@@ -204,11 +249,19 @@ const FriendPage = () => {
           <Grid item xs={4}>
             <Item>
               <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-                {friendProfile.first_name}'s info
+                {friendProfile.user_name}'s info
               </Typography>
-
+              <Divider />
               <Demo>
                 <List>
+                  <ListItem>
+                    <ListItemText
+                      primary="Bio"
+                      secondary={
+                        secondary ? "Secondary text" : friendProfile.bio
+                      }
+                    />
+                  </ListItem>
                   <ListItem>
                     <ListItemText
                       primary="Email"
@@ -219,7 +272,7 @@ const FriendPage = () => {
                   </ListItem>
                   <ListItem>
                     <ListItemText
-                      primary="Name"
+                      primary="User Name"
                       secondary={
                         secondary ? "Secondary text" : friendProfile.user_name
                       }
@@ -229,9 +282,8 @@ const FriendPage = () => {
                     <ListItemText
                       primary="Phone"
                       secondary={
-                        secondary
-                          ? "Secondary text"
-                          : friendProfile.phone_number
+                        friendProfile.phone_number &&
+                        `0${friendProfile.phone_number}`
                       }
                     />
                   </ListItem>
@@ -239,7 +291,9 @@ const FriendPage = () => {
                     <ListItemText
                       primary="Address"
                       secondary={
-                        secondary ? "Secondary text" : friendProfile.address
+                        userProfile.state &&
+                        userProfile.country &&
+                        `${userProfile.state} - ${userProfile.country}`
                       }
                     />
                   </ListItem>
@@ -249,6 +303,28 @@ const FriendPage = () => {
                       secondary={
                         secondary ? "Secondary text" : friendProfile.gender
                       }
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Account Created at"
+                      secondary={new Date(
+                        friendProfile.created_at
+                      ).toLocaleString()}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Birthday"
+                      secondary={new Date(
+                        friendProfile.birthday
+                      ).toDateString()}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="school"
+                      secondary={friendProfile.school}
                     />
                   </ListItem>
                 </List>

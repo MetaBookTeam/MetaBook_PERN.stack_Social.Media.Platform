@@ -116,6 +116,7 @@ const Add = () => {
           position: "fixed",
           bottom: 20,
           left: 20,
+          zIndex: 9999,
           // left: { xs: "calc(50% - 25px)", md: 30 },
         }}
       >
