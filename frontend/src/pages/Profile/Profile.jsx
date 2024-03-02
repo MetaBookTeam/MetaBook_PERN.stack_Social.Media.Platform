@@ -39,11 +39,26 @@ import Box from "@mui/joy/Box";
 import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
 import Add from "../../components/Add/Add";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Divider from "@mui/material/Divider";
 
 import Shares from "../../components/Shares/Shares";
 import Post from "../../components/Post/Post";
 
 // extra information
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "white",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 const Profile = () => {
   // Start extra information
@@ -57,36 +72,10 @@ const Profile = () => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const shares = useSelector((state) => state.shares.shares);
-  const { userProfile } = useSelector((state) => state.users);
+  const { users, userProfile } = useSelector((state) => state.users);
   // console.log('userProfile.followers', userProfile.followers)
   // console.log("userProfile", userProfile);
-  /* 
-{
-    "id": 8,
-    "email": "bugger@gmail.com",
-    "user_name": "Bugger",
-    "password": "$2a$10$0FYTK4az6G1WQ35bbZAitO0jFTEdg4BXCKir1Ek9Xx1cFAikItDEa",
-    "image": "http://res.cloudinary.com/dpbh42kjy/image/upload/v1708864871/kk9y6ycii6xwvezxbvgx.jpg",
-    "role_id": 1,
-    "created_at": "2024-03-01T18:28:13.887Z",
-    "is_deleted": 0,
-    "user_id": 8,
-    "first_name": "Bug",
-    "last_name": "Coder",
-    "birthday": "1999-12-31T22:00:00.000Z",
-    "gender": "male",
-    "phone_number": 790000006,
-    "school": "Erroring",
-    "city": "CatchError",
-    "state": "Throw",
-    "country": "Virus",
-    "cover_photo": "http://res.cloudinary.com/dpbh42kjy/image/upload/v1709326708/hwapqzqew2nsuwqldy9g.jpg",
-    "bio": "add bio",
-    "following": null,
-    "friend_id": null,
-    "followers": null
-}
-*/
+
   const [postProfile, setPostProfile] = useState([]);
 
   const style = {
@@ -180,32 +169,103 @@ const Profile = () => {
     getPostProfile();
   }, []);
 
+  // ====================================================
+  //* followers dropdown list
+  // const [anchorFollowers, setAnchorFollowers] = React.useState(null);
+  // const openFollowers = Boolean(anchorFollowers);
+  // const handleClickFollowers = (event) => {
+  //   setAnchorFollowers(event.currentTarget);
+  // };
+  // const handleCloseFollowers = () => {
+  //   setAnchorFollowers(null);
+  // };
+  // =========================================
+  // openFollowersModal
+  const [userFollowers, setUserFollowers] = useState([]);
+
+  // Followers Modal Toggle ======================
+  const [openFollowers, setOpenFollowers] = useState(false);
+  const closeFollowersModal = () => setOpenFollowers(false);
+
+  const openFollowersModal = async () => {
+    try {
+      // usersRouter.get("/friends", authentication, getAllFriends);
+      // const followers = await axios.get(`http://localhost:5000/users/friends`, {
+      //   headers: {
+      //     Authorization: `Bearer ${auth.token}`,
+      //   },
+      // });
+
+      //! I will get all users then handle which one is a friend from the followers column in getAllUsers
+      console.log("userProfile.followers", userProfile.followers);
+      console.log("users", users);
+
+      const followers = users.filter((user, i) => {
+        if (userProfile.followers) {
+          return userProfile.followers.includes(user.id);
+        }
+      });
+      console.log("followers", followers);
+
+      // setUserFollowers(followers.data.result);
+      // setOpenFollowers(true);
+    } catch (error) {
+      console.log("openFollowersModal", error);
+    }
+  };
+
   return (
     <>
       <Container>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Item>
-              <Box sx={{ borderRadius: "sm", p: 1 }}>
+              <Box>
                 <AspectRatio minHeight={120} maxHeight={350}>
                   <img
                     src={userProfile.cover_photo}
                     alt="A beautiful Cover photo."
+                    style={{ borderRadius: "20px" }}
                   />
                 </AspectRatio>
               </Box>
-              <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
+              <Button
+                onClick={handleOpen}
+                variant="outlined"
+                sx={{
+                  // position: "fixed",
+                  zIndex: 10,
+                  display: "flex",
+                  justifyContent: "center",
+                  // alignItems: "center",
+                  m: "10px",
+                }}
+              >
+                Edit Profile
+              </Button>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <Avatar
                   alt={userProfile.user_name}
                   src={userProfile.image}
-                  sx={{ width: 80, height: 80 }}
+                  sx={{
+                    width: 120,
+                    height: 120,
+                    border: "white solid 5px",
+                    borderRadius: "50%",
+                    margin: " -120px 0 0 0",
+                    zIndex: 5,
+                  }}
                 />
               </Box>
 
-              {userProfile.bio}
               <hr />
               <Grid container sx={{ paddingTop: "10px" }}>
-                <Grid item xs={4}>
+                <Grid
+                  item
+                  xs={4}
+                  // onClick={handleClickFollowers}
+                  onClick={openFollowersModal}
+                >
                   Followers
                   <h1>
                     {userProfile.followers ? userProfile.followers.length : 0}
@@ -221,9 +281,6 @@ const Profile = () => {
                   Post
                   <h1>{postProfile.length}</h1>
                 </Grid>
-                <Button onClick={handleOpen} variant="outlined">
-                  Edit
-                </Button>
               </Grid>
             </Item>
           </Grid>
@@ -234,7 +291,14 @@ const Profile = () => {
               </Typography>
 
               <Demo>
+                <Divider />
                 <List>
+                  <ListItem>
+                    <ListItemText
+                      primary="Bio"
+                      secondary={secondary ? "Secondary text" : userProfile.bio}
+                    />
+                  </ListItem>
                   <ListItem>
                     <ListItemText
                       primary="Email"
@@ -245,7 +309,7 @@ const Profile = () => {
                   </ListItem>
                   <ListItem>
                     <ListItemText
-                      primary="Name"
+                      primary="User Name"
                       secondary={
                         secondary ? "Secondary text" : userProfile.user_name
                       }
@@ -255,7 +319,9 @@ const Profile = () => {
                     <ListItemText
                       primary="Phone"
                       secondary={
-                        secondary ? "Secondary text" : userProfile.phone_number
+                        secondary
+                          ? "Secondary text"
+                          : `0${userProfile.phone_number}`
                       }
                     />
                   </ListItem>
@@ -263,7 +329,9 @@ const Profile = () => {
                     <ListItemText
                       primary="Address"
                       secondary={
-                        secondary ? "Secondary text" : userProfile.address
+                        secondary
+                          ? "Secondary text"
+                          : `${userProfile.state} - ${userProfile.country}`
                       }
                     />
                   </ListItem>
@@ -273,6 +341,26 @@ const Profile = () => {
                       secondary={
                         secondary ? "Secondary text" : userProfile.gender
                       }
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Account Created at"
+                      secondary={new Date(
+                        userProfile.created_at
+                      ).toLocaleString()}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Birthday"
+                      secondary={new Date(userProfile.birthday).toDateString()}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="school"
+                      secondary={userProfile.school}
                     />
                   </ListItem>
                 </List>
@@ -367,6 +455,137 @@ const Profile = () => {
           </Fade>
         </Modal>
       </Container>
+
+      {/* =================================================== */}
+      {/* =================================================== */}
+      {/*  followers dropdown list */}
+      {/* =================================================== */}
+      {/* =================================================== */}
+
+      {/* <Menu
+        anchorEl={anchorFollowers}
+        id="account-menu"
+        open={openFollowers}
+        onClose={handleCloseFollowers}
+        onClick={handleCloseFollowers}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: "visible",
+            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+            mt: 1.5,
+            "& .MuiAvatar-root": {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            "&::before": {
+              content: '""',
+              display: "block",
+              position: "absolute",
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: "background.paper",
+              transform: "translateY(-50%) rotate(45deg)",
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        <MenuItem onClick={handleCloseFollowers}>
+          <Avatar /> Profile
+        </MenuItem>
+         <Divider /> */}
+      {/* <MenuItem
+          onClick={(e) => {
+            openEditPostModal(e);
+            handleClose(e);
+          }}
+        >
+          <ListItemIcon>
+            <EditIcon fontSize="small" />
+          </ListItemIcon>
+          Edit
+        </MenuItem>
+        <MenuItem
+          onClick={(e) => {
+            deletePostHandler(e);
+            handleClose(e);
+          }}
+        >
+          <ListItemIcon>
+            <DeleteForeverIcon fontSize="small" />
+          </ListItemIcon>
+          Delete
+        </MenuItem> 
+      </Menu>*/}
+      {/* //* ///////////////////////////// */}
+      {/* //* ///////////////////////////// */}
+      {/* //* Shares Modal */}
+      {/* //* ///////////////////////////// */}
+      {/* //* ///////////////////////////// */}
+
+      <Modal
+        keepMounted
+        open={openFollowers}
+        onClose={closeFollowersModal}
+        aria-labelledby="keep-mounted-modal-title"
+        aria-describedby="keep-mounted-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Typography
+            id="keep-mounted-modal-title"
+            variant="h6"
+            component="h2"
+            textAlign={"center"}
+          >
+            Shares
+            <hr />
+          </Typography>
+          {userFollowers.toReversed().map((share, i) => (
+            <Typography key={i} id="keep-mounted-modal-description">
+              <Link
+                underline="hover"
+                sx={{ color: "black", my: 0.5 }}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => {
+                  navigate(`/page/${share.user_id}`);
+                }}
+              >
+                <Box
+                  sx={{
+                    position: "relative",
+                    "&::before": {
+                      content: '""',
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      bottom: 0,
+                      right: 0,
+                      m: "-1px",
+                      borderRadius: "50%",
+                      background:
+                        "linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)",
+                    },
+                    mr: 3,
+                  }}
+                  component="span"
+                >
+                  <Avatar component="span" src={share.image} />
+                </Box>
+
+                {share.user_name}
+              </Link>
+            </Typography>
+          ))}
+        </Box>
+      </Modal>
     </>
   );
 };

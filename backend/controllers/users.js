@@ -14,7 +14,7 @@ POST http://localhost:5000/users/register
     "image": "http://res.cloudinary.com/dpbh42kjy/image/upload/v1708864871/kk9y6ycii6xwvezxbvgx.jpg",
     "first_name": "Bug",
     "last_name": "Coder",
-    "birthday": "2000-01-01",
+    "birthday": "2000-05-18",
     "gender": "male",
     "phone_number": "0790000006",
     "school": "Erroring",
@@ -676,26 +676,47 @@ const getAllFriends = async (req, res) => {
 
   try {
     const friends = await pool.query(
+  //     `
+  //   SELECT
+  //     friends.user_id,
+  //     friends.friend_id,
+  //   --users.user_name,
+  //     user_profile.first_name AS follower_first_name,
+  //     user_profile.last_name AS follower_last_name ,
+  //   --users.image,
+  //     friends.created_at
+  
+  // FROM friends 
+  
+  // LEFT JOIN users
+  //     ON users.id = friends.user_id
+  
+  // LEFT JOIN user_profile
+  //     ON user_profile.user_id = friends.Friend_id
+  
+  // WHERE users.id = $1;
+  //     `,
+  //! I will get all users then handle which one is a friend from the followers column in getAllUsers
       `
-  SELECT
-      friends.user_id,
-      friends.friend_id,
-      users.user_name,
-      user_profile.first_name,
-      user_profile.last_name,
-      users.image,
-      friends.created_at
-  
-  FROM friends 
-  
-  LEFT JOIN users
-      ON users.id = friends.user_id
-  
-  LEFT JOIN user_profile
-      ON user_profile.user_id = friends.user_id
-  
-  WHERE users.id = $1;
-      `,
+      SELECT
+        friends.user_id,
+        friends.friend_id,
+      --users.user_name,
+        user_profile.first_name AS follower_first_name,
+        user_profile.last_name AS follower_last_name ,
+      --users.image,
+        friends.created_at
+    
+    FROM friends 
+    
+    LEFT JOIN users
+        ON users.id = friends.user_id
+    
+    LEFT JOIN user_profile
+        ON user_profile.user_id = friends.Friend_id
+    
+    WHERE users.id = $1;
+        `,
       placeholder
     );
     res.status(200).json({
