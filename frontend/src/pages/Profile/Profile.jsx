@@ -236,7 +236,39 @@ const Profile = () => {
       console.log("openFollowersModal", error);
     }
   };
+  // =========================================
+  // openFollowingModal
+  const [userFollowing, setUserFollowing] = useState([]);
 
+  // Following Modal Toggle ======================
+  const [openFollowing, setOpenFollowing] = useState(false);
+  const closeFollowingModal = () => setOpenFollowing(false);
+
+  const openFollowingModal = async () => {
+    try {
+      // usersRouter.get("/friends", authentication, getAllFriends);
+      // const following = await axios.get(`http://localhost:5000/users/friends`, {
+      //   headers: {
+      //     Authorization: `Bearer ${auth.token}`,
+      //   },
+      // });
+
+      //! I will get all users then handle which one is a friend from the following column in getAllUsers
+      console.log("userProfile.following", userProfile.following);
+      console.log("users", users);
+
+      const following = users.filter((user, i) => {
+        if (userProfile.following) {
+          return userProfile.following.includes(user.id);
+        }
+      });
+      // console.log("following", following);
+
+      setUserFollowing(following);
+    } catch (error) {
+      console.log("openFollowingModal", error);
+    }
+  };
   return (
     <>
       <Container>
@@ -301,7 +333,14 @@ const Profile = () => {
                     {userProfile.followers ? userProfile.followers.length : 0}
                   </h1>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid
+                  item
+                  xs={4}
+                  onClick={() => {
+                    setOpenFollowing(true);
+                    openFollowingModal();
+                  }}
+                >
                   Following
                   <h1>
                     {userProfile.following ? userProfile.following.length : 0}
@@ -557,7 +596,7 @@ const Profile = () => {
       </Menu>*/}
       {/* //* ///////////////////////////// */}
       {/* //* ///////////////////////////// */}
-      {/* //* Shares Modal */}
+      {/* //* Followers Modal */}
       {/* //* ///////////////////////////// */}
       {/* //* ///////////////////////////// */}
 
@@ -614,6 +653,71 @@ const Profile = () => {
                   </Box>
 
                   {follower.user_name}
+                </Link>
+              </Typography>
+            );
+          })}
+        </Box>
+      </Modal>
+
+      {/* //* ///////////////////////////// */}
+      {/* //* ///////////////////////////// */}
+      {/* //* Following Modal */}
+      {/* //* ///////////////////////////// */}
+      {/* //* ///////////////////////////// */}
+
+      <Modal
+        keepMounted
+        open={openFollowing}
+        onClose={closeFollowingModal}
+        aria-labelledby="keep-mounted-modal-title"
+        aria-describedby="keep-mounted-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Typography
+            id="keep-mounted-modal-title"
+            variant="h6"
+            component="h2"
+            textAlign={"center"}
+          >
+            Following
+            <hr />
+          </Typography>
+          {userFollowing.map((following, i) => {
+            return (
+              <Typography key={i} id="keep-mounted-modal-description">
+                <Link
+                  underline="hover"
+                  sx={{ color: "black", my: 0.5 }}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => {
+                    navigate(`/page/${following.id}`);
+                  }}
+                >
+                  <Box
+                    sx={{
+                      position: "relative",
+                      "&::before": {
+                        content: '""',
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                        m: "-1px",
+                        borderRadius: "50%",
+                        background:
+                          "linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)",
+                      },
+                      mr: 3,
+                    }}
+                    component="span"
+                  >
+                    <Avatar component="span" src={following.image} />
+                  </Box>
+
+                  {following.user_name}
                 </Link>
               </Typography>
             );
