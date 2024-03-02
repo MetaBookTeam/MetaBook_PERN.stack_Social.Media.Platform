@@ -33,23 +33,19 @@ const RightBar = () => {
         <Typography variant="h6" fontWeight={100}>
           Online Friends
         </Typography>
-       
+
         <AvatarGroup max={7}>
-          {users.map(user => (
-            <Avatar
-            key={user.id}
-            src={user.image}  
-            alt={`${user.first_name} ${user.last_name}`}
-            />
-              
-           
-            
-             
-           
-          ))}
+          {!users.length &&
+            users.map((user) => (
+              <Avatar
+                key={user.id}
+                src={user.image}
+                alt={`${user.first_name} ${user.last_name}`}
+              />
+            ))}
         </AvatarGroup>
 
-         {/* <Avatar 
+        {/* <Avatar 
             alt="Remy Sharp"
             src="https://material-ui.com/static/images/avatar/1.jpg"
           />
@@ -81,7 +77,6 @@ const RightBar = () => {
             alt="Trevor Henderson"
             src="https://material-ui.com/static/images/avatar/9.jpg"
           /> */}
-        
 
         {/* //* Images Collage ///////////// */}
 

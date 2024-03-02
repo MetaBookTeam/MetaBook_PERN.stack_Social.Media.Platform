@@ -256,7 +256,7 @@ const Post = ({ post }) => {
                 src={post.photo_url}
                 alt=""
                 loading="lazy"
-                onClick={() => openPostModal}
+                // onClick={() => openPostModal}
               />
             </AspectRatio>
           </CardOverflow>
