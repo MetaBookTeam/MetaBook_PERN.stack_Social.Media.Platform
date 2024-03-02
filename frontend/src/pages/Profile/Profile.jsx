@@ -268,6 +268,7 @@ const Profile = () => {
       console.log("openFollowingModal", error);
     }
   };
+  console.log("userProfile", userProfile);
   return (
     <>
       <Container>
@@ -478,26 +479,47 @@ const Profile = () => {
                 Edit your information
                 <hr />
               </Typography>
-              <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+              <Typography
+                id="transition-modal-description"
+                sx={{
+                  mt: 2,
+                  display: "flex",
+                  flexDirection: "column",
+                  maxHeight: 700,
+                  overflow: "hidden",
+                  overflowY: "scroll",
+                }}
+              >
                 <TextField
+                  fullWidth
+                  autoFocus
                   name="name"
                   onChange={(e) => {
                     setUpdatedName(e.target.value);
                   }}
                   id="standard-basic"
-                  label="Name"
+                  label="First Name"
+                  variant="standard"
+                />
+                <TextField fullWidth label="Last Name" variant="standard" />
+                <TextField
+                  fullWidth
+                  name="bio"
+                  label="Bio"
                   variant="standard"
                 />
                 <TextField
+                  fullWidth
                   name="phone"
                   onChange={(e) => {
                     setUpdatedPhone(e.target.value);
                   }}
                   id="standard-basic"
-                  label="Phone"
+                  label="Phone Number"
                   variant="standard"
                 />
                 <TextField
+                  fullWidth
                   name="bio"
                   onChange={(e) => {
                     setUpdatedBio(e.target.value);
@@ -506,8 +528,29 @@ const Profile = () => {
                   label="Bio"
                   variant="standard"
                 />
+                <TextField fullWidth label="Birthday" variant="standard" />
+                <TextField fullWidth label="Gender" variant="standard" />
+                <TextField fullWidth label="School" variant="standard" />
+                <TextField fullWidth label="City" variant="standard" />
+                <TextField fullWidth label="State" variant="standard" />
+                <TextField fullWidth label="Country" variant="standard" />
+                <TextField fullWidth id="image" name="image" type="file" />
+                <Button
+                  variant="outlined"
+                  sx={{ width: "70%", height: "4em", marginLeft: "3%" }}
+                >
+                  Update Image
+                </Button>
+                <TextField fullWidth id="image" name="image" type="file" />
+                <Button
+                  variant="outlined"
+                  sx={{ width: "70%", height: "4em", marginLeft: "3%" }}
+                >
+                  Update Cover Photo
+                </Button>
                 <br />
                 <Button
+                  variant="contained"
                   onClick={() => {
                     setUpdated({
                       bio,
