@@ -21,10 +21,9 @@ import {
 } from "@mui/material";
 import React from "react";
 import Weather from "../../Weather/Weather";
-
+import { NavLink } from "react-router-dom";
 
 const SideBar = ({ mode, setMode }) => {
- 
   return (
     <Box flex={1} p={2} sx={{ display: { xs: "none", sm: "block" } }}>
       <Box position="stick">
@@ -34,7 +33,9 @@ const SideBar = ({ mode, setMode }) => {
               <ListItemIcon>
                 <Home />
               </ListItemIcon>
-              <ListItemText primary="Homepage" />
+              <NavLink  className="NavLinks" to={"/home"}>
+                <ListItemText primary="Homepage" />
+              </NavLink>
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
@@ -82,7 +83,9 @@ const SideBar = ({ mode, setMode }) => {
               <ListItemIcon>
                 <AccountBox />
               </ListItemIcon>
-              <ListItemText primary="Profile" />
+              <NavLink className="NavLinks" to={"/profile"}>
+                <ListItemText primary="Profile" />
+              </NavLink>
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
@@ -96,15 +99,10 @@ const SideBar = ({ mode, setMode }) => {
             </ListItemButton>
           </ListItem>
 
-          
-          
-          <Weather/>
+          <Weather />
         </List>
-       
       </Box>
-     
     </Box>
-    
   );
 };
 
