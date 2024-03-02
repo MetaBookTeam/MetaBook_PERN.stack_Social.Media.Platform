@@ -1,12 +1,16 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setShares } from "../../Service/redux/reducers/shares/sharesSlice";
 import { addPost } from "../../Service/redux/reducers/Posts/postsSlice";
-import { setUpdateUserInformation } from "../../Service/redux/reducers/users/usersSlice";
+import {
+  setUsers,
+  setUpdateUserInformation,
+} from "../../Service/redux/reducers/users/usersSlice";
 
 import Stack from "@mui/material/Stack";
 import Container from "@mui/material/Container";
@@ -67,16 +71,6 @@ const Profile = () => {
   }));
 
   const [secondary, setSecondary] = React.useState(false);
-  // End extra information
-
-  const dispatch = useDispatch();
-  const auth = useSelector((state) => state.auth);
-  const shares = useSelector((state) => state.shares.shares);
-  const { users, userProfile } = useSelector((state) => state.users);
-  // console.log('userProfile.followers', userProfile.followers)
-  // console.log("userProfile", userProfile);
-
-  const [postProfile, setPostProfile] = useState([]);
 
   const style = {
     position: "absolute",
@@ -97,6 +91,36 @@ const Profile = () => {
     textAlign: "center",
     color: theme.palette.text.secondary,
   }));
+
+  // End extra information
+
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const shares = useSelector((state) => state.shares.shares);
+  const { users, userProfile } = useSelector((state) => state.users);
+  // console.log('userProfile.followers', userProfile.followers)
+  // console.log("userProfile", userProfile);
+
+  const [postProfile, setPostProfile] = useState([]);
+
+  //* ////////////////////////////
+  const getAllUsers = async () => {
+    try {
+      // console.log('auth.userId', auth.userId)
+      const allUser = await axios.get(`http://localhost:5000/users`, {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
+      dispatch(setUsers(allUser.data.result));
+      // console.log(...user.data.result);
+      // console.log(user.data.result[0]);
+    } catch (error) {
+      console.log("getAllUsers", error);
+    }
+  };
 
   // for update user info
   const [open, setOpen] = React.useState(false);
@@ -164,9 +188,9 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    updateUserInformation();
     getAllShares();
     getPostProfile();
+    getAllUsers();
   }, []);
 
   // ====================================================
@@ -205,10 +229,9 @@ const Profile = () => {
           return userProfile.followers.includes(user.id);
         }
       });
-      console.log("followers", followers);
+      // console.log("followers", followers);
 
-      // setUserFollowers(followers.data.result);
-      // setOpenFollowers(true);
+      setUserFollowers(followers);
     } catch (error) {
       console.log("openFollowersModal", error);
     }
@@ -268,7 +291,10 @@ const Profile = () => {
                   item
                   xs={4}
                   // onClick={handleClickFollowers}
-                  onClick={setOpenFollowers}
+                  onClick={() => {
+                    setOpenFollowers(true);
+                    openFollowersModal();
+                  }}
                 >
                   Followers
                   <h1>
@@ -373,7 +399,7 @@ const Profile = () => {
           <Grid item xs={8}>
             {postProfile ? (
               postProfile.map((post, i) => {
-                console.log("postProfile.map post", post);
+                // console.log("postProfile.map post", post);
                 // return <ProfilePost key={post.id} post={post} />;
                 return <Post key={post.id} post={post} />;
               })
@@ -450,6 +476,7 @@ const Profile = () => {
                       name,
                       phone,
                     });
+                    updateUserInformation();
                   }}
                 >
                   Update
@@ -552,7 +579,7 @@ const Profile = () => {
             <hr />
           </Typography>
           {userFollowers.map((follower, i) => {
-            console.log("follower map", follower);
+            // console.log("follower map", follower);
             return (
               <Typography key={i} id="keep-mounted-modal-description">
                 <Link
@@ -561,7 +588,7 @@ const Profile = () => {
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => {
-                    navigate(`/page/${follower.user_id}`);
+                    navigate(`/page/${follower.id}`);
                   }}
                 >
                   <Box
