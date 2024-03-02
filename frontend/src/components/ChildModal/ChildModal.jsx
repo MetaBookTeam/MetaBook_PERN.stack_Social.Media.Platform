@@ -45,14 +45,14 @@ function ChildModal({ socket, userId }) {
     setAllMessage([...allMessage, data]);
   };
   return (
+    
     <div>
       <Button onClick={handleOpen}>Click To chat </Button>
       <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="child-modal-title"
-        aria-describedby="child-modal-description"
-      >
+        aria-describedby="child-modal-description">
         <Box sx={{ ...style, width: 500 }}>
           <h2 id="child-modal-title">
             <div>
@@ -86,7 +86,8 @@ function ChildModal({ socket, userId }) {
           <Button onClick={handleClose}>Close Child Modal</Button>
         </Box>
       </Modal>
-    </div>
+              </div>
+    
   );
 }
 

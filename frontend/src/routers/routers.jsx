@@ -12,6 +12,8 @@ import Posts from "../pages/Posts/Posts";
 import Page from "../pages/Page/Page";
 import Profile from "../pages/Profile/Profile";
 import FriendPage from "../pages/FriendPage/FriendPage";
+import Messenger from "../components/Messanger/Messenger";
+
 
 export const router = createBrowserRouter([
   {
@@ -62,6 +64,10 @@ export const router = createBrowserRouter([
   {
     path: "/signup",
     element: <Signup />,
+  },
+  {
+    path:"/messanger",
+    element:<Messenger/>
   },
   {
     path: "/login",
