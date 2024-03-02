@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
@@ -34,6 +34,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
+import Link from "@mui/joy/Link";
 import Grid from "@mui/material/Grid";
 import Tooltip from "@mui/material/Tooltip";
 import Divider from "@mui/material/Divider";
@@ -41,6 +42,19 @@ import Divider from "@mui/material/Divider";
 import { styled } from "@mui/material/styles";
 
 import Post from "../../components/Post/Post";
+
+// extra information
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "white",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 const FriendPage = () => {
   const Demo = styled("div")(({ theme }) => ({
@@ -57,13 +71,17 @@ const FriendPage = () => {
     color: theme.palette.text.secondary,
   }));
 
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
-  const { userProfile, friendProfile } = useSelector((state) => state.users);
+  const { users, friendProfile } = useSelector((state) => state.users);
   const { friends } = useSelector((state) => state.friends);
   const postsFr = useSelector((state) => state.posts.posts);
 
-  console.log("friends", friends);
+  // console.log("friends", friends);
+  // console.log("friendProfile", friendProfile);
+
   const { friend_id } = useParams();
 
   const getUserById = async () => {
@@ -109,12 +127,16 @@ const FriendPage = () => {
       );
       console.log("...user.data.result", ...user.data.result);
       dispatch(setFollow(...user.data.result));
+      setUserFollowersCounter((prev) => prev + 1);
+      setIsMyFriend(true);
     } catch (error) {
       console.log("setFollow", error);
     }
   };
 
-  const [isMyFriend, setIsMyFriend] = useState([]);
+  // const [isMyFriend, setIsMyFriend] = useState([]);
+  const [isMyFriend, setIsMyFriend] = useState(false);
+
   console.log("isMyFriend", isMyFriend);
 
   const isMyFriendHandler = async () => {
@@ -127,7 +149,9 @@ const FriendPage = () => {
           },
         }
       );
-      setIsMyFriend(user.data.result);
+      console.log("isMyFriendHandler", user.data.result);
+      // setIsMyFriend(user.data.result);
+      setIsMyFriend(true);
     } catch (error) {
       console.log(error);
     }
@@ -163,8 +187,82 @@ const FriendPage = () => {
 ]
       */
       dispatch(setUnfollow(friend_id));
+      setUserFollowersCounter((prev) => prev - 1);
+      setIsMyFriend(false);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  // =========================================
+  // openFollowersModal
+  const [userFollowers, setUserFollowers] = useState([]);
+  const [userFollowersCounter, setUserFollowersCounter] = useState(
+    friendProfile.followers?.length
+  );
+
+  // Followers Modal Toggle ======================
+  const [openFollowers, setOpenFollowers] = useState(false);
+  const closeFollowersModal = () => setOpenFollowers(false);
+
+  const openFollowersModal = async () => {
+    try {
+      // usersRouter.get("/friends", authentication, getAllFriends);
+      // const followers = await axios.get(`http://localhost:5000/users/friends`, {
+      //   headers: {
+      //     Authorization: `Bearer ${auth.token}`,
+      //   },
+      // });
+
+      //! I will get all users then handle which one is a friend from the followers column in getAllUsers
+      console.log("userProfile.followers", friendProfile.followers);
+      console.log("users", users);
+
+      const followers = users.filter((user, i) => {
+        if (friendProfile.followers) {
+          return friendProfile.followers.includes(user.id);
+        }
+      });
+      // console.log("followers", followers);
+
+      setUserFollowers(followers);
+    } catch (error) {
+      console.log("openFollowersModal", error);
+    }
+  };
+  // =========================================
+  // openFollowingModal
+  const [userFollowing, setUserFollowing] = useState([]);
+  // const [userFollowingCounter, setUserFollowingCounter] = useState(
+  //   friendProfile.following?.length
+  // );
+  // Following Modal Toggle ======================
+  const [openFollowing, setOpenFollowing] = useState(false);
+  const closeFollowingModal = () => setOpenFollowing(false);
+
+  const openFollowingModal = async () => {
+    try {
+      // usersRouter.get("/friends", authentication, getAllFriends);
+      // const following = await axios.get(`http://localhost:5000/users/friends`, {
+      //   headers: {
+      //     Authorization: `Bearer ${auth.token}`,
+      //   },
+      // });
+
+      //! I will get all users then handle which one is a friend from the following column in getAllUsers
+      console.log("userProfile.following", friendProfile.following);
+      console.log("users", users);
+
+      const following = users.filter((user, i) => {
+        if (friendProfile.following) {
+          return friendProfile.following.includes(user.id);
+        }
+      });
+      // console.log("following", following);
+
+      setUserFollowing(following);
+    } catch (error) {
+      console.log("openFollowingModal", error);
     }
   };
 
@@ -189,7 +287,7 @@ const FriendPage = () => {
                 {/* <Grid container sx={{ paddingTop: "10px" }}>
                   <Grid item xs={3}>
                     <Tooltip title="Add" enterDelay={500} leaveDelay={200}> */}
-                {isMyFriend.length ? (
+                {isMyFriend ? (
                   <Button
                     onClick={deleteFriend}
                     variant="outlined"
@@ -248,13 +346,29 @@ const FriendPage = () => {
 
               {/* <hr /> */}
               <Grid container sx={{ paddingTop: "10px" }}>
-                <Grid item xs={4}>
+                <Grid
+                  item
+                  xs={4}
+                  onClick={() => {
+                    setOpenFollowers(true);
+                    openFollowersModal();
+                  }}
+                >
                   Followers
-                  <h1>{isMyFriend.length}</h1>
+                  <h1>{userFollowersCounter}</h1>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid
+                  item
+                  xs={4}
+                  onClick={() => {
+                    setOpenFollowing(true);
+                    openFollowingModal();
+                  }}
+                >
                   Following
-                  <h1>{isMyFriend.length}</h1>
+                  <h1>
+                    {friendProfile.following && friendProfile.following.length}
+                  </h1>
                 </Grid>
                 <Grid item xs={4}>
                   Post
@@ -308,9 +422,9 @@ const FriendPage = () => {
                     <ListItemText
                       primary="Address"
                       secondary={
-                        userProfile.state &&
-                        userProfile.country &&
-                        `${userProfile.state} - ${userProfile.country}`
+                        friendProfile.state &&
+                        friendProfile.country &&
+                        `${friendProfile.state} - ${friendProfile.country}`
                       }
                     />
                   </ListItem>
@@ -359,6 +473,141 @@ const FriendPage = () => {
           </Grid>
         </Grid>
       </Container>
+      {/* //* ///////////////////////////// */}
+      {/* //* ///////////////////////////// */}
+      {/* //* Followers Modal */}
+      {/* //* ///////////////////////////// */}
+      {/* //* ///////////////////////////// */}
+
+      <Modal
+        keepMounted
+        open={openFollowers}
+        onClose={closeFollowersModal}
+        aria-labelledby="keep-mounted-modal-title"
+        aria-describedby="keep-mounted-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Typography
+            id="keep-mounted-modal-title"
+            variant="h6"
+            component="h2"
+            textAlign={"center"}
+          >
+            Followers
+            <hr />
+          </Typography>
+          {userFollowers.map((follower, i) => {
+            // console.log("follower map", follower);
+            return (
+              <Typography key={i} id="keep-mounted-modal-description">
+                <Link
+                  underline="hover"
+                  sx={{ color: "black", my: 0.5 }}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => {
+                    navigate(`/page/${follower.id}`);
+                  }}
+                >
+                  <Box
+                    sx={{
+                      position: "relative",
+                      "&::before": {
+                        content: '""',
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                        m: "-1px",
+                        borderRadius: "50%",
+                        background:
+                          "linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)",
+                      },
+                      mr: 3,
+                    }}
+                    component="span"
+                  >
+                    <Avatar component="span" src={follower.image} />
+                  </Box>
+
+                  {follower.first_name && follower.last_name
+                    ? `${follower.first_name} ${follower.last_name}`
+                    : follower.user_name}
+                </Link>
+              </Typography>
+            );
+          })}
+        </Box>
+      </Modal>
+
+      {/* //* ///////////////////////////// */}
+      {/* //* ///////////////////////////// */}
+      {/* //* Following Modal */}
+      {/* //* ///////////////////////////// */}
+      {/* //* ///////////////////////////// */}
+
+      <Modal
+        keepMounted
+        open={openFollowing}
+        onClose={closeFollowingModal}
+        aria-labelledby="keep-mounted-modal-title"
+        aria-describedby="keep-mounted-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Typography
+            id="keep-mounted-modal-title"
+            variant="h6"
+            component="h2"
+            textAlign={"center"}
+          >
+            Following
+            <hr />
+          </Typography>
+          {userFollowing.map((following, i) => {
+            console.log("following map", following);
+            return (
+              <Typography key={i} id="keep-mounted-modal-description">
+                <Link
+                  underline="hover"
+                  sx={{ color: "black", my: 0.5 }}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => {
+                    navigate(`/page/${following.id}`);
+                  }}
+                >
+                  <Box
+                    sx={{
+                      position: "relative",
+                      "&::before": {
+                        content: '""',
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                        m: "-1px",
+                        borderRadius: "50%",
+                        background:
+                          "linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)",
+                      },
+                      mr: 3,
+                    }}
+                    component="span"
+                  >
+                    <Avatar component="span" src={following.image} />
+                  </Box>
+
+                  {following.first_name && following.last_name
+                    ? `${following.first_name} ${following.last_name}`
+                    : following.user_name}
+                </Link>
+              </Typography>
+            );
+          })}
+        </Box>
+      </Modal>
     </>
   );
 };

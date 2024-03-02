@@ -741,7 +741,10 @@ const isMyFriend = async (req, res) => {
 
   try {
     const friends = await pool.query(
-      `SELECT user_id,friend_id FROM friends WHERE user_id=$1 AND friend_id = $2`,
+      `SELECT *
+      FROM friends 
+      WHERE user_id=$1 
+        AND friend_id = $2`,
       placeholder
     );
     res.status(200).json({
