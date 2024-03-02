@@ -60,9 +60,10 @@ const FriendPage = () => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const { userProfile, friendProfile } = useSelector((state) => state.users);
-  const friends = useSelector((state) => state.friends.friends);
+  const { friends } = useSelector((state) => state.friends);
   const postsFr = useSelector((state) => state.posts.posts);
 
+  console.log("friends", friends);
   const { friend_id } = useParams();
 
   const getUserById = async () => {
@@ -89,40 +90,44 @@ const FriendPage = () => {
 
       dispatch(setPosts(user.data.result));
     } catch (error) {
-      console.log("setFriendProfile", error);
+      console.log("setFriendPosts", error);
     }
   };
 
   const AddNewFriend = async () => {
     try {
+      //usersRouter.post("/friends/:friend_id", authentication, addFriend);
       const user = await axios.post(
         `http://localhost:5000/users/friends/${friend_id}`,
-        { user_id: auth.userId },
+        // { user_id: auth.userId },
+        {},
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
           },
         }
       );
+      console.log("...user.data.result", ...user.data.result);
       dispatch(setFollow(...user.data.result));
     } catch (error) {
       console.log("setFollow", error);
     }
   };
 
-  const [userFriends, setUserFriends] = useState([]);
+  const [isMyFriend, setIsMyFriend] = useState([]);
+  console.log("isMyFriend", isMyFriend);
 
-  const getAllFriend = async () => {
+  const isMyFriendHandler = async () => {
     try {
       const user = await axios.get(
-        `http://localhost:5000/users/friends/${friend_id}/${auth.userId}`,
+        `http://localhost:5000/users/friends/${friend_id}`,
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
           },
         }
       );
-      setUserFriends(user.data.result);
+      setIsMyFriend(user.data.result);
     } catch (error) {
       console.log(error);
     }
@@ -131,7 +136,7 @@ const FriendPage = () => {
   useEffect(() => {
     getUserPost();
     getUserById();
-    getAllFriend();
+    isMyFriendHandler();
   }, []);
 
   const deleteFriend = async () => {
@@ -145,7 +150,19 @@ const FriendPage = () => {
         }
       );
 
-      dispatch(setUnfollow(user.data.result));
+      // console.log("user.data.result", user.data.result);
+      /* 
+      [
+    {
+        "id": 36,
+        "user_id": 9,
+        "friend_id": 6,
+        "created_at": "2024-03-01T23:03:35.177Z",
+        "is_deleted": 0
+    }
+]
+      */
+      dispatch(setUnfollow(friend_id));
     } catch (error) {
       console.log(error);
     }
@@ -172,7 +189,7 @@ const FriendPage = () => {
                 {/* <Grid container sx={{ paddingTop: "10px" }}>
                   <Grid item xs={3}>
                     <Tooltip title="Add" enterDelay={500} leaveDelay={200}> */}
-                {userFriends.length ? (
+                {isMyFriend.length ? (
                   <Button
                     onClick={deleteFriend}
                     variant="outlined"
@@ -233,11 +250,11 @@ const FriendPage = () => {
               <Grid container sx={{ paddingTop: "10px" }}>
                 <Grid item xs={4}>
                   Followers
-                  <h1>{userFriends.length}</h1>
+                  <h1>{isMyFriend.length}</h1>
                 </Grid>
                 <Grid item xs={4}>
                   Following
-                  <h1>{userFriends.length}</h1>
+                  <h1>{isMyFriend.length}</h1>
                 </Grid>
                 <Grid item xs={4}>
                   Post

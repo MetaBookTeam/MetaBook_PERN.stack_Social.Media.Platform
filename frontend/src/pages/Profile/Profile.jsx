@@ -268,7 +268,7 @@ const Profile = () => {
                   item
                   xs={4}
                   // onClick={handleClickFollowers}
-                  onClick={openFollowersModal}
+                  onClick={setOpenFollowers}
                 >
                   Followers
                   <h1>
@@ -373,6 +373,7 @@ const Profile = () => {
           <Grid item xs={8}>
             {postProfile ? (
               postProfile.map((post, i) => {
+                console.log("postProfile.map post", post);
                 // return <ProfilePost key={post.id} post={post} />;
                 return <Post key={post.id} post={post} />;
               })
@@ -384,7 +385,7 @@ const Profile = () => {
                 return <Shares elem={elem} />;
               })
             ) : (
-              <Item>You do not have any Shares post </Item>
+              <Item>You do not have any Shared post </Item>
             )}
           </Grid>
         </Grid>
@@ -547,46 +548,49 @@ const Profile = () => {
             component="h2"
             textAlign={"center"}
           >
-            Shares
+            Followers
             <hr />
           </Typography>
-          {userFollowers.toReversed().map((share, i) => (
-            <Typography key={i} id="keep-mounted-modal-description">
-              <Link
-                underline="hover"
-                sx={{ color: "black", my: 0.5 }}
-                target="_blank"
-                rel="noreferrer"
-                onClick={() => {
-                  navigate(`/page/${share.user_id}`);
-                }}
-              >
-                <Box
-                  sx={{
-                    position: "relative",
-                    "&::before": {
-                      content: '""',
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      bottom: 0,
-                      right: 0,
-                      m: "-1px",
-                      borderRadius: "50%",
-                      background:
-                        "linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)",
-                    },
-                    mr: 3,
+          {userFollowers.map((follower, i) => {
+            console.log("follower map", follower);
+            return (
+              <Typography key={i} id="keep-mounted-modal-description">
+                <Link
+                  underline="hover"
+                  sx={{ color: "black", my: 0.5 }}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => {
+                    navigate(`/page/${follower.user_id}`);
                   }}
-                  component="span"
                 >
-                  <Avatar component="span" src={share.image} />
-                </Box>
+                  <Box
+                    sx={{
+                      position: "relative",
+                      "&::before": {
+                        content: '""',
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                        m: "-1px",
+                        borderRadius: "50%",
+                        background:
+                          "linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)",
+                      },
+                      mr: 3,
+                    }}
+                    component="span"
+                  >
+                    <Avatar component="span" src={follower.image} />
+                  </Box>
 
-                {share.user_name}
-              </Link>
-            </Typography>
-          ))}
+                  {follower.user_name}
+                </Link>
+              </Typography>
+            );
+          })}
         </Box>
       </Modal>
     </>

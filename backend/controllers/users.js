@@ -676,27 +676,27 @@ const getAllFriends = async (req, res) => {
 
   try {
     const friends = await pool.query(
-  //     `
-  //   SELECT
-  //     friends.user_id,
-  //     friends.friend_id,
-  //   --users.user_name,
-  //     user_profile.first_name AS follower_first_name,
-  //     user_profile.last_name AS follower_last_name ,
-  //   --users.image,
-  //     friends.created_at
-  
-  // FROM friends 
-  
-  // LEFT JOIN users
-  //     ON users.id = friends.user_id
-  
-  // LEFT JOIN user_profile
-  //     ON user_profile.user_id = friends.Friend_id
-  
-  // WHERE users.id = $1;
-  //     `,
-  //! I will get all users then handle which one is a friend from the followers column in getAllUsers
+      //     `
+      //   SELECT
+      //     friends.user_id,
+      //     friends.friend_id,
+      //   --users.user_name,
+      //     user_profile.first_name AS follower_first_name,
+      //     user_profile.last_name AS follower_last_name ,
+      //   --users.image,
+      //     friends.created_at
+
+      // FROM friends
+
+      // LEFT JOIN users
+      //     ON users.id = friends.user_id
+
+      // LEFT JOIN user_profile
+      //     ON user_profile.user_id = friends.Friend_id
+
+      // WHERE users.id = $1;
+      //     `,
+      //! I will get all users then handle which one is a friend from the followers column in getAllUsers
       `
       SELECT
         friends.user_id,
@@ -761,7 +761,9 @@ const isMyFriend = async (req, res) => {
 const addFriend = async (req, res) => {
   const { userId } = req.token;
   const { friend_id } = req.params;
+
   const placeholder = [userId, friend_id];
+
   try {
     const select = await pool.query(
       `SELECT user_id,friend_id FROM friends WHERE user_id= $1 AND friend_id = $2`,
@@ -796,10 +798,12 @@ const addFriend = async (req, res) => {
 const deleteFriend = async (req, res) => {
   const { userId } = req.token;
   const { friend_id } = req.params;
+
   const placeholder = [friend_id, userId];
+
   try {
     const deleteFriend = await pool.query(
-      `DELETE FROM friends WHERE friend_id=$1 AND user_id=$2`,
+      `DELETE FROM friends WHERE friend_id=$1 AND user_id=$2 RETURNING *;`,
       placeholder
     );
     res.status(200).json({

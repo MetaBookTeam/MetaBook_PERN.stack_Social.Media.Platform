@@ -14,7 +14,10 @@ export const friendsSlice = createSlice({
       state.friends.push(action.payload);
     },
     setUnfollow: (state, action) => {
-      state.friends !== action.payload;
+      // action.payload = friend_id
+      state.friends.filter((friend) => {
+        return friend.id !== action.payload;
+      });
     },
     getfriend: (state, action) => {
       state.friends == action.payload;
