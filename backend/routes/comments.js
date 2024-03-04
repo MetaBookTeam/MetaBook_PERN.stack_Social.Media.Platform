@@ -7,13 +7,13 @@ const {
   updateComment,
   deleteComment,
   getCommentById,
-} = require("../controllers/comments");
+} = require("../controllers/Comments");
 
 const {
   getLikesByCommentId,
   deleteCommentLikeById,
   createCommentLike,
-} = require("../controllers/commentLikes");
+} = require("../controllers/CommentLikes");
 
 const authentication = require("../middlewares/authentication");
 const authorization = require("../middlewares/authorization");
