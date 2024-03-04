@@ -122,7 +122,7 @@ const NavBar = () => {
   const [allUsers, setAllUsers] = useState([]);
   const getAllUser = async () => {
     try {
-      const user = await axios.get(`http://localhost:5000/users`, {
+      const user = await axios.get(`https://meraki-academy-project-5.onrender.com/users`, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },

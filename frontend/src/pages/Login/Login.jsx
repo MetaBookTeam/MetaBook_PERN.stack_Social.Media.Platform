@@ -76,7 +76,7 @@ export default function Login() {
     const data = new FormData(event.currentTarget);
 
     try {
-      const result = await axios.post("http://localhost:5000/users/login", {
+      const result = await axios.post("https://meraki-academy-project-5.onrender.com/users/login", {
         email: data.get("email"),
         // password: data.get("password"),
         password: loginPassword,
@@ -124,7 +124,7 @@ export default function Login() {
 
     // usersRouter.post("/register", register);
     axios
-      .post("http://localhost:5000/users/register", {
+      .post("https://meraki-academy-project-5.onrender.com/users/register", {
         user_name,
         first_name,
         last_name,
@@ -134,7 +134,7 @@ export default function Login() {
       })
       .then((result) => {
         axios
-          .post("http://localhost:5000/users/login", {
+          .post("https://meraki-academy-project-5.onrender.com/users/login", {
             email,
             password,
           })
@@ -162,7 +162,7 @@ export default function Login() {
       .catch((error) => {
         if (!error.response.data.success) {
           axios
-            .post("http://localhost:5000/users/login", {
+            .post("https://meraki-academy-project-5.onrender.com/users/login", {
               email,
               password,
             })

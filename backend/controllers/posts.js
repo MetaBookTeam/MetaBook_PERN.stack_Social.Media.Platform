@@ -2,7 +2,7 @@ const pool = require("../models/db");
 
 const createNewPost = async (req, res) => {
   /* 
-POST http://localhost:5000/posts
+POST https://meraki-academy-project-5.onrender.com/posts
 
 {
     "content": "description",
@@ -47,7 +47,7 @@ POST http://localhost:5000/posts
 
 const getAllPost = async (req, res) => {
   /* 
-GET http://localhost:5000/posts
+GET https://meraki-academy-project-5.onrender.com/posts
 
 */
   try {
@@ -143,7 +143,7 @@ GET http://localhost:5000/posts
 
 const getYourPosts = async (req, res) => {
   /* 
-GET http://localhost:5000/posts/profile
+GET https://meraki-academy-project-5.onrender.com/posts/profile
 */
 
   const { userId } = req.token;
@@ -292,7 +292,7 @@ GET http://localhost:5000/posts/profile
 
 const getPostByUserId = async (req, res) => {
   /* 
-GET http://localhost:5000/posts/:user_id
+GET https://meraki-academy-project-5.onrender.com/posts/:user_id
      Another friend profile
 */
 
@@ -396,7 +396,7 @@ GET http://localhost:5000/posts/:user_id
 
 const updatePostById = async (req, res) => {
   /*
-PUT http://localhost:5000/posts/:post_id
+PUT https://meraki-academy-project-5.onrender.com/posts/:post_id
 
 {
     "content": "description",
@@ -434,7 +434,7 @@ PUT http://localhost:5000/posts/:post_id
 
 const deletePostById = async (req, res) => {
   /*
-DELETE http://localhost:5000/posts/:post_id
+DELETE https://meraki-academy-project-5.onrender.com/posts/:post_id
 
 
 

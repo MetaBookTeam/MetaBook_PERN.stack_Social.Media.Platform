@@ -97,7 +97,7 @@ const Post = ({ post }) => {
       // postsRouter.delete("/:post_id", authentication, deletePostById); //done
 
       const deletedPost = await axios.delete(
-        `http://localhost:5000/posts/${post.id}`,
+        `https://meraki-academy-project-5.onrender.com/posts/${post.id}`,
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -157,7 +157,7 @@ const Post = ({ post }) => {
       // postsRouter.put("/:post_id", authentication, updatePostById);
 
       const updatePost = await axios.put(
-        `http://localhost:5000/posts/${post.id}`,
+        `https://meraki-academy-project-5.onrender.com/posts/${post.id}`,
         {
           // content: editPostContent ? editPostContent : post.content,
           // photo_url: editPostPhoto ? editPostPhoto : post.photo_url,

@@ -2,7 +2,7 @@ const pool = require("../models/db");
 
 // 1- this function createNewPage
 
-//POST http://localhost:5000/pages/
+//POST https://meraki-academy-project-5.onrender.com/pages/
 
 const createNewPage = (req, res) => {
   const user_id = req.token.userId;
@@ -35,7 +35,7 @@ const createNewPage = (req, res) => {
 
 // 2- this function getAllPages
 
-//GET  http://localhost:5000/pages/
+//GET  https://meraki-academy-project-5.onrender.com/pages/
 
 const getAllPages = (req, res) => {
   const query = `SELECT * FROM pages WHERE is_deleted=0`;
@@ -57,7 +57,7 @@ const getAllPages = (req, res) => {
 }
 // 3- this function getPageByUserId
 
-//GET  http://localhost:5000/pages/user/
+//GET  https://meraki-academy-project-5.onrender.com/pages/user/
 
 const getPageByUser = (req, res) => {
   const user_id = req.token.userId;
@@ -91,7 +91,7 @@ const getPageByUser = (req, res) => {
 
 // 4- this function getPageById
 
-//GET  http://localhost:5000/pages/search_1/:id
+//GET  https://meraki-academy-project-5.onrender.com/pages/search_1/:id
 
 const getPageById = (req, res) => {
   const id = req.params.id;
@@ -124,7 +124,7 @@ const getPageById = (req, res) => {
 
 // 5- this function updatePageById.
 
-//PUT  http://localhost:5000/pages/:id
+//PUT  https://meraki-academy-project-5.onrender.com/pages/:id
 
 const updatePageById = (req, res) => {
   const {id} = req.params;
@@ -158,7 +158,7 @@ const updatePageById = (req, res) => {
 
 // 6- this function  deletePageById.
 
- //DELETE  http://localhost:5000/pages/:id
+ //DELETE  https://meraki-academy-project-5.onrender.com/pages/:id
 const deletePageById=(req,res)=>{
 
     const id=req.params.id
@@ -199,7 +199,7 @@ const deletePageById=(req,res)=>{
 
  // 7- this function  deletePageByUser.
 
- //DELETE  http://localhost:5000/pages/:id/user
+ //DELETE  https://meraki-academy-project-5.onrender.com/pages/:id/user
 
 const deletePageByUser=(req,res)=>{
     const user_id=req.token.id
