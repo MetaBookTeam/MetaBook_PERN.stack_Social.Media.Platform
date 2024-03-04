@@ -4,7 +4,7 @@ const pool = require("../models/db");
 // const getCommentLikeById = async (req, res) => {
 
 //   /*
-// GET http://localhost:5000/comments/likes/:comment_id
+// GET https://meraki-academy-project-5.onrender.com/comments/likes/:comment_id
 // */
 
 //   const { comment_id } = req.params;
@@ -33,7 +33,7 @@ const pool = require("../models/db");
 
 const deleteCommentLikeById = async (req, res) => {
   /* 
-DELETE http://localhost:5000/comments/likes/:like_id
+DELETE https://meraki-academy-project-5.onrender.com/comments/likes/:like_id
 */
 
   const { user_id } = req.params;
@@ -67,7 +67,7 @@ DELETE http://localhost:5000/comments/likes/:like_id
 //
 const createCommentLike = async (req, res) => {
   /* 
-POST http://localhost:5000/comments/likes/:comment_id
+POST https://meraki-academy-project-5.onrender.com/comments/likes/:comment_id
 
 */
   const user_id = req.token.userId;

@@ -32,7 +32,7 @@ const createComment = (req, res) => {
 // getCommentByPostId?????
 const getCommentsByPostId = (req, res) => {
   /* 
-GET http://localhost:5000/comments/:post_id/comments
+GET https://meraki-academy-project-5.onrender.com/comments/:post_id/comments
 */
 
   const { post_id } = req.params;
@@ -97,7 +97,7 @@ GET http://localhost:5000/comments/:post_id/comments
 
 const updateComment = (req, res) => {
   /* 
-PUT http://localhost:5000/comments/:comment_id
+PUT https://meraki-academy-project-5.onrender.com/comments/:comment_id
 
 { 
     "comment": "updated comment"
@@ -134,7 +134,7 @@ PUT http://localhost:5000/comments/:comment_id
 
 const deleteComment = (req, res) => {
   /* 
-DELETE http://localhost:5000/comments/:comment_id
+DELETE https://meraki-academy-project-5.onrender.com/comments/:comment_id
 */
 
   const { comment_id } = req.params;
@@ -164,7 +164,7 @@ DELETE http://localhost:5000/comments/:comment_id
 
 const getCommentById = (req, res) => {
   /* 
-GET http://localhost:5000/comments/:comment_id
+GET https://meraki-academy-project-5.onrender.com/comments/:comment_id
 */
 
   const { comment_id } = req.params;

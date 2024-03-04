@@ -234,7 +234,7 @@ Minimum eight characters, at least one uppercase letter, one lowercase letter, o
       throw new Error();
 
     try {
-      const result = await axios.post("http://localhost:5000/users/register", {
+      const result = await axios.post("https://meraki-academy-project-5.onrender.com/users/register", {
         first_name: data.get("first_name"),
         last_name: data.get("last_name"),
         user_name: data.get("user_name").toLowerCase(),

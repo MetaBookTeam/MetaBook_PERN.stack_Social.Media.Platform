@@ -2,7 +2,7 @@ const pool = require("../models/db");
 
 const createNewRole = (req, res) => {
   /* 
-POST http://localhost:5000/roles/
+POST https://meraki-academy-project-5.onrender.com/roles/
 
 {
     "role": "Admin2"
@@ -34,7 +34,7 @@ POST http://localhost:5000/roles/
 
 const createNewPermission = (req, res) => {
   /* 
-POST http://localhost:5000/roles/permission
+POST https://meraki-academy-project-5.onrender.com/roles/permission
 
 {
     "permission": "ADD_PAGE"
@@ -64,7 +64,7 @@ POST http://localhost:5000/roles/permission
 
 const createNewRolePermission = (req, res) => {
   /* 
-POST http://localhost:5000/roles/role_permission/
+POST https://meraki-academy-project-5.onrender.com/roles/role_permission/
 
 {
     "role_id": 1,
@@ -98,7 +98,7 @@ POST http://localhost:5000/roles/role_permission/
 
 const getAllRoles = (req, res) => {
   /* 
-GET http://localhost:5000/roles/
+GET https://meraki-academy-project-5.onrender.com/roles/
 */
 
   const query = `SELECT * FROM roles;`;
@@ -125,7 +125,7 @@ GET http://localhost:5000/roles/
 
 const getAllPermissions = (req, res) => {
   /* 
-GET http://localhost:5000/roles/permissions
+GET https://meraki-academy-project-5.onrender.com/roles/permissions
 */
 
   const query = `SELECT * FROM permissions;`;
@@ -152,7 +152,7 @@ GET http://localhost:5000/roles/permissions
 
 const getAllRolePermission = (req, res) => {
   /* 
-GET http://localhost:5000/roles/role_permission
+GET https://meraki-academy-project-5.onrender.com/roles/role_permission
 */
 
   const query = `

@@ -64,7 +64,7 @@ const Comments = ({ values }) => {
         contentadd: contentAdd,
       };
       const result = await axios.post(
-        `http://localhost:5000/posts/shares/${post.id}`,
+        `https://meraki-academy-project-5.onrender.com/posts/shares/${post.id}`,
         share,
         {
           headers: {
@@ -100,7 +100,7 @@ const Comments = ({ values }) => {
       //*  getCommentsByPostId ///////////////////
       // commentsRouter.get("/:post_id/comments", authentication,getCommentsByPostId);
       const comments = await axios.get(
-        `http://localhost:5000/comments/${post.id}/comments`,
+        `https://meraki-academy-project-5.onrender.com/comments/${post.id}/comments`,
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -133,7 +133,7 @@ const Comments = ({ values }) => {
   const openLikesModal = async () => {
     try {
       const likes = await axios.get(
-        `http://localhost:5000/posts/like/${post.id}`,
+        `https://meraki-academy-project-5.onrender.com/posts/like/${post.id}`,
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -158,7 +158,7 @@ const Comments = ({ values }) => {
     // postsRouter.post("/like/:post_id", authentication, createNewPostLike);
     try {
       const addLike = await axios.post(
-        `http://localhost:5000/posts/like/${post.id}`,
+        `https://meraki-academy-project-5.onrender.com/posts/like/${post.id}`,
         {},
         {
           headers: {
@@ -181,7 +181,7 @@ const Comments = ({ values }) => {
     // postsRouter.delete("/like/:post_id", authentication, deletePostLikeById);
     try {
       const removeLike = await axios.delete(
-        `http://localhost:5000/posts/like/${post.id}`,
+        `https://meraki-academy-project-5.onrender.com/posts/like/${post.id}`,
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -217,7 +217,7 @@ const Comments = ({ values }) => {
     try {
       // postsRouter.get("/shares/:post_id", authentication, getShareByPostId);
       const shares = await axios.get(
-        `http://localhost:5000/posts/shares/by_post/${post.id}`,
+        `https://meraki-academy-project-5.onrender.com/posts/shares/by_post/${post.id}`,
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -241,7 +241,7 @@ const Comments = ({ values }) => {
       // commentsRouter.post("/:post_id", authentication, createComment);
 
       const comment = await axios.post(
-        `http://localhost:5000/comments/${post.id}`,
+        `https://meraki-academy-project-5.onrender.com/comments/${post.id}`,
         { comment: newComment },
         {
           headers: {
@@ -281,7 +281,7 @@ const Comments = ({ values }) => {
       // commentsRouter.post("/likes/:comment_id", authentication, createCommentLike);
 
       const commentLike = await axios.post(
-        `http://localhost:5000/comments/likes/${commentId}`,
+        `https://meraki-academy-project-5.onrender.com/comments/likes/${commentId}`,
         {},
         {
           headers: {
@@ -305,7 +305,7 @@ const Comments = ({ values }) => {
       // console.log("commentId", commentId);
 
       const deleteComment = await axios.delete(
-        `http://localhost:5000/comments/${commentId}`,
+        `https://meraki-academy-project-5.onrender.com/comments/${commentId}`,
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -356,7 +356,7 @@ deleteComment.data.result
       // console.log("commentId", commentId);
 
       const updateComment = await axios.put(
-        `http://localhost:5000/comments/${comment.id}`,
+        `https://meraki-academy-project-5.onrender.com/comments/${comment.id}`,
         { comment: editComment },
         {
           headers: {

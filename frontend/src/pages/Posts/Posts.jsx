@@ -85,7 +85,7 @@ export default function Posts() {
   const getAllPosts = async () => {
     // setIsLoading(true)
     try {
-      const result = await axios.get("http://localhost:5000/posts/", {
+      const result = await axios.get("https://meraki-academy-project-5.onrender.com/posts/", {
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },
@@ -110,7 +110,7 @@ export default function Posts() {
     try {
       // console.log('auth.userId', auth.userId)
       const user = await axios.get(
-        `http://localhost:5000/users/${auth.userId}`,
+        `https://meraki-academy-project-5.onrender.com/users/${auth.userId}`,
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -128,7 +128,7 @@ export default function Posts() {
   const getAllUsers = async () => {
     try {
       // console.log('auth.userId', auth.userId)
-      const allUser = await axios.get(`http://localhost:5000/users`, {
+      const allUser = await axios.get(`https://meraki-academy-project-5.onrender.com/users`, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },
@@ -145,7 +145,7 @@ export default function Posts() {
     try {
       // usersRouter.get("/friends", authentication, getAllFriends);
       const allFriends = await axios.get(
-        `http://localhost:5000/users/friends`,
+        `https://meraki-academy-project-5.onrender.com/users/friends`,
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,

@@ -3,7 +3,7 @@ const pool = require("../models/db");
 //! user still can like multiple times
 const createNewPostLike = async (req, res) => {
   /* 
-POST http://localhost:5000/posts/like/:post_id
+POST https://meraki-academy-project-5.onrender.com/posts/like/:post_id
 
 //@ 
 oldLike.rows.length ==> already liked
@@ -35,7 +35,7 @@ oldLike.rows.length ==> already liked
 
 const getLikesByPostId = async (req, res) => {
   /* 
-GET http://localhost:5000/posts/like/:post_id
+GET https://meraki-academy-project-5.onrender.com/posts/like/:post_id
 */
   const { post_id } = req.params;
   const placeholder = [post_id];
@@ -68,7 +68,7 @@ GET http://localhost:5000/posts/like/:post_id
 
 const deletePostLikeById = async (req, res) => {
   /* 
-DELETE http://localhost:5000/posts/like/:post_id
+DELETE https://meraki-academy-project-5.onrender.com/posts/like/:post_id
 */
   const user_id = req.token.userId;
   const { post_id } = req.params;

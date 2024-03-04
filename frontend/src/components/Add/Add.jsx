@@ -84,7 +84,7 @@ const Add = () => {
   const newPost = async () => {
     try {
       const newPost = await axios.post(
-        `http://localhost:5000/posts`,
+        `https://meraki-academy-project-5.onrender.com/posts`,
         {
           content,
           photo_url: imageUrl,

@@ -86,7 +86,7 @@ const FriendPage = () => {
 
   const getUserById = async () => {
     try {
-      const user = await axios.get(`http://localhost:5000/users/${friend_id}`, {
+      const user = await axios.get(`https://meraki-academy-project-5.onrender.com/users/${friend_id}`, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },
@@ -100,7 +100,7 @@ const FriendPage = () => {
 
   const getUserPost = async () => {
     try {
-      const user = await axios.get(`http://localhost:5000/posts/${friend_id}`, {
+      const user = await axios.get(`https://meraki-academy-project-5.onrender.com/posts/${friend_id}`, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },
@@ -116,7 +116,7 @@ const FriendPage = () => {
     try {
       //usersRouter.post("/friends/:friend_id", authentication, addFriend);
       const user = await axios.post(
-        `http://localhost:5000/users/friends/${friend_id}`,
+        `https://meraki-academy-project-5.onrender.com/users/friends/${friend_id}`,
         // { user_id: auth.userId },
         {},
         {
@@ -142,7 +142,7 @@ const FriendPage = () => {
   const isMyFriendHandler = async () => {
     try {
       const user = await axios.get(
-        `http://localhost:5000/users/friends/${friend_id}`,
+        `https://meraki-academy-project-5.onrender.com/users/friends/${friend_id}`,
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -166,7 +166,7 @@ const FriendPage = () => {
   const deleteFriend = async () => {
     try {
       const user = await axios.delete(
-        `http://localhost:5000/users/friends/${friend_id}`,
+        `https://meraki-academy-project-5.onrender.com/users/friends/${friend_id}`,
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -208,7 +208,7 @@ const FriendPage = () => {
   const openFollowersModal = async () => {
     try {
       // usersRouter.get("/friends", authentication, getAllFriends);
-      // const followers = await axios.get(`http://localhost:5000/users/friends`, {
+      // const followers = await axios.get(`https://meraki-academy-project-5.onrender.com/users/friends`, {
       //   headers: {
       //     Authorization: `Bearer ${auth.token}`,
       //   },
@@ -243,7 +243,7 @@ const FriendPage = () => {
   const openFollowingModal = async () => {
     try {
       // usersRouter.get("/friends", authentication, getAllFriends);
-      // const following = await axios.get(`http://localhost:5000/users/friends`, {
+      // const following = await axios.get(`https://meraki-academy-project-5.onrender.com/users/friends`, {
       //   headers: {
       //     Authorization: `Bearer ${auth.token}`,
       //   },

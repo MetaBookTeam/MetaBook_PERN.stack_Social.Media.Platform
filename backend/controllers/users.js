@@ -5,7 +5,7 @@ const saltRounds = parseInt(process.env.SALT);
 
 const register = async (req, res) => {
   /* 
-POST http://localhost:5000/users/register
+POST https://meraki-academy-project-5.onrender.com/users/register
 
 {
     "email": "bugger@gmail.com",
@@ -24,7 +24,7 @@ POST http://localhost:5000/users/register
     "cover_photo": "http://res.cloudinary.com/dpbh42kjy/image/upload/v1708868452/gbjzxlonkhr629vgmfau.webp"
 }
 */
-  //http://localhost:5000/users/register
+  //https://meraki-academy-project-5.onrender.com/users/register
 
   /*test in ahmad {
     "email": "ahmad@gmail.com",
@@ -131,7 +131,7 @@ POST http://localhost:5000/users/register
 
 const login = (req, res) => {
   /* 
-POST http://localhost:5000/users/login
+POST https://meraki-academy-project-5.onrender.com/users/login
 
 {
     "email": "user3@gmail.com",
@@ -254,7 +254,7 @@ const getAllUsers = (req, res) => {
 
 const getUserById = (req, res) => {
   /* 
-GET http://localhost:5000/users/:user_id
+GET https://meraki-academy-project-5.onrender.com/users/:user_id
 */
 
   /* //! we need to check: 
@@ -331,7 +331,7 @@ GET http://localhost:5000/users/:user_id
 
 const updateUserById = (req, res) => {
   /* 
-PUT http://localhost:5000/users/2
+PUT https://meraki-academy-project-5.onrender.com/users/2
 
 {
     "email": "user3edited@gmail.com",
@@ -440,7 +440,7 @@ UPDATE user_profile
 
   //   /*
   //     postman params /:id ==>
-  //     PUT http://localhost:5000/users/6595c80555fc1e4be12e5bcc
+  //     PUT https://meraki-academy-project-5.onrender.com/users/6595c80555fc1e4be12e5bcc
   //     req.body:
   // {
   //     "firstName": "user edited",
@@ -537,7 +537,7 @@ UPDATE user_profile
 //? softDeleteUserById  /////////////////////////////////
 const softDeleteUserById = (req, res) => {
   /* 
-DELETE http://localhost:5000/users/3
+DELETE https://meraki-academy-project-5.onrender.com/users/3
 */
   //@ after deleting the user the app shall logout.
   //@ check if the user he is the one who delete the profile.
@@ -571,7 +571,7 @@ DELETE http://localhost:5000/users/3
 
   //   /*
   //     postman params /:id ==>
-  //     DELETE http://localhost:5000/users/65975437a31cc98f9b7c61e2
+  //     DELETE https://meraki-academy-project-5.onrender.com/users/65975437a31cc98f9b7c61e2
   //   */
   //   const userId = req.params.id;
   //   //* check the user account ownership before delete it.
@@ -630,7 +630,7 @@ DELETE http://localhost:5000/users/3
 //? hardDeleteUserById  /////////////////////////////////
 const hardDeleteUserById = (req, res) => {
   /* 
-DELETE http://localhost:5000/users/delete/3
+DELETE https://meraki-academy-project-5.onrender.com/users/delete/3
 */
   //@ after deleting the user the app shall logout.
   //@ check if the user he is the one who delete the profile.
