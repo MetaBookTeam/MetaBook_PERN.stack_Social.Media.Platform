@@ -355,7 +355,12 @@ const FriendPage = () => {
                   }}
                 >
                   Followers
-                  <h1>{userFollowersCounter}</h1>
+                  {/* <h1>{userFollowersCounter ? userFollowersCounter : 0}</h1> */}
+                  <h1>
+                    {friendProfile.followers
+                      ? friendProfile.followers.length
+                      : 0}
+                  </h1>
                 </Grid>
                 <Grid
                   item

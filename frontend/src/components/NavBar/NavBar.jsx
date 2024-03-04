@@ -86,7 +86,7 @@ const NavBar = () => {
   const [token, setToken] = useState("");
   const [openChat, setOpenChate] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-
+  console.log("auth.userId socket", auth.userId);
   const handleOpenChat = () => {
     setOpenChate(true);
     setSocket(
@@ -194,7 +194,7 @@ const NavBar = () => {
             MetaBook
           </NavLink>
         </Typography>
-       
+
         {/* <Pets sx={{ display: { xs: "block", sm: "none" } }} /> */}
         <Stack spacing={2} sx={{ width: 300, bgcolor: "white" }}>
           <Autocomplete
