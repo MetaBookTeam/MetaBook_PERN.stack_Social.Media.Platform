@@ -1,7 +1,7 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import NavBar from "../../components/NavBar/NavBar";
 
-import Footer from "../../components/Footer/Footer";
+import Footer from "../../components/footer/footer";
 import SideBar from "../../components/SideBar/SideBar";
 import RightBar from "../../components/RightBar/RightBar";
 import Feed from "../../components/Feed/Feed";

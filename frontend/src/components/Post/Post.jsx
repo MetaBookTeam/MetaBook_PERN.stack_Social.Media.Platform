@@ -49,7 +49,7 @@ import { styled } from "@mui/material/styles";
 
 // import Message from "../Socket";
 
-import Comments from "../../pages/Comments/Comments";
+import Comments from "../../pages/comments/comments";
 
 const modalStyle = {
   position: "absolute",
@@ -380,7 +380,7 @@ const Post = ({ post }) => {
             }}
             value={editPostContent}
           />
-          
+
           {/* //* Cloudinary /////////////////////*/}
 
           <TextField
