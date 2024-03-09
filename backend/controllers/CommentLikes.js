@@ -105,7 +105,7 @@ const getLikesByCommentId = (req, res) => {
   //const (user_id)=req.body;
 
   pool
-    .query(`SELECT * FROM comment_likes WHERE comment_id=$1`, [comment_id])
+    .query(`SELECT * FROM comment_likes WHERE comment_id=$1 `, [comment_id])
     .then((result) => {
       return res.status(201).json({
         success: true,

@@ -107,7 +107,7 @@ function ProfilePost({ elem }) {
         </Box>
         <Typography fontWeight="lg">{elem.user_name}</Typography>
         <br />
-       
+      
         <IconButton onClick={handleOpen} variant="plain" color="neutral" size="sm" sx={{ ml: 'auto' }}>
           <MoreHoriz />
         </IconButton>
@@ -153,7 +153,7 @@ function ProfilePost({ elem }) {
             <Typography id="transition-modal-title" variant="h6" component="h2">
               Edit post 
             
-             
+            
             </Typography>
             <Typography id="transition-modal-description" sx={{ mt: 2 }}>
             <TextField onChange={(e) => {

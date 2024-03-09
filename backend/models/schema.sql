@@ -140,8 +140,8 @@ CREATE TABLE
   user_profile (
     id SERIAL PRIMARY KEY NOT NULL,
     user_id INT UNIQUE NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    first_name VARCHAR(255),
-    last_name VARCHAR(255),
+    first_name VARCHAR(255) DEFAULT 'John',
+    last_name VARCHAR(255) DEFAULT 'Doe',
     birthday TIMESTAMP,
     gender VARCHAR(6) CHECK (gender IN ('male', 'female')),
     phone_number INT UNIQUE,
@@ -457,12 +457,30 @@ VALUES
   (1, 3),
   (1, 4),
   (1, 5),
+  (1, 6),
+  (1, 7),
+  (2, 1),
   (2, 3),
   (2, 4),
   (2, 5),
+  (2, 6),
+  (2, 7),
+  (3, 1),
+  (3, 2),
   (3, 4),
   (3, 5),
-  (4, 5) RETURNING *;
+  (4, 1),
+  (4, 2),
+  (4, 3),
+  (4, 5),
+  (5, 1),
+  (5, 2),
+  (5, 3),
+  (5, 4),
+  (6, 3),
+  (6, 4),
+  (7, 3),
+  (7, 4) RETURNING *;
 
 -- Create a table called **posts** in the database
 DROP TABLE IF EXISTS posts CASCADE;
@@ -778,14 +796,15 @@ CREATE TABLE
     id SERIAL PRIMARY KEY NOT NULL,
     post_id INT NOT NULL REFERENCES posts (id) ON DELETE CASCADE,
     user_id INT REFERENCES users (id) ON DELETE CASCADE,
-    content VARCHAR(255) DEFAULT 'I share this'
+    -- content VARCHAR(255) DEFAULT 'I share this',
+    contentadd VARCHAR(255)
     -- OR page_id INT REFERENCES pages (id) ON DELETE CASCADE
   );
 
 --! check the role if user or page. //////////////////////
 -- insert shares
 INSERT INTO
-  shares (post_id, user_id, content)
+  shares (post_id, user_id, contentadd)
 VALUES
   (1, 1, 'welcome'),
   (1, 2, 'I share this too'),

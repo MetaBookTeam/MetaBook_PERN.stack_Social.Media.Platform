@@ -12,15 +12,15 @@ POST http://localhost:5000/users/register
     "user_name": "Bugger",
     "password": "Bug_123456",
     "image": "http://res.cloudinary.com/dpbh42kjy/image/upload/v1708864871/kk9y6ycii6xwvezxbvgx.jpg",
-    "first_name": "Virus",
+    "first_name": "Bug",
     "last_name": "Coder",
-    "birthday": "2000-01-01",
+    "birthday": "2000-05-18",
     "gender": "male",
     "phone_number": "0790000006",
     "school": "Erroring",
-    "address": "CatchError",
-    "city": "Throw",
-    "country": "Else",
+    "city": "CatchError",
+    "state": "Throw",
+    "country": "Virus",
     "cover_photo": "http://res.cloudinary.com/dpbh42kjy/image/upload/v1708868452/gbjzxlonkhr629vgmfau.webp"
 }
 */
@@ -56,6 +56,7 @@ POST http://localhost:5000/users/register
     city,
     state,
     country,
+    cover_photo,
   } = req.body;
 
   const role_id = "1"; //! edit the value of role_id depend on role id in role table.
@@ -81,8 +82,8 @@ POST http://localhost:5000/users/register
 
       const query = `
       INSERT INTO user_profile 
-      (user_id, first_name, last_name, birthday, gender, phone_number, school, city, state, country) 
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10);`;
+      (user_id, first_name, last_name, birthday, gender, phone_number, school, city, state, country, cover_photo) 
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11);`;
 
       const data = [
         user_id,
@@ -95,6 +96,7 @@ POST http://localhost:5000/users/register
         city,
         state,
         country,
+        cover_photo,
       ];
 
       await pool
@@ -189,12 +191,35 @@ POST http://localhost:5000/users/login
 //? getAllUsers  /////////////////////////////////
 
 const getAllUsers = (req, res) => {
-  const query = `
-  SELECT * 
+  const query = `   
+  with cte_following as (
+    select user_id, array_agg(friend_id) as following
+    from friends
+    group by user_id
+    ),
+
+  cte_followers as (
+    select friend_id, array_agg(user_id) as followers
+    from friends
+    group by friend_id
+    )
+
+  SELECT *
+
   FROM users 
+
   FULL OUTER JOIN user_profile 
-  ON users.id = user_profile.user_id 
-  WHERE users.is_deleted = 0;
+    ON users.id = user_profile.user_id 
+
+  left join cte_following fg
+    on users.id = fg.user_id
+
+  left join cte_followers fr
+    on users.id = fr.friend_id
+
+  WHERE users.is_deleted = 0
+  
+  ORDER BY users.id;
   `;
   pool
     .query(query)
@@ -203,7 +228,7 @@ const getAllUsers = (req, res) => {
         console.log(`there is no users in DB`);
         // res.status(204) will not send back a response
         res.status(404).json({
-          success: true,
+          success: false,
           message: `there is no users in DB`,
         });
         return;
@@ -241,13 +266,34 @@ GET http://localhost:5000/users/:user_id
 
   const { user_id } = req.params;
 
-  const query = `
-  SELECT * 
+  const query = `   with cte_following as (
+    select user_id, array_agg(friend_id) as following
+    from friends
+    group by user_id
+    ),
+
+  cte_followers as (
+    select friend_id, array_agg(user_id) as followers
+    from friends
+    group by friend_id
+    )
+
+  SELECT *
+
   FROM users 
+
   FULL OUTER JOIN user_profile 
-  ON users.id = user_profile.user_id 
-  WHERE users.id = $1
-  AND users.is_deleted = 0;
+    ON users.id = user_profile.user_id 
+
+  left join cte_following fg
+    on users.id = fg.user_id
+
+  left join cte_followers fr
+    on users.id = fr.friend_id
+
+  WHERE users.id = $1 AND users.is_deleted = 0
+  
+  ORDER BY users.id;
   `;
 
   const data = [user_id];
@@ -625,21 +671,91 @@ DELETE http://localhost:5000/users/delete/3
 
 const getAllFriends = async (req, res) => {
   const { userId } = req.token;
+
   const placeholder = [userId];
+
   try {
-    const friend = await pool.query(
-      `SELECT * FROM friends WHERE user_id=$1`,
+    const friends = await pool.query(
+      //     `
+      //   SELECT
+      //     friends.user_id,
+      //     friends.friend_id,
+      //   --users.user_name,
+      //     user_profile.first_name AS follower_first_name,
+      //     user_profile.last_name AS follower_last_name ,
+      //   --users.image,
+      //     friends.created_at
+
+      // FROM friends
+
+      // LEFT JOIN users
+      //     ON users.id = friends.user_id
+
+      // LEFT JOIN user_profile
+      //     ON user_profile.user_id = friends.Friend_id
+
+      // WHERE users.id = $1;
+      //     `,
+      //! I will get all users then handle which one is a friend from the followers column in getAllUsers
+      `
+      SELECT
+        friends.user_id,
+        friends.friend_id,
+      --users.user_name,
+        user_profile.first_name AS follower_first_name,
+        user_profile.last_name AS follower_last_name ,
+      --users.image,
+        friends.created_at
+    
+    FROM friends 
+    
+    LEFT JOIN users
+        ON users.id = friends.user_id
+    
+    LEFT JOIN user_profile
+        ON user_profile.user_id = friends.Friend_id
+    
+    WHERE users.id = $1;
+        `,
       placeholder
     );
     res.status(200).json({
       success: true,
-      message: "All friends",
-      result: friend.rows,
+      message: `All friends of User No.${userId}`,
+      result: friends.rows,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Server error",
+      message: "getAllFriends Server error",
+      error,
+    });
+  }
+};
+
+const isMyFriend = async (req, res) => {
+  const { userId } = req.token;
+  const { friend_id } = req.params;
+
+  const placeholder = [userId, friend_id];
+
+  try {
+    const friends = await pool.query(
+      `SELECT *
+      FROM friends 
+      WHERE user_id=$1 
+        AND friend_id = $2`,
+      placeholder
+    );
+    res.status(200).json({
+      success: true,
+      message: `User No.${friend_id} is friend with User No.${userId}`,
+      result: friends.rows,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "isMyFriend Server error",
       error,
     });
   }
@@ -648,20 +764,32 @@ const getAllFriends = async (req, res) => {
 const addFriend = async (req, res) => {
   const { userId } = req.token;
   const { friend_id } = req.params;
+
   const placeholder = [userId, friend_id];
-  console.log(placeholder);
+
   try {
-    const addFriend = await pool.query(
-      `INSERT INTO friends (user_id,friend_id) VALUES ($1,$2) RETURNING *`,
+    const select = await pool.query(
+      `SELECT user_id,friend_id FROM friends WHERE user_id= $1 AND friend_id = $2`,
       placeholder
     );
-    res.status(200).json({
-      success: true,
-      message: "Friend added successfully",
-      result: addFriend.rows,
-    });
-    console.log(addFriend);
+    if (!select.rowCount >= 1) {
+      const addFriend = await pool.query(
+        `INSERT INTO friends (user_id,friend_id) VALUES ($1,$2) RETURNING *`,
+        placeholder
+      );
+      res.status(200).json({
+        success: true,
+        message: "Friend added successfully",
+        result: addFriend.rows,
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "You are a friend",
+      });
+    }
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Server error",
@@ -673,10 +801,12 @@ const addFriend = async (req, res) => {
 const deleteFriend = async (req, res) => {
   const { userId } = req.token;
   const { friend_id } = req.params;
-  const placeholder = [friend_id];
+
+  const placeholder = [friend_id, userId];
+
   try {
     const deleteFriend = await pool.query(
-      `DELETE FROM friends WHERE friend_id=$1`,
+      `DELETE FROM friends WHERE friend_id=$1 AND user_id=$2 RETURNING *;`,
       placeholder
     );
     res.status(200).json({
@@ -685,6 +815,7 @@ const deleteFriend = async (req, res) => {
       result: deleteFriend.rows,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Server error",
@@ -701,6 +832,7 @@ module.exports = {
   softDeleteUserById,
   hardDeleteUserById,
   getAllFriends,
+  isMyFriend,
   addFriend,
   deleteFriend,
 };

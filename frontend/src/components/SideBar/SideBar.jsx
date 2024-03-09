@@ -7,7 +7,9 @@ import {
   Person,
   Settings,
   Storefront,
+  WbSunny,
 } from "@mui/icons-material";
+
 import {
   Box,
   List,
@@ -18,7 +20,10 @@ import {
   Switch,
 } from "@mui/material";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+
+import Weather from "../../Weather/Weather";
+import { NavLink } from "react-router-dom";
+
 
 const SideBar = ({ mode, setMode }) => {
   const navigator=useNavigate()
@@ -31,7 +36,9 @@ const SideBar = ({ mode, setMode }) => {
               <ListItemIcon>
                 <Home />
               </ListItemIcon>
-              <ListItemText primary="Homepage" />
+              <NavLink  className="NavLinks" to={"/home"}>
+                <ListItemText primary="Homepage" />
+              </NavLink>
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
@@ -81,7 +88,9 @@ const SideBar = ({ mode, setMode }) => {
               <ListItemIcon>
                 <AccountBox />
               </ListItemIcon>
-              <ListItemText primary="Profile" />
+              <NavLink className="NavLinks" to={"/profile"}>
+                <ListItemText primary="Profile" />
+              </NavLink>
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
@@ -94,6 +103,8 @@ const SideBar = ({ mode, setMode }) => {
               />
             </ListItemButton>
           </ListItem>
+
+          <Weather />
         </List>
       </Box>
     </Box>

@@ -38,27 +38,33 @@ import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 
 import { addShare } from "../../Service/redux/reducers/shares/sharesSlice";
+import { addComment } from "../../Service/redux/reducers/comments/commentsSlice";
 
 const Comments = ({ values }) => {
   const navigate = useNavigate();
   const { post, modalStyle } = values;
-
+  // console.log(values);// Post
+  // console.log('post', post)
   //* Redux =========================
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   // const shares = useSelector((state) => state.shares.shares);
   // auth.isLoggedIn, auth.token, auth.userId;
   const { userProfile } = useSelector((state) => state.users);
+  const { comments, commentLike, shares } = useSelector(
+    (state) => state.comments
+  );
 
   // =========================================
+  const [contentAdd, setContentAdd] = useState("");
 
   const createNewShare = async (e) => {
     try {
       const share = {
-        content: contentAdd,
+        contentadd: contentAdd,
       };
       const result = await axios.post(
-        `http://localhost:5000/posts/shares/${postId}`,
+        `http://localhost:5000/posts/shares/${post.id}`,
         share,
         {
           headers: {
@@ -71,6 +77,7 @@ const Comments = ({ values }) => {
       if (result.data.success) {
         // setStatus(true);
         // setMessage(result.data.message);
+        handleCloseAddShare();
       }
     } catch (error) {
       if (!error.response.data.success) {
@@ -85,11 +92,9 @@ const Comments = ({ values }) => {
 
   const [collapseComments, setCollapseComments] = useState(false);
   const [postComments, setPostComments] = useState([]);
-
+  // console.log('postComments', postComments)
   const handleCommentsModal = async (e) => {
     setCollapseComments((prev) => !prev);
-
-    console.log(post.id, auth.userId);
 
     try {
       //*  getCommentsByPostId ///////////////////
@@ -114,44 +119,16 @@ const Comments = ({ values }) => {
   // =========================================
 
   // openLikesModal
+  // console.log("post.liked_users", post.liked_users);
   const [postLikes, setPostLikes] = useState([]);
   const [likeIcon, setLikeIcon] = useState(
     post.liked_users?.some((user) => auth.userId * 1 === user * 1) ||
       postLikes.some((like) => auth.userId * 1 === like.user_id * 1)
   );
 
-  // console.log(
-  //   "post",
-  //   post.id,
-  //   "=>",
-  //   post.liked_users?.some((user) => auth.userId * 1 === user * 1),
-  //   postLikes.some((like) => auth.userId * 1 === like.user_id * 1)
-  // );
-
-  const getLikesByPostId = async () => {
-    try {
-      // postsRouter.get("/like/:post_id", authentication, getLikesByPostId);
-      const likes = await axios.get(
-        `http://localhost:5000/posts/like/${post.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
-      // console.log("likes.data.result", likes.data.result);
-      setPostLikes(likes.data.result);
-    } catch (error) {
-      console.log("getLikesByPostId", error);
-    }
-  };
-
-  // useEffect(() => {
-  //   getLikesByPostId();
-  // }, []);
-
   // Likes Modal Toggle ======================
   const [openLike, setOpenLike] = useState(false);
+  const closeLikesModal = () => setOpenLike(false);
 
   const openLikesModal = async () => {
     try {
@@ -170,7 +147,6 @@ const Comments = ({ values }) => {
     }
   };
 
-  const closeLikesModal = () => setOpenLike(false);
   // =========================================
 
   const [likesCount, setLikeCount] = useState(post.likes * 1);
@@ -220,22 +196,191 @@ const Comments = ({ values }) => {
   };
 
   // =========================================
-  // share post to your profile modal
+  // add share post to your profile modal
 
-  const [openShare, setOpenShare] = useState(false);
-  const handleOpenShare = () => setOpenShare(true);
-  const handleCloseShare = () => setOpenShare(false);
-  const [contentAdd, setContentAdd] = useState("");
-  const [postId, setPostId] = useState(0);
+  const [openAddShare, setOpenAddShare] = useState(false);
+  const handleOpenAddShare = () => setOpenAddShare(true);
+  const handleCloseAddShare = () => setOpenAddShare(false);
 
   // =========================================
   // openSharesModal
-  //! post.shared_users //////////////
   const [postShares, setPostShares] = useState([]);
   const [shareIcon, setShareIcon] = useState(
-    post.liked_users?.some((user) => auth.userId * 1 === user * 1) ||
-      postLikes.some((like) => auth.userId * 1 === like.user_id * 1)
+    post.shared_users?.some((user) => auth.userId * 1 === user * 1) ||
+      postShares.some((share) => auth.userId * 1 === share.user_id * 1)
   );
+  // shares Modal Toggle ======================
+  const [openShare, setOpenShare] = useState(false);
+  const closeSharesModal = () => setOpenShare(false);
+
+  const openSharesModal = async () => {
+    try {
+      // postsRouter.get("/shares/:post_id", authentication, getShareByPostId);
+      const shares = await axios.get(
+        `http://localhost:5000/posts/shares/by_post/${post.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      setPostShares(shares.data.result);
+      setOpenShare(true);
+    } catch (error) {
+      console.log("openSharesModal", error);
+    }
+  };
+
+  // =========================================
+  //* Add new comment
+  const [newComment, setNewComment] = useState("");
+  const [commentsCount, setCommentsCount] = useState(post.comments * 1);
+
+  const AddCommentHandler = async () => {
+    try {
+      // commentsRouter.post("/:post_id", authentication, createComment);
+
+      const comment = await axios.post(
+        `http://localhost:5000/comments/${post.id}`,
+        { comment: newComment },
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      // console.log("comment.data.result", ...comment.data.result);
+      // setPostComments((prev) => {
+      //   console.log("[...prev, ...comment.data.result]", [
+      //     ...prev,
+      //     ...comment.data.result,
+      //   ]);
+      //   return [...prev, ...comment.data.result];
+      // });
+      setNewComment("");
+      setCommentsCount((prev) => prev + 1);
+      handleCommentsModal();
+      setCollapseComments(true);
+    } catch (error) {
+      console.log("AddCommentHandler", error);
+    }
+  };
+
+  // =========================================
+  //* add Comment Like
+  // console.log("postComments.comment_likes", postComments);
+
+  const [commentsLikesCount, setCommentsLikesCount] = useState(
+    // postComments.comment_likes * 1
+    0
+  );
+
+  const addCommentLikeHandler = async (e, commentId) => {
+    try {
+      // commentsRouter.post("/likes/:comment_id", authentication, createCommentLike);
+
+      const commentLike = await axios.post(
+        `http://localhost:5000/comments/likes/${commentId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      setCommentsLikesCount((prev) => prev + 1);
+    } catch (error) {
+      console.log("addCommentLikeHandler", error);
+    }
+  };
+
+  // =========================================
+  //* delete Comment
+
+  const deleteCommentHandler = async (e, commentId) => {
+    try {
+      // commentsRouter.delete("/:comment_id", authentication, deleteComment);
+      // console.log("commentId", commentId);
+
+      const deleteComment = await axios.delete(
+        `http://localhost:5000/comments/${commentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      // console.log("deleteComment.data.result", deleteComment.data.result);
+      /* 
+deleteComment.data.result 
+[
+    {
+        "id": 51,
+        "user_id": 8,
+        "post_id": 11,
+        "comment": "Edit this",
+        "created_at": "2024-02-29T01:05:13.639Z",
+        "is_deleted": 1
+    }
+]
+
+*/
+      setPostComments((prev) =>
+        prev.filter((comment) => comment.id !== commentId)
+      );
+    } catch (error) {
+      console.log("deleteCommentHandler", error);
+    }
+  };
+
+  // =========================================
+
+  //* Edit Comment Modal
+  // comment Modal Toggle ======================
+  const [openEditComment, setOpenEditComment] = useState(false);
+  const closeEditCommentModal = () => setOpenEditComment(false);
+  const [editComment, setEditComment] = useState("");
+
+  const openEditCommentModal = async (e, comment) => {
+    setEditComment(comment.comment);
+    setOpenEditComment(true);
+  };
+
+  //* Edit Comment
+
+  const editCommentHandler = async (e, comment) => {
+    try {
+      // commentsRouter.put("/:comment_id", authentication, updateComment);
+      // console.log("commentId", commentId);
+
+      const updateComment = await axios.put(
+        `http://localhost:5000/comments/${comment.id}`,
+        { comment: editComment },
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      // console.log("updateComment.data.result", updateComment.data.result);
+
+      setPostComments((prev) =>
+        // prev.toReversed().map((oldComment) => {
+        prev.map((oldComment) => {
+          if (oldComment.id === comment.id) {
+            return { ...comment, comment: editComment };
+          }
+          return oldComment;
+        })
+      );
+      closeEditCommentModal();
+    } catch (error) {
+      console.log("editCommentHandler", error);
+    }
+  };
 
   return (
     <>
@@ -296,6 +441,7 @@ const Comments = ({ values }) => {
           <IconButton variant="plain" color="neutral" size="sm">
             <ModeCommentOutlined />
           </IconButton>
+
           <Link
             // onClick={commentsModal}
             component="button"
@@ -305,7 +451,7 @@ const Comments = ({ values }) => {
             fontWeight="lg"
             textColor="text.primary"
           >
-            {post.comments} comments
+            {commentsCount} comments
           </Link>
         </Grid>
 
@@ -321,7 +467,7 @@ const Comments = ({ values }) => {
             variant="plain"
             color="neutral"
             size="sm"
-            onClick={handleOpenShare}
+            onClick={handleOpenAddShare}
           >
             <SendOutlined />
           </IconButton>
@@ -331,6 +477,7 @@ const Comments = ({ values }) => {
             fontSize="sm"
             fontWeight="lg"
             textColor="text.primary"
+            onClick={openSharesModal}
           >
             {post.shares} shares
           </Link>
@@ -344,69 +491,174 @@ const Comments = ({ values }) => {
           variant="plain"
           placeholder="Add a comment…"
           sx={{ flex: 1, px: 0, "--Input-focusedThickness": "0px" }}
+          onChange={(e) => {
+            setNewComment(e.target.value);
+          }}
+          value={newComment}
         />
-        <Link underline="none" role="button">
+        <Link underline="none" role="button" onClick={AddCommentHandler}>
           Post
         </Link>
       </CardContent>
       <Collapse in={collapseComments}>
-        {postComments.length ? (
-          postComments.map((comment, i) => {
-            console.log(comment, i);
-            return (
-              <div key={i}>
-                {i > 0 && (
-                  <Divider variant="fullWidth" style={{ margin: "15px 0" }} />
-                )}
-                <Paper style={{ padding: "15px" }}>
-                  <Grid container wrap="nowrap" spacing={2}>
-                    <Grid item>
-                      <Avatar
-                        alt={comment.commenter_name}
-                        size="sm"
-                        src={comment.commenter_image}
-                      />
+        <Box
+          sx={{
+            mb: 2,
+            display: "flex",
+            flexDirection: "column",
+            maxHeight: 700,
+            overflow: "hidden",
+            overflowY: "scroll",
+            padding: "15px",
+          }}
+        >
+          {postComments.length ? (
+            postComments.toReversed().map((comment, i) => {
+              // postComments.map((comment, i) => {
+
+              // console.log(comment, i);
+              // setCommentsLikesCount(comment.comment_likes);
+              return (
+                <div key={i}>
+                  {i > 0 && (
+                    <Divider variant="fullWidth" style={{ margin: "15px 0" }} />
+                  )}
+                  <Paper style={{ padding: "15px" }}>
+                    <Grid container wrap="nowrap" spacing={2}>
+                      <Grid item>
+                        <Avatar
+                          alt={comment.first_name}
+                          size="sm"
+                          src={comment.commenter_image}
+                        />
+                      </Grid>
+                      <Grid justifyContent="left" item xs zeroMinWidth>
+                        <Typography
+                          component="h4"
+                          variant="h4"
+                          sx={{ color: "black" }}
+                        >
+                          {comment.first_name} {comment.last_name}
+                        </Typography>
+                        <Typography>{comment.comment}</Typography>
+                      </Grid>
                     </Grid>
-                    <Grid justifyContent="left" item xs zeroMinWidth>
-                      <Typography
-                        component="h4"
-                        variant="h4"
-                        sx={{ color: "black" }}
-                      >
-                        {comment.commenter_name}
+                  </Paper>
+                  <Grid
+                    container
+                    wrap="nowrap"
+                    columnSpacing={1}
+                    ml={1}
+                    sx={{ mt: "3px" }}
+                  >
+                    <Grid item xs="auto">
+                      <Typography>
+                        {new Date(comment.created_at).toLocaleString()} -
                       </Typography>
-                      <Typography>{comment.comment}</Typography>
                     </Grid>
+                    <Grid item xs="auto">
+                      <Typography
+                        onClick={(e) => {
+                          addCommentLikeHandler(e, comment.id);
+                          if (comment.comment_likes * 1 > commentsLikesCount) {
+                            setCommentsLikesCount(comment.comment_likes * 1);
+                          }
+                        }}
+                        sx={{ cursor: "pointer" }}
+                      >
+                        {comment.comment_likes * 1 >= commentsLikesCount
+                          ? comment.comment_likes
+                          : commentsLikesCount}{" "}
+                        Like
+                        {comment.comment_likes > 1 && "s"}
+                        {/* {commentsLikesCount} Like
+                      {commentsLikesCount > 1 && "s"} */}
+                      </Typography>
+                    </Grid>
+
+                    {comment.user_id == auth.userId && (
+                      <>
+                        <Grid item ml="auto" xs="auto">
+                          <Typography
+                            sx={{ cursor: "pointer" }}
+                            onClick={(e) => {
+                              openEditCommentModal(e, comment);
+                            }}
+                          >
+                            Edit
+                          </Typography>
+                        </Grid>
+                        <Grid item mr={2} xs="auto">
+                          <Typography
+                            sx={{ cursor: "pointer" }}
+                            onClick={(e) => {
+                              deleteCommentHandler(e, comment.id);
+                            }}
+                          >
+                            Delete
+                          </Typography>
+                        </Grid>
+                      </>
+                    )}
                   </Grid>
-                </Paper>
-                <Grid
-                  container
-                  wrap="nowrap"
-                  columnSpacing={1}
-                  ml={1}
-                  sx={{ mt: "3px" }}
-                >
-                  <Grid item xs="auto">
-                    <Typography>
-                      {new Date(comment.created_at).toLocaleString()} -
-                    </Typography>
-                  </Grid>
-                  <Grid item xs="auto">
-                    <Typography>Like</Typography>
-                  </Grid>
-                  <Grid item ml="auto" xs="auto">
-                    <Typography>Edit</Typography>
-                  </Grid>
-                  <Grid item mr={2} xs="auto">
-                    <Typography>Delete</Typography>
-                  </Grid>
-                </Grid>
-              </div>
-            );
-          })
-        ) : (
-          <Typography>There is no comments on this post yet.</Typography>
-        )}
+                  {/* //* ///////////////////////////// */}
+                  {/* //* ///////////////////////////// */}
+                  {/* //* Edit Comment Modal */}
+                  {/* //* ///////////////////////////// */}
+                  {/* //* ///////////////////////////// */}
+
+                  <Modal
+                    keepMounted
+                    open={openEditComment}
+                    onClose={closeEditCommentModal}
+                    aria-labelledby="keep-mounted-modal-title"
+                    aria-describedby="keep-mounted-modal-description"
+                  >
+                    <Box
+                      sx={{
+                        ...modalStyle,
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography
+                        id="keep-mounted-modal-title"
+                        variant="h6"
+                        component="h2"
+                      >
+                        Edit comment No.{comment.id}
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        variant="outlined"
+                        placeholder="Edit this comment…"
+                        sx={{
+                          margin: "10px 0",
+                        }}
+                        onChange={(e) => {
+                          setEditComment(e.target.value);
+                        }}
+                        value={editComment}
+                      />
+                      <Button
+                        variant="contained"
+                        onClick={(e) => {
+                          editCommentHandler(e, comment);
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </Box>
+                  </Modal>
+                </div>
+              );
+            })
+          ) : (
+            <Typography>There is no comments on this post yet.</Typography>
+          )}
+        </Box>
       </Collapse>
 
       {/* //* ///////////////////////////// */}
@@ -474,12 +726,75 @@ const Comments = ({ values }) => {
         </Box>
       </Modal>
 
+      {/* //* ///////////////////////////// */}
+      {/* //* ///////////////////////////// */}
+      {/* //* Shares Modal */}
+      {/* //* ///////////////////////////// */}
+      {/* //* ///////////////////////////// */}
+
+      <Modal
+        keepMounted
+        open={openShare}
+        onClose={closeSharesModal}
+        aria-labelledby="keep-mounted-modal-title"
+        aria-describedby="keep-mounted-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Typography
+            id="keep-mounted-modal-title"
+            variant="h6"
+            component="h2"
+            textAlign={"center"}
+          >
+            Shares
+            <hr />
+          </Typography>
+          {postShares.toReversed().map((share, i) => (
+            <Typography key={i} id="keep-mounted-modal-description">
+              <Link
+                underline="hover"
+                sx={{ color: "black", my: 0.5 }}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => {
+                  navigate(`/page/${share.user_id}`);
+                }}
+              >
+                <Box
+                  sx={{
+                    position: "relative",
+                    "&::before": {
+                      content: '""',
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      bottom: 0,
+                      right: 0,
+                      m: "-1px",
+                      borderRadius: "50%",
+                      background:
+                        "linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)",
+                    },
+                    mr: 3,
+                  }}
+                  component="span"
+                >
+                  <Avatar component="span" src={share.image} />
+                </Box>
+
+                {share.user_name}
+              </Link>
+            </Typography>
+          ))}
+        </Box>
+      </Modal>
+
       {/*  share modal */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={openShare}
-        onClose={handleCloseShare}
+        open={openAddShare}
+        onClose={handleCloseAddShare}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
@@ -488,7 +803,7 @@ const Comments = ({ values }) => {
           },
         }}
       >
-        <Fade in={openShare}>
+        <Fade in={openAddShare}>
           <Grid container sx={modalStyle} spacing={2} justifyContent="center">
             <Typography id="transition-modal-title" variant="h6" component="h2">
               Share this post
@@ -504,7 +819,7 @@ const Comments = ({ values }) => {
               variant="standard"
               onChange={(e) => {
                 setContentAdd(e.target.value);
-                setPostId(post.id);
+                // setPostId(post.id);
               }}
             />
 

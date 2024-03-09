@@ -37,7 +37,6 @@ const getLikesByPostId = async (req, res) => {
   /* 
 GET http://localhost:5000/posts/like/:post_id
 */
-  const { userId } = req.token;
   const { post_id } = req.params;
   const placeholder = [post_id];
   try {
@@ -55,13 +54,13 @@ GET http://localhost:5000/posts/like/:post_id
     );
     res.status(200).json({
       success: true,
-      message: "like successfully",
+      message: "getLikesByPostId",
       result: postLike.rows,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: " Server error",
+      message: "getLikesByPostId Server error",
       error,
     });
   }

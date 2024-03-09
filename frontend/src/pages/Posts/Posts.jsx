@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
 
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +13,12 @@ import {
   setUsers,
   setUserProfile,
 } from "../../Service/redux/reducers/users/usersSlice";
+import {
+  getAllFriends,
+  getfriend,
+  setUnfollow,
+  setFollow,
+} from "../../Service/redux/reducers/friend/friendSlice";
 
 import Paper from "@mui/material/Paper";
 import Modal from "@mui/material/Modal";
@@ -21,7 +28,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-
+import Loader from "../../components/Loader/Loader";
 import { styled } from "@mui/material/styles";
 
 import Post from "../../components/Post/Post";
@@ -43,12 +50,40 @@ export default function Posts() {
   const auth = useSelector((state) => state.auth);
   // auth.isLoggedIn, auth.token, auth.userId;
   const posts = useSelector((state) => state.posts.posts);
-  const { userProfile } = useSelector((state) => state.users);
-
+  const { users, userProfile } = useSelector((state) => state.users);
+  // console.log('users', users)
+  /* 
+{
+    "id": 6,
+    "email": "meraki@gmail.com",
+    "user_name": "Meraki",
+    "password": "123456",
+    "image": "http://res.cloudinary.com/dpbh42kjy/image/upload/v1708829657/xmazfa0odnmjlqtcjg4u.jpg",
+    "role_id": 2,
+    "created_at": "2024-03-01T13:51:31.021Z",
+    "is_deleted": 0,
+    "user_id": 6,
+    "first_name": "Meraki",
+    "last_name": "Academy",
+    "birthday": "2020-02-01T22:00:00.000Z",
+    "gender": "male",
+    "phone_number": 790000007,
+    "school": "Academy",
+    "city": "Full",
+    "state": "Stack",
+    "country": "Developer",
+    "cover_photo": "https://colorfully.eu/wp-content/uploads/2013/07/beautiful-sea-view-facebook-cover.jpg",
+    "bio": "add bio",
+    "total_friends": null,
+    "user_friends": null
+}
+*/
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(<Loader />);
   const getAllPosts = async () => {
+    // setIsLoading(true)
     try {
       const result = await axios.get("http://localhost:5000/posts/", {
         headers: {
@@ -59,6 +94,7 @@ export default function Posts() {
         setStatus(true);
         // console.log(result.data.result);
         dispatch(setPosts(result.data.result));
+        setIsLoading(false);
       } else throw Error;
     } catch (error) {
       if (!error.response.data.success) {
@@ -87,9 +123,46 @@ export default function Posts() {
       console.log("getUserById", error);
     }
   };
+
+  //* ////////////////////////////
+  const getAllUsers = async () => {
+    try {
+      // console.log('auth.userId', auth.userId)
+      const allUser = await axios.get(`http://localhost:5000/users`, {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
+      dispatch(setUsers(allUser.data.result));
+      // console.log(...user.data.result);
+      // console.log(user.data.result[0]);
+    } catch (error) {
+      console.log("getAllUsers", error);
+    }
+  };
+  //* ////////////////////////////
+  const getAllFriendsHandler = async () => {
+    try {
+      // usersRouter.get("/friends", authentication, getAllFriends);
+      const allFriends = await axios.get(
+        `http://localhost:5000/users/friends`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      dispatch(getAllFriends(allFriends.data.result));
+    } catch (error) {
+      console.log("getAllFriendsHandler", error);
+    }
+  };
+
   useEffect(() => {
     getUserById();
     getAllPosts();
+    getAllUsers();
+    getAllFriendsHandler();
   }, []);
 
   return (
@@ -100,8 +173,7 @@ export default function Posts() {
 
       {/* //* Add new post button //////////////// */}
       <Add />
-
-      <Grid container spacing={10} direction="row" justifyContent="center">
+      <Grid container spacing={5} direction="row" justifyContent="center">
         <Grid
           item
           md={2}
@@ -110,16 +182,35 @@ export default function Posts() {
           <SideBar />
         </Grid>
 
-        <Grid item md={5} sm={7} xs={9}>
-          {posts &&
-            posts.toReversed().map((post) => {
-              return <Post key={post.id} post={post} />;
-            })}
+        <Grid item md={6} sm={8} xs={10}>
+          <Box
+            sx={{
+              mt: 2,
+              display: "flex",
+              flexDirection: "column",
+              height: 1000,
+              overflow: "hidden",
+              overflowY: "scroll",
+            }}
+          >
+            {posts &&
+              // posts.toReversed().map((post) => {
+              posts.map((post) => {
+                return (
+                  <>
+                    {isLoading ? (
+                      <Loader />
+                    ) : (
+                      <Post key={post.id} post={post} />
+                    )}
+                  </>
+                );
+              })}
+          </Box>
         </Grid>
-
         <Grid
           item
-          md="auto"
+          md={3}
           sx={{ display: { md: "block", sm: "none", xs: "none" } }}
         >
           <RightBar />

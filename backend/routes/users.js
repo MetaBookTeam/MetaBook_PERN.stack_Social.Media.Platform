@@ -10,6 +10,7 @@ const {
   softDeleteUserById,
   hardDeleteUserById,
   getAllFriends,
+  isMyFriend,
   addFriend,
   deleteFriend,
 } = require("../controllers/users");
@@ -35,6 +36,7 @@ usersRouter.get(
 );
 // friend
 usersRouter.get("/friends", authentication, getAllFriends);
+usersRouter.get("/friends/:friend_id", authentication, isMyFriend);
 
 usersRouter.get(
   "/:user_id",

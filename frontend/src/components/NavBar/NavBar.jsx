@@ -21,6 +21,8 @@ import React, { useState, useEffect } from "react";
 
 import { NavLink } from "react-router-dom";
 
+import { googleLogout } from "@react-oauth/google";
+
 import axios from "axios";
 
 const StyledToolbar = styled(Toolbar)({
@@ -147,7 +149,7 @@ const NavBar = () => {
   // console.log(filter);
 
   return (
-    <AppBar position="sticky">
+    <AppBar position="fixed">
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -165,20 +167,23 @@ const NavBar = () => {
           <Box sx={style}>
             <Typography id="transition-modal-title" variant="h6" component="h2">
               Start Chatting
-              <hr/>
+              <hr />
             </Typography>
-            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              {allUsers.map((users) => {
-                return (
-                  <>
-                    {" "}
-                    <Paper elevation={0}>{users.user_name}</Paper>
-                    <ChildModal socket={socket} userId={users.id} />
-               
-                  </>
-                );
-              })}
-            </Typography>
+
+            {allUsers.map((users, i) => {
+              return (
+                <div key={i}>
+                  <Paper elevation={0}>
+                    {users.first_name} {users.last_name}
+                  </Paper>
+                  <ChildModal
+                    socket={socket}
+                    userId={users.id}
+                    name={users.first_name}
+                  />
+                </div>
+              );
+            })}
           </Box>
         </Fade>
       </Modal>
@@ -189,17 +194,12 @@ const NavBar = () => {
             MetaBook
           </NavLink>
         </Typography>
-        <NavLink className={"Home"} to={"/contact"}>
-          Contact Us
-        </NavLink>
-        <NavLink className={"Home"} to={"/about"}>
-          About Us
-        </NavLink>
+       
         {/* <Pets sx={{ display: { xs: "block", sm: "none" } }} /> */}
         <Stack spacing={2} sx={{ width: 300, bgcolor: "white" }}>
           <Autocomplete
             disableClearable
-            options={allUsers.map((option) => option.user_name)}
+            options={allUsers.map((option) => option.first_name)}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -228,10 +228,13 @@ const NavBar = () => {
             src={userProfile.image}
             onClick={(e) => setOpen(true)}
           />
+          <Typography variant="span" onClick={(e) => setOpen(true)}>
+            {userProfile.first_name} {userProfile.last_name}
+          </Typography>
         </Icons>
         <UserBox onClick={(e) => setOpen(true)}>
           <Avatar sx={{ width: 30, height: 30 }} src={userProfile.image} />
-          <Typography variant="span">{userProfile.user_name}</Typography>
+          <Typography variant="span">{userProfile.first_name}</Typography>
         </UserBox>
       </StyledToolbar>
       <Menu
@@ -258,6 +261,7 @@ const NavBar = () => {
             className={"userInfo"}
             onClick={() => {
               dispatch(setLogout());
+              googleLogout();
             }}
             to="/login"
           >

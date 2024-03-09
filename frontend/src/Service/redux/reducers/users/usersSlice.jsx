@@ -71,6 +71,9 @@ export const usersSlice = createSlice({
         }
       });
     },
+    setNewFollow: (state , action) => {
+      state.users == action.payload;
+    }
   },
 });
 

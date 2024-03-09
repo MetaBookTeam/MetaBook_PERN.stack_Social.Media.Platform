@@ -116,6 +116,7 @@ const Add = () => {
           position: "fixed",
           bottom: 20,
           left: 20,
+          zIndex: 9999,
           // left: { xs: "calc(50% - 25px)", md: 30 },
         }}
       >
@@ -143,7 +144,7 @@ const Add = () => {
           <UserBox>
             <Avatar src={userProfile.image} sx={{ width: 30, height: 30 }} />
             <Typography fontWeight={500} variant="span">
-              {userProfile.user_name}
+              {userProfile.first_name} {userProfile.last_name}
             </Typography>
           </UserBox>
           <TextField

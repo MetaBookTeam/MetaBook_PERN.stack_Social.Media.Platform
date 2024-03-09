@@ -7,7 +7,6 @@ const NotFound = () => {
       <h2>NotFound 404</h2>
 
       <p>
-        {" "}
         Go to the <NavLink to="/">Homepage</NavLink>
       </p>
     </div>

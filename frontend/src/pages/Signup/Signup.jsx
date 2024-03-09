@@ -67,6 +67,9 @@ const style = {
   p: 4,
 };
 
+// import { GoogleLogin } from "@react-oauth/google";
+// import { jwtDecode } from "jwt-decode";
+
 export default function Signup() {
   const navigate = useNavigate();
   //===============================================================
@@ -590,6 +593,25 @@ Minimum eight characters, at least one uppercase letter, one lowercase letter, o
                 >
                   Sign up
                 </Button>
+
+                {/* <Box display={"flex"} justifyContent={"center"} mb={2}>
+                  <GoogleLogin
+                    onSuccess={(credentialResponse) => {
+                      console.log(credentialResponse);
+                      const token = credentialResponse.credential;
+                      const decoded = jwtDecode(token);
+                      console.log("decoded", decoded);
+                    }}
+                    onError={() => {
+                      console.log("Login Failed");
+                    }}
+                    theme="filled_blue"
+                    size="large"
+                    // width="400px"
+                    text="signup_with"
+                  />
+                </Box> */}
+
                 <Grid container>
                   <Grid item xs>
                     <Link href="#" variant="body2" onClick={handleOpen}>

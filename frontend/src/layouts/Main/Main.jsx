@@ -1,4 +1,4 @@
-import { Outlet,useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import NavBar from "../../components/NavBar/NavBar";
 
 import Footer from "../../components/Footer/Footer";
@@ -15,14 +15,14 @@ const Main = () => {
   const [mode, setMode] = useState("light");
   const Navigation = useNavigate();
   const auth = useSelector((state) => state.auth);
-  
+
   useEffect(() => {
-    if(auth.token) {
-      Navigation('/home')
-     } else {
-      Navigation('/login')
-     }
-  },[])
+    if (auth.token) {
+      Navigation("/home");
+    } else {
+      Navigation("/login");
+    }
+  }, []);
 
   // const darkTheme = createTheme({
   //   palette: {
@@ -31,14 +31,13 @@ const Main = () => {
   // });
   return (
     <div className="root-layout">
-      
       <header>
-        <NavBar/>
+        <NavBar />
       </header>
-      
-      <main> 
-      {/* <ThemeProvider theme={darkTheme}> */}
-      {/* <Box bgcolor={"background.default"} color={"text.primary"}>
+
+      <main style={{ marginTop: "55px" }}>
+        {/* <ThemeProvider theme={darkTheme}> */}
+        {/* <Box bgcolor={"background.default"} color={"text.primary"}>
         <NavBar />
         <Stack direction="row" spacing={2} justifyContent="space-between">
           <Feed/>
@@ -46,15 +45,14 @@ const Main = () => {
         </Stack>
       
       </Box> */}
-    {/* </ThemeProvider> */}
+        {/* </ThemeProvider> */}
         {/* Outlet : it the subRouter of Main {children:[]} */}
-        <Outlet/>
+        <Outlet />
       </main>
 
       <footer>
-       <Footer/>
+        <Footer />
       </footer>
-
     </div>
   );
 };

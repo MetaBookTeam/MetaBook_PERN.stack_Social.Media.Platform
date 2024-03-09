@@ -23,20 +23,33 @@ const RightBar = () => {
   // auth.isLoggedIn, auth.token, auth.userId;
   const posts = useSelector((state) => state.posts.posts);
 
-  //===============================================================
+  const users = useSelector((state) => state.users.users);
+  // console.log(users);
 
+  //===============================================================
   return (
     <Box flex={2} p={2} sx={{ display: { xs: "none", sm: "block" } }}>
       <Box position="stick" width={300}>
         <Typography variant="h6" fontWeight={100}>
           Online Friends
         </Typography>
+
         <AvatarGroup max={7}>
-          <Avatar
+          {!users.length &&
+            users.map((user) => (
+              <Avatar
+                key={user.id}
+                src={user.image}
+                alt={`${user.first_name} ${user.last_name}`}
+              />
+            ))}
+        </AvatarGroup>
+
+        {/* <Avatar 
             alt="Remy Sharp"
             src="https://material-ui.com/static/images/avatar/1.jpg"
           />
-          <Avatar
+           <Avatar
             alt="Travis Howard"
             src="https://material-ui.com/static/images/avatar/2.jpg"
           />
@@ -63,8 +76,7 @@ const RightBar = () => {
           <Avatar
             alt="Trevor Henderson"
             src="https://material-ui.com/static/images/avatar/9.jpg"
-          />
-        </AvatarGroup>
+          /> */}
 
         {/* //* Images Collage ///////////// */}
 
@@ -72,7 +84,8 @@ const RightBar = () => {
           Latest Photos
         </Typography>
         <ImageList sx={{ width: 300, height: 300 }} cols={3} rowHeight={90}>
-          {posts.toReversed().map((post) => {
+          {/* {posts.toReversed().map((post) => { */}
+          {posts.map((post) => {
             if (post.photo_url) {
               return (
                 <ImageListItem key={post.id}>
@@ -82,10 +95,9 @@ const RightBar = () => {
                     alt={post.id}
                     loading="lazy"
                   />
-                
                 </ImageListItem>
               );
-            } 
+            }
           })}
         </ImageList>
 
